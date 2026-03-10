@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Cards</title>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    *{-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation;}
+    body{
+      font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;
+      height:100vh; overflow:hidden;
+    }
+
+    /* ══ LAYOUT ══ */
+    .layout{display:flex;height:100vh;}
+
+    /* ══════════════════════════════
+       LEFT PANE — card stack
+    ══════════════════════════════ */
+    .left-pane{
+      width:50%;
+      background:linear-gradient(160deg,#0f2027 0%,#203a43 50%,#2c5364 100%);
+      display:flex;flex-direction:column;align-items:center;
+      padding:20px 16px 22px;gap:14px;overflow:hidden;position:relative;
+    }
+    .left-top{width:100%;display:flex;align-items:center;justify-content:space-between;}
+    .back-link{
+      color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85em;
+      background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+      padding:6px 14px;border-radius:50px;transition:0.25s;
+    }
+    .back-link:hover{background:rgba(255,255,255,0.22);color:#fff;}
+    .left-heading{color:rgba(255,255,255,0.45);font-size:0.78em;letter-spacing:3px;text-transform:uppercase;}
+
+    /* category pills */
+    .cat-bar{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;width:100%;}
+    .cat-btn{
+      background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);
+      color:rgba(255,255,255,0.75);font-size:0.78em;font-weight:bold;
+      padding:6px 13px;border-radius:50px;cursor:pointer;font-family:inherit;transition:0.22s;
+    }
+    .cat-btn:hover{background:rgba(255,255,255,0.22);color:#fff;}
+    .cat-btn.active{
+      background:linear-gradient(135deg,#f7971e,#ffd200);
+      color:#1a1a2e;border-color:transparent;
+      box-shadow:0 4px 14px rgba(247,151,30,0.5);
+    }
+
+    /* deck area */
+    .deck-area{
+      position:relative;flex:1;
+      display:flex;align-items:center;justify-content:center;
+    }
+
+    /* ghost stacked cards */
+    .ghost{
+      position:absolute;width:400px;height:550px;border-radius:26px;
+      background:linear-gradient(150deg,#1a2a4a 0%,#0d1b2a 100%);
+      border:2px solid rgba(255,255,255,0.08);
+      box-shadow:0 8px 24px rgba(0,0,0,0.5);
+    }
+    .ghost::before{content:'';position:absolute;inset:14px;border:1.5px solid rgba(255,255,255,0.07);border-radius:18px;}
+    .ghost:nth-child(1){transform:rotate(8deg) translate(40px,16px);opacity:0.45;z-index:1;}
+    .ghost:nth-child(2){transform:rotate(5deg) translate(25px, 9px);opacity:0.62;z-index:2;}
+    .ghost:nth-child(3){transform:rotate(2deg) translate(11px, 4px);opacity:0.82;z-index:3;}
+
+    /* top face-up card */
+    .top-card{
+      position:relative;z-index:10;
+      width:400px;height:550px;border-radius:26px;
+      background:linear-gradient(145deg,#ffffff 0%,#f0f4ff 100%);
+      border:3px solid rgba(255,255,255,0.9);
+      box-shadow:0 24px 60px rgba(0,0,0,0.55),0 4px 16px rgba(0,0,0,0.3);
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:10px;
+      cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;
+    }
+    .top-card:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 32px 70px rgba(0,0,0,0.6);}
+    .top-card:active{transform:translateY(-2px) scale(0.98);}
+
+    .card-num-badge{position:absolute;top:12px;right:14px;font-size:0.72em;color:rgba(80,100,160,0.6);font-weight:bold;}
+    .card-cat-badge{position:absolute;bottom:12px;font-size:0.68em;color:rgba(80,100,160,0.55);}
+
+    .card-emoji-big{
+      font-size:9.5em;line-height:1;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));
+    }
+    .card-emoji-big.pop{animation:emojiPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    @keyframes emojiPop{
+      0%  {transform:scale(0.55) rotate(-8deg);}
+      70% {transform:scale(1.18) rotate(3deg);}
+      100%{transform:scale(1)    rotate(0);}
+    }
+    .card-img{
+      width:88%;max-width:320px;height:auto;max-height:360px;
+      object-fit:contain;
+      filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));
+    }
+    .card-img.pop{animation:emojiPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    .css-shape{display:flex;align-items:center;justify-content:center;width:100%;}
+    .csh-rect{width:232px;height:138px;background:linear-gradient(135deg,#e74c3c,#c0392b);border-radius:14px;box-shadow:0 8px 24px rgba(231,76,60,0.35);}
+    .csh-oval{width:224px;height:140px;background:linear-gradient(135deg,#9b59b6,#6c3483);border-radius:50%;box-shadow:0 8px 24px rgba(155,89,182,0.35);}
+    /* for number cards, make the numeral big */
+    .card-num-text{font-size:9em;font-weight:bold;color:#263082;line-height:1;}
+
+    .card-name-big{font-size:2.4em;font-weight:bold;color:#1a2a4a;}
+
+    /* nav */
+    .deck-nav{display:flex;gap:14px;width:100%;justify-content:center;}
+    .nav-btn{
+      flex:1;max-width:120px;
+      background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.3);
+      color:#fff;font-size:1em;font-weight:bold;
+      padding:12px 0;border-radius:50px;cursor:pointer;font-family:inherit;transition:0.22s;
+    }
+    .nav-btn:hover{background:rgba(255,255,255,0.25);transform:translateY(-2px);}
+    .nav-btn:active{transform:translateY(0);}
+
+    /* progress */
+    .prog-strip{width:100%;}
+    .prog-bg{background:rgba(255,255,255,0.12);border-radius:50px;height:8px;overflow:hidden;}
+    .prog-fg{height:100%;background:linear-gradient(90deg,#43cea2,#ffd200);border-radius:50px;transition:width 0.5s ease;}
+    .prog-txt{color:rgba(255,255,255,0.4);font-size:0.72em;text-align:center;margin-top:5px;}
+
+    /* ══════════════════════════════
+       RIGHT PANE — the machine
+    ══════════════════════════════ */
+    .right-pane{
+      flex:1;
+      background:linear-gradient(140deg,#ffecd2 0%,#fcb69f 100%);
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;position:relative;overflow:hidden;
+    }
+    .right-pane::before{
+      content:'';position:absolute;inset:0;z-index:0;
+      background-image:radial-gradient(rgba(0,0,0,0.07) 1px,transparent 1px);
+      background-size:22px 22px;
+    }
+
+    /* THE MACHINE BOX */
+    .machine{
+      position:relative;z-index:1;
+      background:linear-gradient(170deg,#2c2c54 0%,#1a1a3e 100%);
+      border-radius:28px;padding:22px 24px 26px;
+      width:100%;max-width:370px;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,0.08),
+        0 28px 70px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      display:flex;flex-direction:column;align-items:center;gap:16px;
+    }
+    /* engraved name plate */
+    .machine-plate{
+      background:linear-gradient(135deg,#3a3a7a,#22226a);
+      border-radius:8px;padding:7px 22px;
+      color:rgba(255,255,255,0.5);font-size:0.62em;letter-spacing:5px;text-transform:uppercase;
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    /* screen */
+    .machine-screen{
+      width:100%;background:#000;border-radius:16px;padding:16px 14px 14px;
+      border:4px solid #0a0a0a;
+      box-shadow:inset 0 0 28px rgba(0,200,150,0.08),0 4px 12px rgba(0,0,0,0.5);
+      display:flex;flex-direction:column;align-items:center;gap:7px;
+      position:relative;overflow:hidden;
+    }
+    .machine-screen::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 30%,rgba(0,255,180,0.07),transparent 70%);
+      pointer-events:none;
+    }
+    /* scanlines */
+    .machine-screen::after{
+      content:'';position:absolute;inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.1) 3px,rgba(0,0,0,0.1) 4px);
+      pointer-events:none;border-radius:12px;
+    }
+    .scrn-emoji{
+      font-size:5.2em;line-height:1;position:relative;z-index:1;
+      filter:drop-shadow(0 0 12px rgba(0,255,180,0.4));
+      transition:filter 0.3s;
+    }
+    /* for number cards on screen */
+    .scrn-num{font-size:3.8em;font-weight:bold;color:#00ffb4;font-family:'Courier New',monospace;z-index:1;text-shadow:0 0 18px rgba(0,255,180,0.7);}
+    .scrn-emoji.flash{animation:screenFlash 0.6s ease;}
+    @keyframes screenFlash{
+      0%  {filter:drop-shadow(0 0 12px rgba(0,255,180,0.4)) brightness(1);}
+      35% {filter:drop-shadow(0 0 40px rgba(0,255,180,1))   brightness(1.6);}
+      100%{filter:drop-shadow(0 0 12px rgba(0,255,180,0.4)) brightness(1);}
+    }
+    .scrn-img{
+      width:140px;height:140px;object-fit:contain;
+      position:relative;z-index:1;
+      filter:drop-shadow(0 0 12px rgba(0,255,180,0.4));
+      transition:filter 0.3s;
+    }
+    .scrn-img.flash{animation:screenFlash 0.6s ease;}
+    .scrn-name{
+      font-size:1.75em;font-weight:bold;color:#00ffb4;position:relative;z-index:1;
+      text-shadow:0 0 14px rgba(0,255,180,0.7);letter-spacing:1px;
+      font-family:'Courier New',monospace;
+    }
+    .scrn-fact{
+      font-size:0.7em;color:rgba(0,255,180,0.55);text-align:center;line-height:1.45;
+      max-width:250px;position:relative;z-index:1;
+      font-family:'Courier New',monospace;min-height:3em;transition:opacity 0.4s;
+    }
+
+    /* speaker grille */
+    .grille{
+      width:100%;background:linear-gradient(180deg,#181830,#0d0d22);
+      border-radius:12px;padding:12px 14px;
+      border:1px solid rgba(255,255,255,0.05);
+    }
+    .grille-row{display:flex;gap:5px;justify-content:center;margin-bottom:5px;}
+    .grille-row:last-child{margin-bottom:0;}
+    .grille-dot{
+      width:7px;height:7px;border-radius:50%;
+      background:rgba(255,255,255,0.1);
+      box-shadow:inset 0 1px 2px rgba(0,0,0,0.5);
+      transition:background 0.1s,box-shadow 0.1s;
+    }
+    .grille-dot.lit{
+      background:#00ffb4;
+      box-shadow:0 0 6px #00ffb4,0 0 12px rgba(0,255,180,0.6);
+      animation:dotPop 0.2s ease both;
+    }
+    @keyframes dotPop{from{transform:scale(0.5);}to{transform:scale(1);}}
+
+    /* sound waves */
+    .waves{display:flex;align-items:center;justify-content:center;gap:4px;height:28px;opacity:0;transition:opacity 0.3s;}
+    .waves.active{opacity:1;}
+    .wv{width:4px;background:#f7971e;border-radius:4px;animation:wvPulse 0.7s ease-in-out infinite;}
+    .wv:nth-child(1){height:10px;animation-delay:0s;}
+    .wv:nth-child(2){height:20px;animation-delay:0.1s;}
+    .wv:nth-child(3){height:26px;animation-delay:0.2s;}
+    .wv:nth-child(4){height:20px;animation-delay:0.3s;}
+    .wv:nth-child(5){height:10px;animation-delay:0.4s;}
+    @keyframes wvPulse{0%,100%{transform:scaleY(0.4);opacity:0.5;}50%{transform:scaleY(1);opacity:1;}}
+
+    /* BIG PRESS BUTTON */
+    .press-btn{
+      width:100%;
+      background:linear-gradient(145deg,#f7971e,#ffd200);
+      border:none;border-radius:18px;padding:18px 14px;cursor:pointer;font-family:inherit;
+      color:#1a1a2e;font-size:1.25em;font-weight:bold;text-align:center;line-height:1.3;
+      box-shadow:0 8px 0 #b8700e,0 12px 24px rgba(247,151,30,0.4);
+      transition:all 0.12s;letter-spacing:0.5px;
+    }
+    .press-btn:hover{background:linear-gradient(145deg,#ffad2e,#ffe030);transform:translateY(-2px);box-shadow:0 10px 0 #b8700e,0 16px 30px rgba(247,151,30,0.5);}
+    .press-btn:active,.press-btn.pressed{transform:translateY(6px);box-shadow:0 2px 0 #b8700e,0 4px 10px rgba(247,151,30,0.3);}
+    .btn-icon{font-size:1.2em;display:block;margin-bottom:3px;}
+    .btn-sub{font-size:0.6em;opacity:0.65;font-weight:normal;display:block;margin-top:2px;}
+
+    /* completion overlay */
+    .done-overlay{
+      display:none;position:absolute;inset:0;z-index:50;
+      background:rgba(0,0,0,0.45);
+      align-items:center;justify-content:center;
+    }
+    .done-overlay.show{display:flex;}
+    .done-card{
+      background:#fff;border-radius:24px;padding:38px 36px;
+      text-align:center;max-width:320px;width:90%;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+      animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .done-card h2{font-size:1.8em;color:#f7971e;margin:10px 0 8px;}
+    .done-card p{color:#555;font-size:0.95em;margin-bottom:20px;}
+    .restart-btn{
+      background:linear-gradient(135deg,#43cea2,#185a9d);
+      color:#fff;border:none;border-radius:50px;
+      padding:13px 36px;font-size:1em;font-weight:bold;
+      cursor:pointer;font-family:inherit;
+      box-shadow:0 5px 16px rgba(0,0,0,0.2);transition:0.22s;
+    }
+    .restart-btn:hover{transform:translateY(-2px);}
+    @keyframes popIn{
+      0%  {transform:scale(0.5) rotate(-5deg);opacity:0;}
+      100%{transform:scale(1)   rotate(0);    opacity:1;}
+    }
+
+    /* confetti */
+    .cf{position:fixed;pointer-events:none;z-index:9999;animation:cfFall 2.5s linear forwards;}
+    @keyframes cfFall{
+      0%  {transform:translateY(-10px) rotateZ(0);     opacity:1;}
+      100%{transform:translateY(105vh) rotateZ(720deg);opacity:0;}
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:700px){
+      body{overflow-y:auto;}
+      .layout{flex-direction:column;height:auto;min-height:100vh;}
+      .left-pane{width:100%;padding:14px 14px 18px;}
+      .right-pane{padding:18px 14px 30px;}
+      .machine{max-width:100%;}
+      .top-card{width:260px;height:360px;}
+      .ghost    {width:260px;height:360px;}
+      .card-emoji-big{font-size:6.5em;}
+      .scrn-emoji{font-size:4.2em;}
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ════ LEFT: CARD DECK ════ -->
+  <div class="left-pane">
+    <div class="left-top">
+      <a href="index.html" class="back-link">&#x1F3E0; Home</a>
+      <span class="left-heading">Card Deck</span>
+    </div>
+
+    <div class="cat-bar" id="catBar"></div>
+
+    <div class="deck-area">
+      <div class="ghost"></div>
+      <div class="ghost"></div>
+      <div class="ghost"></div>
+      <!-- top card — always face-up, shows the current card -->
+      <div class="top-card" id="topCard" onclick="pressMachine()">
+        <span class="card-num-badge" id="cardNum">1 / 12</span>
+        <div id="cardFace"></div>
+        <div class="card-name-big" id="cardName"></div>
+        <span class="card-cat-badge" id="cardCatBadge"></span>
+      </div>
+    </div>
+
+    <div class="deck-nav">
+      <button class="nav-btn" onclick="navigate(-1)">&#9664; Prev</button>
+      <button class="nav-btn" onclick="navigate(1)">Next &#9654;</button>
+    </div>
+
+    <div class="prog-strip">
+      <div class="prog-bg"><div class="prog-fg" id="progFg" style="width:8%"></div></div>
+      <div class="prog-txt" id="progTxt">Card 1 of 12</div>
+    </div>
+  </div>
+
+  <!-- ════ RIGHT: MACHINE ════ -->
+  <div class="right-pane">
+    <div class="machine" id="machine">
+      <div class="machine-plate">&#10022; Flash Card Machine &#10022;</div>
+
+      <div class="machine-screen">
+        <div id="screenFace"></div>
+        <div class="scrn-name" id="screenName"></div>
+        <div class="scrn-fact" id="screenFact"></div>
+      </div>
+
+      <div class="grille" id="grille"></div>
+
+      <div class="waves" id="waves">
+        <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+        <div class="wv"></div><div class="wv"></div>
+      </div>
+
+      <div class="press-btn" id="pressBtn" onclick="pressMachine()">
+        <span class="btn-icon">&#128266;</span>
+        TAP TO HEAR!
+        <span class="btn-sub">Press — I will tell you what the card is!</span>
+      </div>
+    </div>
+
+    <div class="done-overlay" id="doneOverlay">
+      <div class="done-card">
+        <div style="font-size:3em">&#127881;</div>
+        <h2>Amazing Job!</h2>
+        <p id="doneMsg">You went through all the cards!</p>
+        <button class="restart-btn" onclick="restart()">&#128260; Play Again</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+/* ================================================================
+   DATA  — emojis stored as Unicode codepoints to avoid any
+           encoding issues whatsoever in the source file.
+   String.fromCodePoint() converts them to actual emoji at runtime.
+================================================================ */
+var E = String.fromCodePoint.bind(String);
+var FLUENT = 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/';
+
+var DECKS = {
+  animals:{
+    label: E(0x1F43E)+' Animals',
+    cards:[
+      {img:'Dog/3D/dog_3d.png',              code:'1F415',e:E(0x1F415),n:'Dog',      f:'Dogs are loyal pets that love to play and cuddle!'},
+      {img:'Cat/3D/cat_3d.png',              code:'1F408',e:E(0x1F408),n:'Cat',      f:'Cats purr softly when they feel happy.'},
+      {img:'Elephant/3D/elephant_3d.png',    code:'1F418',e:E(0x1F418),n:'Elephant', f:'Elephants are the biggest land animals on Earth.'},
+      {img:'Lion/3D/lion_3d.png',            code:'1F981',e:E(0x1F981),n:'Lion',     f:'Lions are called the King of the Jungle!'},
+      {img:'Tiger/3D/tiger_3d.png',          code:'1F405',e:E(0x1F405),n:'Tiger',    f:'Tigers have beautiful orange and black stripes.'},
+      {img:'Giraffe/3D/giraffe_3d.png',      code:'1F992',e:E(0x1F992),n:'Giraffe',  f:'Giraffes have the longest necks of any animal.'},
+      {img:'Koala/3D/koala_3d.png',          code:'1F428',e:E(0x1F428),n:'Koala',    f:'Koalas sleep up to 22 hours every single day!'},
+      {img:'Zebra/3D/zebra_3d.png',          code:'1F993',e:E(0x1F993),n:'Zebra',    f:'Every zebra has a completely unique stripe pattern.'},
+      {img:'Bear/3D/bear_3d.png',            code:'1F43B',e:E(0x1F43B),n:'Bear',     f:'Bears hibernate all winter long to stay warm.'},
+      {img:'Frog/3D/frog_3d.png',            code:'1F438',e:E(0x1F438),n:'Frog',     f:'Frogs can jump 20 times their own body length!'},
+      {img:'Penguin/3D/penguin_3d.png',      code:'1F427',e:E(0x1F427),n:'Penguin',  f:'Penguins cannot fly but swim very fast underwater.'},
+      {img:'Fox%20Face/3D/fox_face_3d.png',  code:'1F98A',e:E(0x1F98A),n:'Fox',      f:'Foxes are very clever and quick animals.'},
+      {img:'Rabbit/3D/rabbit_3d.png',         code:'1F407',e:E(0x1F407),n:'Rabbit',   f:'Rabbits have big ears and can hop very far!'},
+      {img:'Monkey/3D/monkey_3d.png',         code:'1F412',e:E(0x1F412),n:'Monkey',   f:'Monkeys are playful and cleverly swing on trees!'},
+      {img:'Panda/3D/panda_3d.png',           code:'1F43C',e:E(0x1F43C),n:'Panda',    f:'Pandas eat bamboo all day and are black and white.'},
+      {img:'Kangaroo/3D/kangaroo_3d.png',     code:'1F998',e:E(0x1F998),n:'Kangaroo', f:'Kangaroos carry their babies in a cosy pouch!'},
+      {img:'Horse/3D/horse_3d.png',           code:'1F40E',e:E(0x1F40E),n:'Horse',    f:'Horses run very fast and love to gallop in fields!'},
+      {img:'Pig/3D/pig_3d.png',               code:'1F416',e:E(0x1F416),n:'Pig',      f:'Pigs are very smart and love to roll in mud to cool off.'},
+      {img:'Cow/3D/cow_3d.png',               code:'1F404',e:E(0x1F404),n:'Cow',      f:'Cows give us the milk we drink every day!'},
+      {img:'Wolf/3D/wolf_3d.png',             code:'1F43A',e:E(0x1F43A),n:'Wolf',     f:'Wolves howl at the moon and live in family packs.'},
+      {img:'Crocodile/3D/crocodile_3d.png',   code:'1F40A',e:E(0x1F40A),n:'Crocodile',f:'Crocodiles are reptiles that love swimming in rivers.'},
+      {img:'Turtle/3D/turtle_3d.png',         code:'1F422',e:E(0x1F422),n:'Turtle',   f:'Turtles carry their cosy home on their back!'},
+      {img:'Camel/3D/camel_3d.png',           code:'1F42A',e:E(0x1F42A),n:'Camel',    f:'Camels store fat in their humps for energy in the desert.'},
+      {img:'Hippopotamus/3D/hippopotamus_3d.png',code:'1F99B',e:E(0x1F99B),n:'Hippo',      f:'Hippos are huge animals that love to swim in rivers.'},
+      {img:'Ewe/3D/ewe_3d.png',                 code:'1F411',e:E(0x1F411),n:'Sheep',     f:'Sheep have fluffy wool coats that keep them warm in winter!'},
+      {img:'Goat/3D/goat_3d.png',               code:'1F410',e:E(0x1F410),n:'Goat',      f:'Goats are curious animals that love to climb on rocks!'},
+      {img:'Deer/3D/deer_3d.png',               code:'1F98C',e:E(0x1F98C),n:'Deer',      f:'Deer are graceful animals that run swiftly through forests.'},
+      {img:'Gorilla/3D/gorilla_3d.png',         code:'1F98D',e:E(0x1F98D),n:'Gorilla',   f:'Gorillas are the biggest and strongest apes on Earth!'},
+      {img:'Mouse%20Face/3D/mouse_face_3d.png', code:'1F42D',e:E(0x1F42D),n:'Mouse',     f:'Mice are tiny and nibble on seeds and cheese!'},
+      {img:'Hamster/3D/hamster_3d.png',         code:'1F439',e:E(0x1F439),n:'Hamster',   f:'Hamsters stuff food in their big chubby cheeks!'},
+      {img:'Raccoon/3D/raccoon_3d.png',         code:'1F99D',e:E(0x1F99D),n:'Raccoon',   f:'Raccoons have black eye patches like little masked bandits!'},
+      {img:'Otter/3D/otter_3d.png',             code:'1F9A6',e:E(0x1F9A6),n:'Otter',     f:'Otters hold hands while sleeping so they don\'t float away!'},
+      {img:'Hedgehog/3D/hedgehog_3d.png',       code:'1F994',e:E(0x1F994),n:'Hedgehog',  f:'Hedgehogs have hundreds of sharp spines on their back!'},
+      {img:'Llama/3D/llama_3d.png',             code:'1F999',e:E(0x1F999),n:'Llama',     f:'Llamas are friendly animals from South America!'},
+      {img:'Bison/3D/bison_3d.png',             code:'1F9AC',e:E(0x1F9AC),n:'Bison',     f:'Bisons are huge and strong with a big hump on their shoulders.'},
+      {img:'Leopard/3D/leopard_3d.png',         code:'1F406',e:E(0x1F406),n:'Leopard',   f:'Leopards have spots and can climb trees with their prey!'},
+    ]
+  },
+  birds:{
+    label: E(0x1F99C)+' Birds',
+    cards:[
+      {img:'Parrot/3D/parrot_3d.png',        code:'1F99C',e:E(0x1F99C),n:'Parrot',   f:'Parrots can copy human speech perfectly!'},
+      {img:'Eagle/3D/eagle_3d.png',          code:'1F985',e:E(0x1F985),n:'Eagle',    f:'Eagles have incredibly sharp eyesight.'},
+      {img:'Owl/3D/owl_3d.png',              code:'1F989',e:E(0x1F989),n:'Owl',      f:'Owls can turn their heads almost all the way around.'},
+      {img:'Peacock/3D/peacock_3d.png',      code:'1F99A',e:E(0x1F99A),n:'Peacock',  f:'Peacocks fan out their beautiful colourful feathers.'},
+      {img:'Flamingo/3D/flamingo_3d.png',    code:'1F9A9',e:E(0x1F9A9),n:'Flamingo', f:'Flamingos are pink because they eat pink shrimp!'},
+      {img:'Duck/3D/duck_3d.png',            code:'1F986',e:E(0x1F986),n:'Duck',     f:'Ducks have waterproof feathers and love water.'},
+      {img:'Swan/3D/swan_3d.png',            code:'1F9A2',e:E(0x1F9A2),n:'Swan',     f:'Swans mate for life — they are very loyal birds.'},
+      {img:'Rooster/3D/rooster_3d.png',      code:'1F413',e:E(0x1F413),n:'Rooster',  f:'Roosters crow loudly to welcome the sunrise.'},
+      {img:'Bird/3D/bird_3d.png',            code:'1F426',e:E(0x1F426),n:'Sparrow',  f:'Sparrows are tiny birds that chirp merrily all day.'},
+      {img:'Turkey/3D/turkey_3d.png',        code:'1F983',e:E(0x1F983),n:'Turkey',   f:'Turkeys have colourful feathers and a fan-shaped tail!'},
+      {img:'Baby%20Chick/3D/baby_chick_3d.png',code:'1F424',e:E(0x1F424),n:'Chick', f:'Baby chicks are fluffy yellow birds that say cheep cheep!'},
+      {img:'Hatching%20Chick/3D/hatching_chick_3d.png',code:'1F423',e:E(0x1F423),n:'Hatching Egg',f:'A chick hatches by pecking its way out of a shell!'},
+      {img:'Dove/3D/dove_3d.png',            code:'1F54A',e:E(0x1F54A),n:'Dove',     f:'Doves are gentle white birds and a symbol of peace.'},
+      {img:'Bat/3D/bat_3d.png',              code:'1F987',e:E(0x1F987),n:'Bat',       f:'Bats are the only mammals that can truly fly — they sleep upside down!'},
+    ]
+  },
+  food:{
+    label: E(0x1F34E)+' Food',
+    cards:[
+      {e:E(0x1F34E),n:'Apple',      f:'Apples come in red, green and yellow colours.'},
+      {e:E(0x1F34C),n:'Banana',     f:'Bananas are a great energy-packed snack!'},
+      {e:E(0x1F355),n:'Pizza',      f:'Pizza was invented in Italy a long time ago.'},
+      {e:E(0x1F366),n:'Ice Cream',  f:'Ice cream is made from chilled milk and cream.'},
+      {e:E(0x1F369),n:'Donut',      f:'Donuts have a fun round hole in the middle!'},
+      {e:E(0x1F955),n:'Carrot',     f:'Carrots are orange and help keep your eyes healthy.'},
+      {e:E(0x1F353),n:'Strawberry', f:'Strawberries are sweet, juicy red fruits.'},
+      {e:E(0x1F33D),n:'Corn',       f:'Corn grows very tall on a stalk in the field.'},
+      {e:E(0x1F349),n:'Watermelon', f:'Watermelon is mostly water — perfect on a hot day!'},
+      {e:E(0x1F354),n:'Burger',     f:'Burgers have a soft bun, a patty and yummy toppings.'},
+      {e:E(0x1F9C1),n:'Cupcake',    f:'Cupcakes are little cakes with frosting on top.'},
+      {e:E(0x1F36B),n:'Chocolate',  f:'Chocolate is made from cacao beans from the jungle.'},
+      {e:E(0x1F347),n:'Grapes',     f:'Grapes grow in big bunches on a vine!'},
+      {e:E(0x1F352),n:'Cherry',     f:'Cherries are tiny, sweet and bright red fruits.'},
+      {e:E(0x1F34B),n:'Lemon',      f:'Lemons are sour and yellow \u2014 great for lemonade!'},
+      {e:E(0x1F34D),n:'Pineapple',  f:'Pineapples are spiky outside and sweet inside.'},
+      {e:E(0x1F36A),n:'Cookie',     f:'Cookies are yummy baked treats with chocolate chips!'},
+      {e:E(0x1F37F),n:'Popcorn',    f:'Popcorn pops when corn kernels get very hot!'},
+      {e:E(0x1F95A),n:'Egg',        f:'Eggs come from hens and are full of protein!'},
+      {e:E(0x1F32D),n:'Hot Dog',    f:'Hot dogs are sausages tucked snugly in a soft bun.'},
+      {e:E(0x1F96E),n:'Mango',      f:'Mangoes are juicy tropical fruits \u2014 the king of fruits!'},
+      {e:E(0x1F34A),n:'Orange',     f:'Oranges are round, juicy and full of vitamin C!'},
+      {e:E(0x1F351),n:'Peach',      f:'Peaches are soft, fuzzy and wonderfully sweet!'},
+      {e:E(0x1F350),n:'Pear',       f:'Pears are green and sweet \u2014 great in a lunchbox!'},
+      {e:E(0x1F345),n:'Tomato',     f:'Tomatoes are red and juicy \u2014 they are actually fruits!'},
+      {e:E(0x1F966),n:'Broccoli',   f:'Broccoli is a green veggie that looks like a tiny tree!'},
+      {e:E(0x1F344),n:'Mushroom',   f:'Mushrooms grow in forests and taste great in cooking!'},
+      {e:E(0x1F9C0),n:'Cheese',     f:'Cheese is made from milk and comes in many flavours!'},
+      {e:E(0x1F95B),n:'Milk',       f:'Milk from cows makes us strong and healthy!'},
+      {e:E(0x1F35E),n:'Bread',      f:'Bread is baked in an oven and is warm and fluffy!'},
+      {e:E(0x1F32E),n:'Taco',       f:'Tacos are a Mexican food with a crunchy shell!'},
+      {e:E(0x1F363),n:'Sushi',      f:'Sushi is a Japanese food made with rice and fish!'},
+      {e:E(0x1F36D),n:'Lollipop',   f:'Lollipops are sweet round sweets on a stick!'},
+      {e:E(0x1F36F),n:'Honey',      f:'Honey is made by busy bees and is golden and sweet!'},
+      {e:E(0x1F37F),n:'Popcorn',    f:'Popcorn pops when corn kernels get really hot!'},
+      {e:E(0x1F967),n:'Pie',        f:'Pies have a yummy filling baked inside a pastry crust!'},
+    ]
+  },
+  shapes:{
+    label: E(0x1F537)+' Shapes',
+    cards:[
+      {e:E(0x2B55), n:'Circle',    f:'A circle is perfectly round with no corners at all.'},
+      {e:E(0x2B1C), n:'Square',    f:'A square has 4 perfectly equal sides and 4 corners.'},
+      {e:E(0x1F53A),n:'Triangle',  f:'A triangle has 3 sides and 3 sharp corners.'},
+      {shape:'rect',e:E(0x25AC),n:'Rectangle',f:'A rectangle has 4 sides — two long and two short.'},
+      {e:E(0x1F4A0),n:'Diamond',   f:'A diamond shape is like a square tilted on its side.'},
+      {e:E(0x2B50), n:'Star',      f:'A star has 5 pointy tips and lights up the night sky!'},
+      {e:E(0x2764)+E(0xFE0F),n:'Heart',f:'A heart shape is the universal symbol of love.'},
+      {e:E(0x1F536),n:'Hexagon',   f:'A hexagon has 6 sides — just like a honeycomb cell!'},
+      {e:E(0x1F319),n:'Crescent',  f:'A crescent looks like the shape of the new moon.'},
+      {shape:'oval',e:E(0x1F95A), n:'Oval',      f:'An oval is like a stretched circle \u2014 just like an egg!'},
+      {e:E(0x2795),              n:'Plus',       f:'A plus sign has 4 lines \u2014 we use it to add numbers!'},
+      {e:E(0x27A1)+E(0xFE0F),   n:'Arrow',      f:'An arrow points to show us which way to go!'},
+      {e:E(0x1F6D1),            n:'Octagon',    f:'An octagon has 8 sides \u2014 just like a stop sign!'},
+    ]
+  },
+  colors:{
+    label: E(0x1F308)+' Colors',
+    cards:[
+      {e:E(0x1F534),n:'Red',    f:'Red is the colour of juicy apples and fire trucks!'},
+      {e:E(0x1F7E0),n:'Orange', f:'Orange is the colour of a ripe, sweet orange fruit.'},
+      {e:E(0x1F7E1),n:'Yellow', f:'Yellow is the bright colour of the sunny sun.'},
+      {e:E(0x1F7E2),n:'Green',  f:'Green is the colour of fresh grass and leaves.'},
+      {e:E(0x1F535),n:'Blue',   f:'Blue is the colour of the wide sky and deep ocean.'},
+      {e:E(0x1F7E3),n:'Purple', f:'Purple is made by mixing red and blue together.'},
+      {e:E(0x26AA), n:'White',  f:'White contains all the colours of the rainbow!'},
+      {e:E(0x26AB), n:'Black',  f:'Black absorbs all light — that is why it looks dark.'},
+      {e:E(0x1F7E4),n:'Brown',  f:'Brown is the colour of chocolate and wooden tables.'},
+      {e:E(0x1FA77),n:'Pink',   f:'Pink is a soft and pretty mix of red and white.'},
+      {e:E(0x1FA76),n:'Grey',   f:'Grey is a calm colour \u2014 like clouds on a rainy day.'},
+      {e:E(0x1F7E1),n:'Gold',   f:'Gold is a shiny yellow colour \u2014 like a treasure chest!'},
+    ]
+  },
+  numbers:{
+    label: E(0x1F522)+' Numbers',
+    cards:[
+      {num:'0', n:'Zero',  f:'Zero means nothing at all — but it is very important!'},
+      {num:'1', n:'One',   f:'One — there is only one sun in our solar system!'},
+      {num:'2', n:'Two',   f:'Two — you have two eyes to see the beautiful world!'},
+      {num:'3', n:'Three', f:'Three — a tricycle has three wheels!'},
+      {num:'4', n:'Four',  f:'Four — a dog has four legs to run super fast!'},
+      {num:'5', n:'Five',  f:'Five — you have five fingers on one hand!'},
+      {num:'6', n:'Six',   f:'Six — a honeycomb cell has six sides!'},
+      {num:'7', n:'Seven', f:'Seven — a rainbow has seven beautiful colours!'},
+      {num:'8', n:'Eight', f:'Eight — a spider has eight legs!'},
+      {num:'9', n:'Nine',  f:'Nine — cats are said to have nine lives!'},
+      {num:'10',n:'Ten',   f:'Ten — ten fingers on both your hands combined!'},
+      {num:'11',n:'Eleven',    f:'Eleven — a football team has eleven players!'},
+      {num:'12',n:'Twelve',    f:'Twelve \u2014 there are twelve months in a whole year!'},
+      {num:'13',n:'Thirteen',  f:'Thirteen \u2014 a baker\'s dozen has thirteen treats!'},
+      {num:'14',n:'Fourteen',  f:'Fourteen \u2014 two weeks have fourteen days in total!'},
+      {num:'15',n:'Fifteen',   f:'Fifteen \u2014 a quarter of an hour is fifteen minutes!'},
+      {num:'16',n:'Sixteen',   f:'Sixteen \u2014 sixteen crayons fit in a small crayon box!'},
+      {num:'17',n:'Seventeen', f:'Seventeen \u2014 seventeen candles would make a bright cake!'},
+      {num:'18',n:'Eighteen',  f:'Eighteen \u2014 eighteen holes make a full golf course!'},
+      {num:'19',n:'Nineteen',  f:'Nineteen \u2014 nineteen steps from here to the garden gate!'},
+      {num:'20',n:'Twenty',    f:'Twenty \u2014 twenty toes on five friendly frogs!'},
+    ]
+  },
+  vehicles:{
+    label: E(0x1F697)+' Vehicles',
+    cards:[
+      {e:E(0x1F697),n:'Car',        f:'Cars carry families to different places on roads.'},
+      {e:E(0x1F68C),n:'Bus',        f:'Buses carry many people together at once.'},
+      {e:E(0x1F682),n:'Train',      f:'Trains run on special metal tracks across the land.'},
+      {e:E(0x2708)+E(0xFE0F),n:'Airplane',f:'Airplanes fly high up in the sky above the clouds!'},
+      {e:E(0x1F6A2),n:'Ship',       f:'Big ships sail across vast oceans.'},
+      {e:E(0x1F691),n:'Ambulance',  f:'Ambulances rush sick people to hospital quickly.'},
+      {e:E(0x1F692),n:'Fire Truck', f:'Fire trucks carry water to put out blazing fires.'},
+      {e:E(0x1F681),n:'Helicopter', f:'Helicopters can hover perfectly still in the air.'},
+      {e:E(0x1F6B2),n:'Bicycle',    f:'Bicycles have two wheels and need you to pedal!'},
+      {e:E(0x1F680),n:'Rocket',     f:'Rockets blast off and travel into outer space!'},
+      {e:E(0x1F3CD)+E(0xFE0F),n:'Motorcycle',f:'Motorcycles are fast two-wheeled vehicles!'},
+      {e:E(0x1F69C),n:'Tractor',    f:'Tractors are big and strong and work on farms.'},
+      {e:E(0x1F695),n:'Taxi',       f:'Taxis are yellow cars you can hire for a ride.'},
+      {e:E(0x1F693),n:'Police Car', f:'Police cars help keep everyone safe on the roads.'},
+      {e:E(0x1F69A),n:'Truck',      f:'Trucks carry heavy loads across long distances.'},
+      {e:E(0x26F5),n:'Sailboat',    f:'Sailboats use the wind to glide across the water.'},
+      {e:E(0x1F6F4),n:'Scooter',    f:'Scooters are small two-wheeled rides \u2014 great for kids!'},
+      {e:E(0x1F6F9),n:'Skateboard', f:'Skateboards have four wheels and need great balance!'},
+      {e:E(0x1F690),n:'Van',        f:'Vans are big boxy vehicles that carry lots of people.'},
+      {e:E(0x1F68A),n:'Tram',       f:'Trams run on rails along city streets.'},
+      {e:E(0x1F6F6),n:'Canoe',      f:'Canoes are narrow boats you paddle on rivers!'},
+      {e:E(0x1F6A0),n:'Cable Car',  f:'Cable cars hang from wires and climb steep hills!'},
+      {e:E(0x26F4)+E(0xFE0F),n:'Ferry',f:'Ferries carry cars and people across water.'},
+      {e:E(0x1F6F8),n:'Flying Saucer',f:'A flying saucer is a round spacecraft from outer space!'},
+    ]
+  },
+  sea:{
+    label: E(0x1F30A)+' Sea Animals',
+    cards:[
+      {img:'Tropical%20Fish/3D/tropical_fish_3d.png',  code:'1F420',e:E(0x1F420),n:'Clownfish',  f:'Clownfish are bright orange and live in sea anemones!'},
+      {img:'Fish/3D/fish_3d.png',                      code:'1F41F',e:E(0x1F41F),n:'Fish',        f:'Fish breathe underwater through special organs called gills!'},
+      {img:'Spouting%20Whale/3D/spouting_whale_3d.png',code:'1F433',e:E(0x1F433),n:'Whale',      f:'Whales are the biggest animals that have ever lived on Earth!'},
+      {img:'Dolphin/3D/dolphin_3d.png',                code:'1F42C',e:E(0x1F42C),n:'Dolphin',    f:'Dolphins are very smart and love to jump and play in waves!'},
+      {img:'Shark/3D/shark_3d.png',                    code:'1F988',e:E(0x1F988),n:'Shark',      f:'Sharks are powerful fish with rows of very sharp teeth.'},
+      {img:'Octopus/3D/octopus_3d.png',                code:'1F419',e:E(0x1F419),n:'Octopus',    f:'Octopuses have 8 amazing arms and are incredibly clever!'},
+      {img:'Crab/3D/crab_3d.png',                      code:'1F980',e:E(0x1F980),n:'Crab',       f:'Crabs walk sideways and have powerful pincers!'},
+      {img:'Lobster/3D/lobster_3d.png',                code:'1F99E',e:E(0x1F99E),n:'Lobster',    f:'Lobsters live on the ocean floor and have 10 legs!'},
+      {img:'Blowfish/3D/blowfish_3d.png',              code:'1F421',e:E(0x1F421),n:'Blowfish',   f:'Blowfish puff up like a spiky ball when they are scared!'},
+      {img:'Squid/3D/squid_3d.png',                    code:'1F991',e:E(0x1F991),n:'Squid',      f:'Squids shoot ink at enemies to escape quickly!'},
+      {img:'Seal/3D/seal_3d.png',                      code:'1F9AD',e:E(0x1F9AD),n:'Seal',       f:'Seals are playful and can balance balls on their noses!'},
+      {img:'Shrimp/3D/shrimp_3d.png',                  code:'1F990',e:E(0x1F990),n:'Shrimp',     f:'Shrimps are tiny sea creatures that swim backwards!'},
+      {img:'Turtle/3D/turtle_3d.png',                  code:'1F422',e:E(0x1F422),n:'Sea Turtle', f:'Sea turtles swim thousands of miles across the ocean!'},
+      {img:'Spiral%20Shell/3D/spiral_shell_3d.png',    code:'1F41A',e:E(0x1F41A),n:'Shell',      f:'Shells are the cosy homes of snails and other sea creatures!'},
+    ]
+  },
+  insects:{
+    label: E(0x1F41B)+' Insects',
+    cards:[
+      {img:'Honeybee/3D/honeybee_3d.png',              code:'1F41D',e:E(0x1F41D),n:'Bee',         f:'Bees make honey and carry pollen to help flowers grow!'},
+      {img:'Butterfly/3D/butterfly_3d.png',            code:'1F98B',e:E(0x1F98B),n:'Butterfly',   f:'Butterflies start as caterpillars then grow beautiful wings!'},
+      {img:'Lady%20Beetle/3D/lady_beetle_3d.png',      code:'1F41E',e:E(0x1F41E),n:'Ladybug',     f:'Ladybugs are red with black spots and eat harmful insects!'},
+      {img:'Ant/3D/ant_3d.png',                        code:'1F41C',e:E(0x1F41C),n:'Ant',         f:'Ants are tiny but can carry 50 times their own body weight!'},
+      {img:'Snail/3D/snail_3d.png',                    code:'1F40C',e:E(0x1F40C),n:'Snail',       f:'Snails carry their shell house everywhere they go!'},
+      {img:'Bug/3D/bug_3d.png',                        code:'1F41B',e:E(0x1F41B),n:'Caterpillar', f:'Caterpillars munch leaves before turning into butterflies!'},
+      {img:'Spider/3D/spider_3d.png',                  code:'1F577',e:E(0x1F577),n:'Spider',      f:'Spiders spin silky webs to catch their food!'},
+      {img:'Cricket/3D/cricket_3d.png',                code:'1F997',e:E(0x1F997),n:'Cricket',     f:'Crickets make music by rubbing their wings together!'},
+      {img:'Mosquito/3D/mosquito_3d.png',              code:'1F99F',e:E(0x1F99F),n:'Mosquito',    f:'Mosquitoes make a loud buzz with their very fast wings.'},
+      {img:'Beetle/3D/beetle_3d.png',                  code:'1FAB2',e:E(0x1FAB2),n:'Beetle',      f:'Beetles are the most common insects in the whole world!'},
+      {img:'Cockroach/3D/cockroach_3d.png',            code:'1FAB3',e:E(0x1FAB3),n:'Cockroach',   f:'Cockroaches can run very fast and have been here since dinosaurs!'},
+      {img:'Worm/3D/worm_3d.png',                      code:'1FAB1',e:E(0x1FAB1),n:'Worm',        f:'Worms dig through soil and help plants grow strong roots!'},
+    ]
+  }
+};
+
+/* ── STATE ── */
+var deck='animals', idx=0;
+
+/* ── IMAGE FALLBACKS ── */
+function imgFail(img){
+  var d=document.createElement('div');d.className='card-emoji-big pop';
+  d.textContent=String.fromCodePoint(parseInt(img.dataset.code,16));
+  img.replaceWith(d);
+}
+function imgFailScreen(img){
+  var d=document.createElement('div');d.className='scrn-emoji';d.id='screenEmojiEl';
+  d.textContent=String.fromCodePoint(parseInt(img.dataset.code,16));
+  img.replaceWith(d);
+}
+
+/* ── CATEGORY BAR ── */
+function buildCatBar(){
+  var bar=document.getElementById('catBar');
+  bar.innerHTML='';
+  Object.keys(DECKS).forEach(function(key){
+    var btn=document.createElement('button');
+    btn.className='cat-btn'+(key===deck?' active':'');
+    btn.textContent=DECKS[key].label;
+    btn.onclick=function(){switchDeck(key);};
+    bar.appendChild(btn);
+  });
+}
+function switchDeck(key){
+  deck=key; idx=0;
+  document.querySelectorAll('.cat-btn').forEach(function(b,i){
+    b.classList.toggle('active',Object.keys(DECKS)[i]===key);
+  });
+  document.getElementById('doneOverlay').classList.remove('show');
+  renderAll();
+}
+
+/* ── RENDER ── */
+function cardEmojiFace(card,bigClass,numClass){
+  if(card.num!=null){
+    return '<div class="'+numClass+'">'+card.num+'</div>';
+  }
+  if(card.img){
+    return '<img class="card-img" src="'+FLUENT+card.img+'" alt="'+card.n+'" data-code="'+card.code+'" onerror="imgFail(this)">';
+  }
+  if(card.shape){
+    return '<div class="css-shape"><div class="csh-'+card.shape+'"></div></div>';
+  }
+  return '<div class="'+bigClass+'">'+card.e+'</div>';
+}
+function screenEmojiFace(card){
+  if(card.num!=null){
+    return '<div class="scrn-num">'+card.num+'</div>';
+  }
+  if(card.img){
+    return '<img class="scrn-img" id="screenEmojiEl" src="'+FLUENT+card.img+'" alt="'+card.n+'" data-code="'+card.code+'" onerror="imgFailScreen(this)">';
+  }
+  return '<div class="scrn-emoji" id="screenEmojiEl">'+card.e+'</div>';
+}
+
+function renderAll(){
+  var card =DECKS[deck].cards[idx];
+  var total=DECKS[deck].cards.length;
+
+  /* ---- Left card ---- */
+  var cf=document.getElementById('cardFace');
+  cf.innerHTML=cardEmojiFace(card,'card-emoji-big','card-num-text');
+  /* pop animation on the emoji/num element */
+  var inner=cf.firstChild;
+  if(inner){
+    inner.classList.remove('pop');
+    void inner.offsetWidth;
+    inner.classList.add('pop');
+  }
+  document.getElementById('cardName').textContent=card.n;
+  document.getElementById('cardNum').textContent=(idx+1)+' / '+total;
+  document.getElementById('cardCatBadge').textContent=DECKS[deck].label;
+
+  /* ---- Right machine screen ---- */
+  document.getElementById('screenFace').innerHTML=screenEmojiFace(card);
+  document.getElementById('screenName').textContent=card.n;
+  document.getElementById('screenFact').textContent=card.f;
+
+  /* progress */
+  document.getElementById('progFg').style.width=((idx+1)/total*100)+'%';
+  document.getElementById('progTxt').textContent='Card '+(idx+1)+' of '+total;
+
+  buildGrille(false);
+}
+
+/* ── GRILLE ── */
+function buildGrille(lit){
+  var g=document.getElementById('grille');
+  g.innerHTML='';
+  var rows=4,cols=14;
+  for(var r=0;r<rows;r++){
+    var row=document.createElement('div');
+    row.className='grille-row';
+    for(var c=0;c<cols;c++){
+      var dot=document.createElement('div');
+      dot.className='grille-dot'+(lit&&Math.random()>0.35?' lit':'');
+      row.appendChild(dot);
+    }
+    g.appendChild(row);
+  }
+}
+
+/* ── NAVIGATE ── */
+function navigate(dir){
+  var total=DECKS[deck].cards.length;
+  var next=idx+dir;
+  if(next<0) return;
+  if(next>=total){checkDone();return;}
+  idx=next; renderAll();
+}
+function checkDone(){
+  var d=DECKS[deck];
+  document.getElementById('doneMsg').textContent=
+    'You went through all '+d.cards.length+' '+d.label.replace(/^\S+\s/,'')+' cards!';
+  document.getElementById('doneOverlay').classList.add('show');
+  launchConfetti();
+}
+function restart(){switchDeck(deck);}
+
+/* ── PRESS MACHINE ── */
+function pressMachine(){
+  var btn=document.getElementById('pressBtn');
+  btn.classList.add('pressed');
+  setTimeout(function(){btn.classList.remove('pressed');},180);
+
+  /* flash screen emoji */
+  var sel=document.getElementById('screenEmojiEl');
+  if(sel){sel.classList.remove('flash');void sel.offsetWidth;sel.classList.add('flash');}
+
+  /* light up grille, then dim */
+  buildGrille(true);
+  setTimeout(function(){buildGrille(false);},1100);
+
+  /* waves on */
+  document.getElementById('waves').classList.add('active');
+
+  speak();
+}
+
+/* ── SPEECH ── */
+function speak(){
+  if(!('speechSynthesis' in window)) return;
+  var card=DECKS[deck].cards[idx];
+  window.speechSynthesis.cancel();
+  var utt=new SpeechSynthesisUtterance(card.n+'!   '+card.f);
+  utt.rate=0.9; utt.pitch=1.1;
+  utt.onend=function(){ document.getElementById('waves').classList.remove('active'); };
+  window.speechSynthesis.speak(utt);
+}
+
+/* ── CONFETTI ── */
+function launchConfetti(){
+  var cols=['#f7971e','#ffd200','#ff6b6b','#43cea2','#667eea','#f093fb','#84fab0','#fff'];
+  for(var i=0;i<100;i++){
+    (function(i){
+      setTimeout(function(){
+        var p=document.createElement('div');
+        p.className='cf';
+        var sz=8+Math.random()*12;
+        p.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(Math.random()*100)+'vw;top:-20px;background:'+
+          cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(1.6+Math.random()*2.2)+
+          's;border-radius:'+(Math.random()>0.5?'50%':'3px')+';';
+        document.body.appendChild(p);
+        setTimeout(function(){p.remove();},5000);
+      },i*20);
+    })(i);
+  }
+}
+
+/* ── INIT ── */
+buildCatBar();
+renderAll();
+</script>
+</body>
+</html>

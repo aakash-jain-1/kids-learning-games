@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Honest Woodcutter Story</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Animated stars background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #fff;
+      font-size: 3em;
+      margin: 30px 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+      animation: fadeInDown 1s ease-out;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .story-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      margin-bottom: 40px;
+    }
+    
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background: linear-gradient(to bottom, #87ceeb 0%, #98d8e8 50%, #90ee90 100%);
+      border-radius: 15px;
+      margin: 30px 0;
+      overflow: hidden;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+    }
+    
+    /* Forest background */
+    .tree {
+      position: absolute;
+      bottom: 0;
+    }
+    
+    .tree1 {
+      left: 50px;
+      width: 80px;
+      height: 200px;
+      background: linear-gradient(to bottom, #228b22, #006400);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: sway 4s ease-in-out infinite;
+    }
+    
+    .tree2 {
+      right: 80px;
+      width: 100px;
+      height: 250px;
+      background: linear-gradient(to bottom, #32cd32, #228b22);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: sway 3.5s ease-in-out infinite 0.5s;
+    }
+    
+    .tree3 {
+      left: 200px;
+      width: 70px;
+      height: 180px;
+      background: linear-gradient(to bottom, #3cb371, #2e8b57);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: sway 4.5s ease-in-out infinite 1s;
+    }
+    
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    
+    /* River */
+    .river {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, rgba(30, 144, 255, 0.7), rgba(0, 100, 200, 0.8));
+      overflow: hidden;
+    }
+    
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 200%;
+      height: 30px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 60"><path d="M0,30 Q150,10 300,30 T600,30 T900,30 T1200,30 L1200,60 L0,60 Z" fill="rgba(255,255,255,0.3)"/></svg>') repeat-x;
+      animation: wave-animation 8s linear infinite;
+    }
+    
+    @keyframes wave-animation {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(50%); }
+    }
+    
+    /* Woodcutter character */
+    .woodcutter {
+      position: absolute;
+      bottom: 130px;
+      left: 45%;
+      width: 80px;
+      height: 120px;
+      transition: all 1s ease;
+    }
+    
+    .woodcutter-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 60px;
+      background: #8b4513;
+      border-radius: 10px;
+    }
+    
+    .woodcutter-head {
+      position: absolute;
+      bottom: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      background: #fdbcb4;
+      border-radius: 50%;
+    }
+    
+    .woodcutter-arms {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 8px;
+      background: #8b4513;
+      border-radius: 4px;
+      animation: chop 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+    
+    @keyframes chop {
+      0%, 100% { transform: translateX(-50%) rotate(-20deg); }
+      50% { transform: translateX(-50%) rotate(20deg); }
+    }
+    
+    .axe {
+      position: absolute;
+      bottom: 45px;
+      right: -20px;
+      width: 30px;
+      height: 35px;
+      background: #708090;
+      clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+    }
+    
+    /* Fairy character */
+    .fairy {
+      position: absolute;
+      top: 100px;
+      right: 200px;
+      width: 60px;
+      height: 80px;
+      opacity: 0;
+      animation: fairy-appear 2s ease-out 3s forwards, float 3s ease-in-out infinite 5s;
+    }
+    
+    @keyframes fairy-appear {
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(180deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .fairy-body {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 25px;
+      height: 35px;
+      background: linear-gradient(to bottom, #ff69b4, #ff1493);
+      border-radius: 10px;
+    }
+    
+    .fairy-head {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background: #fdbcb4;
+      border-radius: 50%;
+    }
+    
+    .fairy-wings {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 35px;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.8), rgba(173,216,230,0.6));
+      border-radius: 50%;
+      clip-path: polygon(0% 50%, 25% 0%, 50% 50%, 75% 0%, 100% 50%, 75% 100%, 50% 50%, 25% 100%);
+      animation: wing-flap 0.5s ease-in-out infinite;
+    }
+    
+    @keyframes wing-flap {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.1); }
+    }
+    
+    .wand {
+      position: absolute;
+      bottom: 30px;
+      right: -15px;
+      width: 3px;
+      height: 40px;
+      background: #ffd700;
+      transform: rotate(-30deg);
+    }
+    
+    .wand::before {
+      content: '⭐';
+      position: absolute;
+      top: -15px;
+      left: -7px;
+      font-size: 20px;
+      animation: sparkle-rotate 2s linear infinite;
+    }
+    
+    @keyframes sparkle-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Magic sparkles */
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: gold;
+      border-radius: 50%;
+      animation: sparkle-move 2s ease-out infinite;
+      opacity: 0;
+    }
+    
+    @keyframes sparkle-move {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0);
+      }
+    }
+    
+    /* Golden axe */
+    .golden-axe {
+      position: absolute;
+      bottom: 150px;
+      left: 40%;
+      width: 50px;
+      height: 60px;
+      background: linear-gradient(145deg, #ffd700, #ffed4e, #ffd700);
+      clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+      opacity: 0;
+      animation: axe-rise 3s ease-out 6s forwards;
+      box-shadow: 0 0 20px gold;
+    }
+    
+    @keyframes axe-rise {
+      0% {
+        opacity: 0;
+        bottom: 100px;
+        transform: scale(0.5) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        bottom: 180px;
+        transform: scale(1.2) rotate(180deg);
+      }
+      100% {
+        opacity: 1;
+        bottom: 150px;
+        transform: scale(1) rotate(360deg);
+      }
+    }
+    
+    /* Silver axe */
+    .silver-axe {
+      position: absolute;
+      bottom: 150px;
+      left: 50%;
+      width: 50px;
+      height: 60px;
+      background: linear-gradient(145deg, #c0c0c0, #e8e8e8, #c0c0c0);
+      clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+      opacity: 0;
+      animation: axe-rise 3s ease-out 9s forwards;
+      box-shadow: 0 0 20px silver;
+    }
+    
+    /* Story text */
+    .story-text {
+      font-size: 1.3em;
+      line-height: 1.8;
+      color: #333;
+      margin: 20px 0;
+      text-align: justify;
+    }
+    
+    .moral {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      padding: 25px;
+      border-radius: 15px;
+      margin-top: 30px;
+      border: 3px solid #ff8c00;
+      box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+    }
+    
+    .moral h2 {
+      color: #8b4513;
+      margin-bottom: 15px;
+      font-size: 2em;
+      text-align: center;
+    }
+    
+    .moral p {
+      color: #654321;
+      font-size: 1.4em;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.6;
+    }
+    
+    .controls {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .btn {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2em;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      margin: 0 10px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .navigation {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #2e7d32;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .nav-btn:hover {
+      background: #4CAF50;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    /* Animation states */
+    .scene.animated .woodcutter {
+      animation: woodcutter-drop 2s ease-out 1s forwards;
+    }
+    
+    @keyframes woodcutter-drop {
+      0% { bottom: 130px; transform: rotate(0deg); }
+      50% { bottom: 110px; transform: rotate(-10deg); }
+      100% { bottom: 120px; transform: rotate(0deg); }
+    }
+    
+    /* Splash effect */
+    .splash {
+      position: absolute;
+      bottom: 100px;
+      left: 48%;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
+      opacity: 0;
+      animation: splash-effect 1.5s ease-out 2s;
+    }
+    
+    @keyframes splash-effect {
+      0% {
+        opacity: 0;
+        transform: scale(0);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.5);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2);
+      }
+    }
+    
+    /* Sun */
+    .sun {
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #ffeb3b, #ffc107);
+      border-radius: 50%;
+      box-shadow: 0 0 50px rgba(255, 235, 59, 0.6);
+      animation: sun-glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes sun-glow {
+      0%, 100% { box-shadow: 0 0 50px rgba(255, 235, 59, 0.6); }
+      50% { box-shadow: 0 0 80px rgba(255, 235, 59, 0.9); }
+    }
+    
+    /* Clouds */
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 100px;
+      opacity: 0.8;
+    }
+    
+    .cloud1 {
+      width: 100px;
+      height: 40px;
+      top: 60px;
+      left: 20%;
+      animation: cloud-move 30s linear infinite;
+    }
+    
+    .cloud2 {
+      width: 120px;
+      height: 50px;
+      top: 100px;
+      right: 15%;
+      animation: cloud-move 35s linear infinite reverse;
+    }
+    
+    @keyframes cloud-move {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(100px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  
+  <div class="navigation">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="alphabet-game.html" class="nav-btn">Games</a>
+  </div>
+  
+  <div class="container">
+    <h1>🪓 The Honest Woodcutter 🧚‍♀️</h1>
+    
+    <div class="story-container">
+      <div class="scene" id="scene">
+        <!-- Sky elements -->
+        <div class="sun"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        
+        <!-- Forest -->
+        <div class="tree tree1"></div>
+        <div class="tree tree2"></div>
+        <div class="tree tree3"></div>
+        
+        <!-- River -->
+        <div class="river">
+          <div class="wave"></div>
+        </div>
+        
+        <!-- Woodcutter -->
+        <div class="woodcutter" id="woodcutter">
+          <div class="woodcutter-head"></div>
+          <div class="woodcutter-arms">
+            <div class="axe"></div>
+          </div>
+          <div class="woodcutter-body"></div>
+        </div>
+        
+        <!-- Fairy -->
+        <div class="fairy" id="fairy">
+          <div class="fairy-head"></div>
+          <div class="fairy-wings"></div>
+          <div class="fairy-body"></div>
+          <div class="wand"></div>
+        </div>
+        
+        <!-- Axes -->
+        <div class="golden-axe" id="goldenAxe"></div>
+        <div class="silver-axe" id="silverAxe"></div>
+        
+        <!-- Effects -->
+        <div class="splash" id="splash"></div>
+      </div>
+      
+      <div class="controls">
+        <button class="btn" onclick="playAnimation()">▶️ Play Animation</button>
+        <button class="btn" onclick="resetAnimation()">🔄 Reset</button>
+      </div>
+      
+      <div class="story-text">
+        <h2 style="color: #2e7d32; margin-bottom: 20px;">📖 The Story</h2>
+        <p>
+          Once upon a time, there lived a poor but honest woodcutter. One day, while cutting wood near a river, 
+          his axe slipped from his hands and fell into the deep water. The woodcutter was very sad because the 
+          axe was his only means of earning a living.
+        </p>
+        <p style="margin-top: 15px;">
+          As he sat crying by the river, a beautiful fairy appeared from the water. She asked him why he was 
+          crying. The woodcutter explained his situation. The kind fairy dove into the river and brought up a 
+          golden axe, asking, "Is this your axe?"
+        </p>
+        <p style="margin-top: 15px;">
+          The honest woodcutter replied, "No, that is not mine." The fairy went back and returned with a silver 
+          axe. Again the woodcutter said, "No, that is not mine either." Finally, the fairy brought his old iron 
+          axe. The woodcutter's eyes lit up, "Yes! That's my axe!"
+        </p>
+        <p style="margin-top: 15px;">
+          The fairy was very pleased with his honesty. She rewarded him by giving him both the golden and silver 
+          axes along with his own axe. The woodcutter thanked the fairy and returned home happily with all three axes.
+        </p>
+      </div>
+      
+      <div class="moral">
+        <h2>✨ Moral of the Story ✨</h2>
+        <p>Honesty is always rewarded. Truth and integrity are the greatest virtues one can possess.</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Create animated stars
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    // Create sparkles around fairy
+    function createSparkles() {
+      const fairy = document.getElementById('fairy');
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'sparkle';
+          const angle = (Math.PI * 2 * i) / 20;
+          const distance = 50 + Math.random() * 50;
+          sparkle.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+          sparkle.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+          sparkle.style.left = '30px';
+          sparkle.style.top = '40px';
+          sparkle.style.animationDelay = (i * 0.1) + 's';
+          fairy.appendChild(sparkle);
+          
+          setTimeout(() => sparkle.remove(), 2000);
+        }, 5000 + i * 100);
+      }
+    }
+    
+    function playAnimation() {
+      const scene = document.getElementById('scene');
+      scene.classList.add('animated');
+      createSparkles();
+      
+      // Reset and replay if already played
+      const fairy = document.getElementById('fairy');
+      const goldenAxe = document.getElementById('goldenAxe');
+      const silverAxe = document.getElementById('silverAxe');
+      
+      fairy.style.animation = 'none';
+      goldenAxe.style.animation = 'none';
+      silverAxe.style.animation = 'none';
+      
+      setTimeout(() => {
+        fairy.style.animation = 'fairy-appear 2s ease-out 3s forwards, float 3s ease-in-out infinite 5s';
+        goldenAxe.style.animation = 'axe-rise 3s ease-out 6s forwards';
+        silverAxe.style.animation = 'axe-rise 3s ease-out 9s forwards';
+      }, 10);
+    }
+    
+    function resetAnimation() {
+      location.reload();
+    }
+    
+    // Initialize
+    createStars();
+    
+    // Auto-play animation on load
+    window.addEventListener('load', () => {
+      setTimeout(() => playAnimation(), 500);
+    });
+  </script>
+</body>
+</html>

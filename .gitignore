@@ -1,0 +1,15 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+*.code-workspace
+
+# Temp / generated
+*.tmp
+*.log
+sample.txt
+_gen_flashcards.py
+generate-icons.html

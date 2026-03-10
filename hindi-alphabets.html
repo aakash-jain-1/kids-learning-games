@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>हिंदी वर्णमाला - Hindi Alphabets</title>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Noto Sans Devanagari', 'Mangal', 'Kruti Dev', Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
+      text-align: center;
+      margin: 0;
+      padding: 100px 0 0 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+    }
+    body.dark-mode { background: linear-gradient(135deg, #1a0f00 0%, #0d1f0f 100%); }
+    body.font-small { font-size: 14px; }
+    body.font-medium { font-size: 16px; }
+    body.font-large { font-size: 18px; }
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
+    }
+    .flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .switch input:checked + span { background-color: #4caf50; }
+    .switch input:checked + span:before { transform: translateX(26px); }
+    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
+      pointer-events: none;
+      animation: sparkle 20s linear infinite;
+    }
+    
+    @keyframes sparkle {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    
+    h1 {
+      color: #fff;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: glow 2s ease-in-out infinite alternate;
+      padding: 10px;
+    }
+    
+    @keyframes glow {
+      from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,153,51,0.3); }
+      to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,153,51,0.6); }
+    }
+    .confetti { position: fixed; width: 10px; height: 10px; background-color: #f00; animation: confetti-fall 3s linear forwards; z-index: 9999; }
+    @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
+    .celebration-burst { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; animation: burst 0.6s ease-out forwards; z-index: 10000; pointer-events: none; }
+    @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
+    @media (max-width: 768px) { body { padding: 10px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .hindi-letter { font-size: 6em !important; width: 180px !important; height: 180px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .letter-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)) !important; gap: 10px !important; padding: 10px !important; } .letter-item { font-size: 2em !important; padding: 12px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .hindi-letter { font-size: 5em !important; width: 140px !important; height: 140px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .letter-item { font-size: 1.7em !important; padding: 10px !important; } }
+    
+    .control-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 25px auto;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 700px;
+      position: relative;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+    .control-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #ff9933;
+      border-radius: 15px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #138808;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      min-width: 130px;
+    }
+    .control-btn:hover:not(:disabled) {
+      background: linear-gradient(145deg, #ff9933, #ff7700);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 153, 51, 0.4);
+    }
+    .control-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .progress-counter {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #ff9933;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #138808;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      min-width: 150px;
+    }
+    
+    .navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .nav-btn {
+      background: linear-gradient(135deg, #ff9933 0%, #138808 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      display: inline-block;
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 20px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .left-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 153, 51, 0.3);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .section-title {
+      font-size: 2em;
+      color: #ff9933;
+      margin: 20px 0 10px 0;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    
+    .hindi-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #ff9933;
+      border-radius: 15px;
+      font-size: 2.8em;
+      font-weight: bold;
+      padding: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      color: #138808;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .hindi-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,153,51,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .hindi-btn:hover::before {
+      left: 100%;
+    }
+    
+    .hindi-btn:hover {
+      background: linear-gradient(145deg, #ffe5cc, #ffd9b3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(255, 153, 51, 0.3);
+      border-color: #ff6600;
+    }
+    
+    .hindi-btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .right-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(19, 136, 8, 0.3);
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+    }
+    
+    .right-pane::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,153,51,0.05) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .letter-display {
+      font-size: 8em;
+      font-weight: bold;
+      color: #ff9933;
+      min-height: 150px;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      animation: bounce 0.6s ease-in-out;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 60%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      80% { transform: translateY(-10px); }
+    }
+    
+    .word-display {
+      font-size: 3em;
+      font-weight: bold;
+      color: #138808;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+    }
+    
+    .pronunciation {
+      font-size: 2em;
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .image-display {
+      height: 250px;
+      max-width: 350px;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      border: 3px solid rgba(255, 153, 51, 0.5);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.5s ease;
+      position: relative;
+      z-index: 1;
+      animation: fadeInScale 0.8s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(-10deg); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg); 
+      }
+    }
+    
+    .image-display:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-text {
+      font-size: 1.2em;
+      color: #555;
+      text-align: center;
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(255, 153, 51, 0.1);
+      border-radius: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Scrollbar styling */
+    .left-pane::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .left-pane::-webkit-scrollbar-track {
+      background: rgba(255, 153, 51, 0.1);
+      border-radius: 10px;
+    }
+    
+    .left-pane::-webkit-scrollbar-thumb {
+      background: #ff9933;
+      border-radius: 10px;
+    }
+    
+    .left-pane::-webkit-scrollbar-thumb:hover {
+      background: #ff6600;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+  <div class="navigation">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="alphabet-game.html" class="nav-btn">English</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
+    <a href="animals-game.html" class="nav-btn">Animals</a>
+    <a href="birds.html" class="nav-btn">Birds</a>
+  </div>
+  
+  <h1>🇮🇳 हिंदी वर्णमाला | Hindi Alphabets 🇮🇳</h1>
+  
+  <div class="control-panel">
+    <button id="randomBtn" class="control-btn" aria-label="Show random letter" tabindex="0">
+      🎲 Random
+    </button>
+    <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
+      🎯 Quiz
+    </button>
+    <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
+      ⚙️ Settings
+    </button>
+    <button id="speakBtn" class="control-btn" aria-label="Speak current letter" tabindex="0" disabled>
+      🔊 Speak
+    </button>
+    <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
+      🔄 Reset
+    </button>
+    <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
+    <div class="progress-counter" id="progressCounter" aria-live="polite">
+      0 / 48 learned
+    </div>
+  </div>
+  
+  <!-- Quiz Modal -->
+  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #ff9933 0%, #138808 100%); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
+      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 हिंदी Quiz</h2>
+      
+      <div style="margin: 20px 0;">
+        <img id="quizImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
+      </div>
+      
+      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What Hindi letter does this word start with?</p>
+      
+      <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
+      
+      <p id="quizFeedback" style="font-size: 1.3em; font-weight: bold; margin: 15px 0; min-height: 30px;"></p>
+      
+      <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
+      
+      <button id="nextQuizBtn" style="display: none; background: linear-gradient(135deg, #ff9933, #138808); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
+        Next →
+      </button>
+    </div>
+  </div>
+  
+  <!-- Stats Modal -->
+  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+    <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); padding: 30px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; margin: 20px auto;">
+      <h2 style="color: white; margin-bottom: 20px; text-align: center;">📊 Your Statistics</h2>
+      <div id="statsContent"></div>
+      <h3 style="color: white; margin: 30px 0 15px 0; text-align: center;">🏆 Achievements</h3>
+      <div id="achievementsDisplay">
+        <div id="achievementsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+      </div>
+      <button id="closeStats" style="width: 100%; padding: 15px; background: white; color: #2196f3; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; position: relative; z-index: 10;">Close</button>
+    </div>
+  </div>
+  
+  <!-- Settings Modal -->
+  <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #ff9933 0%, #138808 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
+      <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🌙 Dark Mode</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="darkModeToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #ff9933; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
+            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🔊 Sound Effects</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="soundToggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4caf50; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🗣️ Auto-Speak</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="autoSpeakToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+      </div>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%;">✓ Save Settings</button>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <!-- Vowels -->
+      <div class="section-title">स्वर (Vowels)</div>
+      <div class="alphabet-grid" id="vowelsGrid"></div>
+      
+      <!-- Consonants -->
+      <div class="section-title">व्यंजन (Consonants)</div>
+      <div class="alphabet-grid" id="consonantsGrid"></div>
+    </div>
+    
+    <div class="right-pane">
+      <div class="letter-display" id="letterDisplay"></div>
+      <div class="word-display" id="wordDisplay"></div>
+      <div class="pronunciation" id="pronunciation"></div>
+      <img class="image-display" id="imageDisplay" src="" alt="" style="display:none;" />
+      <div class="info-text" id="infoText" style="display:none;"></div>
+    </div>
+  </div>
+  
+  <script>
+    // Phase 5: Particle Background System
+    (function() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+      
+      const particles = [];
+      const particleCount = 50;
+      
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedX = Math.random() * 0.5 - 0.25;
+          this.speedY = Math.random() * 0.5 - 0.25;
+          this.opacity = Math.random() * 0.5 + 0.2;
+          this.color = `rgba(255, 255, 255, ${this.opacity})`;
+        }
+        
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      
+      function init() {
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      
+      init();
+      animate();
+    })();
+
+    // Phase 5: Ripple Effect Function
+    function createRipple(e) {
+      const button = e.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.add('ripple');
+      
+      button.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    }
+    const hindiLetters = {
+      // Vowels (स्वर)
+      vowels: {
+        'अ': { word: 'अनार', english: 'Anar', meaning: 'Pomegranate', pronunciation: 'a', img: 'https://img.icons8.com/color/96/pomegranate.png' },
+        'आ': { word: 'आम', english: 'Aam', meaning: 'Mango', pronunciation: 'aa', img: 'https://img.icons8.com/color/96/mango.png' },
+        'इ': { word: 'इमली', english: 'Imli', meaning: 'Tamarind', pronunciation: 'i', img: 'https://img.icons8.com/color/96/tamarind.png' },
+        'ई': { word: 'ईख', english: 'Eekh', meaning: 'Sugarcane', pronunciation: 'ee', img: 'https://img.icons8.com/color/96/sugar-cane.png' },
+        'उ': { word: 'उल्लू', english: 'Ullu', meaning: 'Owl', pronunciation: 'u', img: 'https://img.icons8.com/color/96/owl.png' },
+        'ऊ': { word: 'ऊन', english: 'Oon', meaning: 'Wool', pronunciation: 'oo', img: 'https://img.icons8.com/color/96/wool.png' },
+        'ए': { word: 'एक', english: 'Ek', meaning: 'One', pronunciation: 'e', img: 'https://img.icons8.com/color/96/1-key.png' },
+        'ऐ': { word: 'ऐनक', english: 'Ainak', meaning: 'Glasses', pronunciation: 'ai', img: 'https://img.icons8.com/color/96/glasses.png' },
+        'ओ': { word: 'ओखली', english: 'Okhli', meaning: 'Mortar', pronunciation: 'o', img: 'https://img.icons8.com/color/96/mortar-and-pestle.png' },
+        'औ': { word: 'औरत', english: 'Aurat', meaning: 'Woman', pronunciation: 'au', img: 'https://img.icons8.com/color/96/user-female.png' },
+        'अं': { word: 'अंगूर', english: 'Angoor', meaning: 'Grapes', pronunciation: 'an', img: 'https://img.icons8.com/color/96/grape.png' },
+        'अः': { word: 'अः', english: 'Ah', meaning: 'Visarga', pronunciation: 'ah', img: 'https://img.icons8.com/color/96/om.png' }
+      },
+      
+      // Consonants (व्यंजन)
+      consonants: {
+        'क': { word: 'कबूतर', english: 'Kabootar', meaning: 'Pigeon', pronunciation: 'ka', img: 'https://img.icons8.com/color/96/dove.png' },
+        'ख': { word: 'खरगोश', english: 'Khargosh', meaning: 'Rabbit', pronunciation: 'kha', img: 'https://img.icons8.com/color/96/rabbit.png' },
+        'ग': { word: 'गाय', english: 'Gaay', meaning: 'Cow', pronunciation: 'ga', img: 'https://img.icons8.com/color/96/cow.png' },
+        'घ': { word: 'घर', english: 'Ghar', meaning: 'House', pronunciation: 'gha', img: 'https://img.icons8.com/color/96/home.png' },
+        'ङ': { word: 'ङ', english: 'Nga', meaning: 'Nasal sound', pronunciation: 'nga', img: 'https://img.icons8.com/color/96/musical-notes.png' },
+        'च': { word: 'चम्मच', english: 'Chammach', meaning: 'Spoon', pronunciation: 'cha', img: 'https://img.icons8.com/color/96/spoon.png' },
+        'छ': { word: 'छतरी', english: 'Chhatri', meaning: 'Umbrella', pronunciation: 'chha', img: 'https://img.icons8.com/color/96/umbrella.png' },
+        'ज': { word: 'जहाज', english: 'Jahaaz', meaning: 'Ship', pronunciation: 'ja', img: 'https://img.icons8.com/color/96/ship.png' },
+        'झ': { word: 'झंडा', english: 'Jhanda', meaning: 'Flag', pronunciation: 'jha', img: 'https://img.icons8.com/color/96/flag.png' },
+        'ञ': { word: 'ञ', english: 'Nya', meaning: 'Nasal sound', pronunciation: 'nya', img: 'https://img.icons8.com/color/96/musical-notes.png' },
+        'ट': { word: 'टमाटर', english: 'Tamatar', meaning: 'Tomato', pronunciation: 'ta', img: 'https://img.icons8.com/color/96/tomato.png' },
+        'ठ': { word: 'ठठेरा', english: 'Thathera', meaning: 'Craftsman', pronunciation: 'tha', img: 'https://img.icons8.com/color/96/worker-male.png' },
+        'ड': { word: 'डमरू', english: 'Damru', meaning: 'Drum', pronunciation: 'da', img: 'https://img.icons8.com/color/96/drum.png' },
+        'ढ': { word: 'ढोल', english: 'Dhol', meaning: 'Dhol Drum', pronunciation: 'dha', img: 'https://img.icons8.com/color/96/drums.png' },
+        'ण': { word: 'गणित', english: 'Ganit', meaning: 'Mathematics', pronunciation: 'na', img: 'https://img.icons8.com/color/96/calculator.png' },
+        'त': { word: 'तरबूज', english: 'Tarbooj', meaning: 'Watermelon', pronunciation: 'ta', img: 'https://img.icons8.com/color/96/watermelon.png' },
+        'थ': { word: 'थैला', english: 'Thaila', meaning: 'Bag', pronunciation: 'tha', img: 'https://img.icons8.com/color/96/shopping-bag.png' },
+        'द': { word: 'दरवाजा', english: 'Darwaza', meaning: 'Door', pronunciation: 'da', img: 'https://img.icons8.com/color/96/door.png' },
+        'ध': { word: 'धनुष', english: 'Dhanush', meaning: 'Bow', pronunciation: 'dha', img: 'https://img.icons8.com/color/96/bow-and-arrow.png' },
+        'न': { word: 'नल', english: 'Nal', meaning: 'Tap', pronunciation: 'na', img: 'https://img.icons8.com/color/96/water-tap.png' },
+        'प': { word: 'पतंग', english: 'Patang', meaning: 'Kite', pronunciation: 'pa', img: 'https://img.icons8.com/color/96/kite.png' },
+        'फ': { word: 'फल', english: 'Phal', meaning: 'Fruit', pronunciation: 'pha', img: 'https://img.icons8.com/color/96/fruit.png' },
+        'ब': { word: 'बकरी', english: 'Bakri', meaning: 'Goat', pronunciation: 'ba', img: 'https://img.icons8.com/color/96/goat.png' },
+        'भ': { word: 'भालू', english: 'Bhaalu', meaning: 'Bear', pronunciation: 'bha', img: 'https://img.icons8.com/color/96/bear.png' },
+        'म': { word: 'मछली', english: 'Machhli', meaning: 'Fish', pronunciation: 'ma', img: 'https://img.icons8.com/color/96/fish.png' },
+        'य': { word: 'यज्ञ', english: 'Yagya', meaning: 'Ritual', pronunciation: 'ya', img: 'https://img.icons8.com/color/96/fire-element.png' },
+        'र': { word: 'रथ', english: 'Rath', meaning: 'Chariot', pronunciation: 'ra', img: 'https://img.icons8.com/color/96/chariot.png' },
+        'ल': { word: 'लड्डू', english: 'Laddu', meaning: 'Sweet', pronunciation: 'la', img: 'https://img.icons8.com/color/96/laddu.png' },
+        'व': { word: 'वानर', english: 'Vanar', meaning: 'Monkey', pronunciation: 'va', img: 'https://img.icons8.com/emoji/96/monkey-face.png' },
+        'श': { word: 'शेर', english: 'Sher', meaning: 'Lion', pronunciation: 'sha', img: 'https://img.icons8.com/color/96/lion.png' },
+        'ष': { word: 'षट्कोण', english: 'Shatkone', meaning: 'Hexagon', pronunciation: 'sha', img: 'https://img.icons8.com/color/96/hexagon.png' },
+        'स': { word: 'सेब', english: 'Seb', meaning: 'Apple', pronunciation: 'sa', img: 'https://img.icons8.com/color/96/apple.png' },
+        'ह': { word: 'हाथी', english: 'Haathi', meaning: 'Elephant', pronunciation: 'ha', img: 'https://img.icons8.com/color/96/elephant.png' },
+        'क्ष': { word: 'क्षत्रिय', english: 'Kshatriya', meaning: 'Warrior', pronunciation: 'ksha', img: 'https://img.icons8.com/color/96/warrior.png' },
+        'त्र': { word: 'त्रिशूल', english: 'Trishul', meaning: 'Trident', pronunciation: 'tra', img: 'https://img.icons8.com/color/96/trident.png' },
+        'ज्ञ': { word: 'ज्ञान', english: 'Gyaan', meaning: 'Knowledge', pronunciation: 'gya', img: 'https://img.icons8.com/color/96/brain.png' }
+      }
+    };
+    
+    // Combine all letters for navigation
+    const allLetters = { ...hindiLetters.vowels, ...hindiLetters.consonants };
+    const letterKeys = Object.keys(allLetters);
+    
+    // State management
+    let currentLetter = '';
+    let learnedLetters = new Set(JSON.parse(localStorage.getItem('hindi_learned') || '[]'));
+    
+    // DOM elements
+    const vowelsGrid = document.getElementById('vowelsGrid');
+    const consonantsGrid = document.getElementById('consonantsGrid');
+    const letterDisplay = document.getElementById('letterDisplay');
+    const wordDisplay = document.getElementById('wordDisplay');
+    const pronunciation = document.getElementById('pronunciation');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const infoText = document.getElementById('infoText');
+    const randomBtn = document.getElementById('randomBtn');
+    const speakBtn = document.getElementById('speakBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const progressCounter = document.getElementById('progressCounter');
+    const statsBtn = document.getElementById('statsBtn');
+    const statsModal = document.getElementById('statsModal');
+    const closeStats = document.getElementById('closeStats');
+    
+    // Text-to-speech function
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.7;
+        utterance.pitch = 1.2;
+        utterance.volume = 1;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+    
+    // Display letter function
+    function displayLetter(letter) {
+      currentLetter = letter;
+      const data = allLetters[letter];
+      
+      // Update letter display
+      letterDisplay.textContent = letter;
+      letterDisplay.style.animation = 'none';
+      letterDisplay.offsetHeight;
+      letterDisplay.style.animation = 'bounce 0.6s ease-in-out';
+      
+      // Update word display
+      wordDisplay.textContent = data.word;
+      
+      // Update pronunciation
+      pronunciation.textContent = `(${data.pronunciation})`;
+      
+      // Update image with fallback
+      imageDisplay.src = data.img;
+      imageDisplay.alt = data.word;
+      imageDisplay.style.display = 'block';
+      imageDisplay.style.animation = 'none';
+      imageDisplay.offsetHeight;
+      imageDisplay.style.animation = 'fadeInScale 0.8s ease-out';
+      
+      imageDisplay.onerror = () => {
+        imageDisplay.src = 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"96\" height=\"96\"><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" font-size=\"48\">' + letter + '</text></svg>';
+      };
+      
+      // Update info text
+      infoText.textContent = `${data.english} - ${data.meaning}`;
+      infoText.style.display = 'block';
+      
+      // Mark as learned
+      if (!learnedLetters.has(letter)) {
+        learnedLetters.add(letter);
+        localStorage.setItem('hindi_learned', JSON.stringify([...learnedLetters]));
+        updateProgress();
+        
+        // Check achievements
+        checkAchievements();
+      }
+      
+      // Update button styling
+      document.querySelectorAll('.hindi-btn').forEach(btn => {
+        if (btn.textContent === letter) {
+          btn.style.backgroundColor = '#ff9933';
+          btn.style.color = 'white';
+          btn.style.transform = 'scale(1.1)';
+        }
+      });
+      
+      // Enable speak button
+      speakBtn.disabled = false;
+      
+      // Auto-speak
+      speak(letter + '. ' + data.word);
+    }
+    
+    // Update progress counter
+    function updateProgress() {
+      progressCounter.textContent = `${learnedLetters.size} / 48 learned`;
+    }
+    
+    // Show random letter
+    function showRandom() {
+      const randomLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+      displayLetter(randomLetter);
+    }
+    
+    // Reset progress
+    function reset() {
+      learnedLetters.clear();
+      localStorage.removeItem('hindi_learned');
+      currentLetter = '';
+      letterDisplay.textContent = 'वर्ण चुनें';
+      wordDisplay.textContent = '';
+      pronunciation.textContent = '';
+      imageDisplay.style.display = 'none';
+      infoText.style.display = 'none';
+      speakBtn.disabled = true;
+      updateProgress();
+      
+      // Reset all button styles
+      document.querySelectorAll('.hindi-btn').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+        btn.style.transform = '';
+      });
+      
+      // Reset achievements
+      Object.keys(achievements).forEach(key => {
+        achievements[key].unlocked = false;
+      });
+      localStorage.removeItem('hindi_achievements');
+      
+      // Reset statistics
+      stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
+      localStorage.removeItem('hindi_stats');
+      
+      // Show confirmation
+      speak('Progress reset complete');
+    }
+    
+    // Create button function
+    function createButton(letter, data, gridElement) {
+      const btn = document.createElement('button');
+      btn.className = 'hindi-btn';
+      btn.textContent = letter;
+      btn.setAttribute('aria-label', `Learn ${letter} for ${data.word}`);
+      btn.tabIndex = 0;
+      
+      // Mark learned letters
+      if (learnedLetters.has(letter)) {
+        btn.style.backgroundColor = '#ff9933';
+        btn.style.color = 'white';
+        btn.style.transform = 'scale(1.1)';
+      }
+      
+      btn.onclick = (e) => {
+        btn.classList.add('flipping');
+        setTimeout(() => btn.classList.remove('flipping'), 600);
+        createRipple(e);
+        displayLetter(letter);
+      };
+      gridElement.appendChild(btn);
+    }
+    
+    // Create vowel buttons
+    Object.entries(hindiLetters.vowels).forEach(([letter, data]) => {
+      createButton(letter, data, vowelsGrid);
+    });
+    
+    // Create consonant buttons
+    Object.entries(hindiLetters.consonants).forEach(([letter, data]) => {
+      createButton(letter, data, consonantsGrid);
+    });
+    
+    // Control button event listeners
+    randomBtn.onclick = () => { playSound('click'); showRandom(); };
+    speakBtn.onclick = () => {
+      if (currentLetter) {
+        playSound('click');
+        const data = allLetters[currentLetter];
+        speak(currentLetter + '. ' + data.word);
+      }
+    };
+    resetBtn.onclick = () => { playSound('click'); reset(); };
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // R key for random
+      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        showRandom();
+      }
+      
+      // Space key to speak current letter
+      if (e.key === ' ' && currentLetter && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        const data = allLetters[currentLetter];
+        speak(currentLetter + '. ' + data.word);
+      }
+      
+      // Escape key to reset
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        reset();
+      }
+      
+      // Arrow keys to navigate
+      if (currentLetter && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault();
+        const currentIndex = letterKeys.indexOf(currentLetter);
+        let nextIndex;
+        
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % letterKeys.length;
+        } else {
+          nextIndex = (currentIndex - 1 + letterKeys.length) % letterKeys.length;
+        }
+        
+        displayLetter(letterKeys[nextIndex]);
+      }
+    });
+    
+    // Quiz Mode Implementation
+    const quizBtn = document.getElementById('quizBtn');
+    const quizModal = document.getElementById('quizModal');
+    const closeQuiz = document.getElementById('closeQuiz');
+    const quizImage = document.getElementById('quizImage');
+    const quizOptions = document.getElementById('quizOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    const quizScore = document.getElementById('quizScore');
+    const nextQuizBtn = document.getElementById('nextQuizBtn');
+    
+    let quizState = {
+      currentQuestion: 0,
+      correctAnswers: 0,
+      totalQuestions: 10,
+      currentCorrectLetter: '',
+      answered: false
+    };
+    
+    function startQuiz() {
+      quizState = {
+        currentQuestion: 0,
+        correctAnswers: 0,
+        totalQuestions: 10,
+        currentCorrectLetter: '',
+        answered: false
+      };
+      quizModal.style.display = 'flex';
+      nextQuestion();
+    }
+    
+    function nextQuestion() {
+      if (quizState.currentQuestion >= quizState.totalQuestions) {
+        showQuizResults();
+        return;
+      }
+      
+      quizState.currentQuestion++;
+      quizState.answered = false;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      
+      // Pick random letter
+      const correctLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+      quizState.currentCorrectLetter = correctLetter;
+      
+      // Show word image
+      quizImage.src = allLetters[correctLetter].img;
+      quizImage.alt = allLetters[correctLetter].word;
+      
+      // Generate 4 options (1 correct + 3 wrong)
+      const options = [correctLetter];
+      while (options.length < 4) {
+        const randomLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+        if (!options.includes(randomLetter)) {
+          options.push(randomLetter);
+        }
+      }
+      
+      // Shuffle options
+      options.sort(() => Math.random() - 0.5);
+      
+      // Create option buttons
+      quizOptions.innerHTML = '';
+      options.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.textContent = letter;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #ff9933; border-radius: 15px; font-size: 2em; font-weight: bold; padding: 20px; cursor: pointer; transition: all 0.3s; color: #138808;';
+        
+        btn.onclick = () => checkAnswer(letter, btn);
+        
+        btn.onmouseenter = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1.05)';
+            btn.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+          }
+        };
+        btn.onmouseleave = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = 'none';
+          }
+        };
+        
+        quizOptions.appendChild(btn);
+      });
+      
+      updateQuizScore();
+    }
+    
+    function checkAnswer(selectedLetter, btn) {
+      if (quizState.answered) return;
+      
+      quizState.answered = true;
+      const correct = selectedLetter === quizState.currentCorrectLetter;
+      
+      if (correct) {
+        quizState.correctAnswers++;
+        btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#2e7d32';
+        quizFeedback.innerHTML = `✅ सही! Correct! ${selectedLetter} - ${allLetters[selectedLetter].word}`;
+        quizFeedback.style.color = '#4caf50';
+        playSound('correct');
+        speak(`Correct! ${selectedLetter}. ${allLetters[selectedLetter].word}`);
+      } else {
+        btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#c62828';
+        playSound('wrong');
+        
+        // Highlight correct answer
+        const buttons = quizOptions.querySelectorAll('button');
+        buttons.forEach(b => {
+          if (b.textContent === quizState.currentCorrectLetter) {
+            b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+            b.style.color = 'white';
+            b.style.borderColor = '#2e7d32';
+          }
+        });
+        
+        quizFeedback.innerHTML = `❌ गलत! Wrong! Correct: ${quizState.currentCorrectLetter} - ${allLetters[quizState.currentCorrectLetter].word}`;
+        quizFeedback.style.color = '#f44336';
+        speak(`Wrong! It's ${quizState.currentCorrectLetter}. ${allLetters[quizState.currentCorrectLetter].word}`);
+      }
+      
+      updateQuizScore();
+      
+      // Show next button after delay
+      setTimeout(() => {
+        nextQuizBtn.style.display = 'block';
+      }, 1500);
+    }
+    
+    function updateQuizScore() {
+      quizScore.textContent = `Score: ${quizState.correctAnswers}/${quizState.currentQuestion}  |  Question ${quizState.currentQuestion}/${quizState.totalQuestions}`;
+    }
+    
+    function showQuizResults() {
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      let message = '';
+      let emoji = '';
+      
+      if (percentage === 100) {
+        message = 'Perfect! बहुत अच्छा! You know all the letters! 🌟';
+        emoji = '🏆';
+        createConfetti();
+      } else if (percentage >= 80) {
+        message = 'Excellent! शाबाश! You\'re doing great! 👏';
+        emoji = '⭐';
+        createConfetti();
+      } else if (percentage >= 60) {
+        message = 'Good job! अच्छा! Keep learning! 💪';
+        emoji = '👍';
+      } else {
+        message = 'Keep practicing! अभ्यास करते रहो! 📚';
+        emoji = '💡';
+      }
+      
+      quizOptions.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center;">
+          <div style="font-size: 5em; margin: 20px 0;">${emoji}</div>
+          <h3 style="color: white; font-size: 2em; margin: 20px 0;">Quiz Complete!</h3>
+          <p style="color: white; font-size: 1.5em; margin: 15px 0;">Your Score: ${quizState.correctAnswers} / ${quizState.totalQuestions}</p>
+          <p style="color: white; font-size: 1.3em; margin: 15px 0;">${percentage.toFixed(0)}% Correct</p>
+          <p style="color: white; font-size: 1.2em; margin: 20px 0;">${message}</p>
+          <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            🔄 Try Again
+          </button>
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(135deg, #ff9933, #138808); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            ✓ Done
+          </button>
+        </div>
+      `;
+      quizFeedback.textContent = '';
+      quizImage.style.display = 'none';
+      nextQuizBtn.style.display = 'none';
+      
+      speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
+    }
+    
+    // Quiz event listeners
+    quizBtn.onclick = startQuiz;
+    closeQuiz.onclick = () => {
+      quizModal.style.display = 'none';
+    };
+    nextQuizBtn.onclick = nextQuestion;
+    
+    // Close modal on outside click
+    quizModal.onclick = (e) => {
+      if (e.target === quizModal) {
+        quizModal.style.display = 'none';
+      }
+    };
+    
+    // Add hover effect to quiz button
+    quizBtn.onmouseenter = () => {
+      quizBtn.style.transform = 'translateY(-3px)';
+      quizBtn.style.boxShadow = '0 6px 20px rgba(255, 152, 0, 0.5)';
+    };
+    quizBtn.onmouseleave = () => {
+      quizBtn.style.transform = 'translateY(0)';
+      quizBtn.style.boxShadow = '0 4px 15px rgba(255, 152, 0, 0.4)';
+    };
+    
+    // Settings Panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettings = document.getElementById('closeSettings');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const autoSpeakToggle = document.getElementById('autoSpeakToggle');
+    const fontSizeBtns = document.querySelectorAll('.fontSizeBtn');
+
+    const settings = {
+      darkMode: localStorage.getItem('darkMode') === 'true',
+      soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
+      autoSpeak: localStorage.getItem('autoSpeak') === 'true',
+      fontSize: localStorage.getItem('fontSize') || 'medium'
+    };
+
+    if (settings.darkMode) {
+      document.body.classList.add('dark-mode');
+      darkModeToggle.checked = true;
+    }
+    soundToggle.checked = settings.soundEnabled;
+    autoSpeakToggle.checked = settings.autoSpeak;
+    document.body.className += ' font-' + settings.fontSize;
+
+    fontSizeBtns.forEach(btn => {
+      if (btn.dataset.size === settings.fontSize) {
+        btn.style.background = 'white';
+        btn.style.fontWeight = 'bold';
+      }
+    });
+
+    settingsBtn.onclick = () => settingsModal.style.display = 'flex';
+    closeSettings.onclick = () => settingsModal.style.display = 'none';
+    settingsModal.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
+
+    darkModeToggle.onchange = () => {
+      document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    };
+
+    soundToggle.onchange = () => {
+      settings.soundEnabled = soundToggle.checked;
+      localStorage.setItem('soundEnabled', soundToggle.checked);
+    };
+
+    autoSpeakToggle.onchange = () => {
+      settings.autoSpeak = autoSpeakToggle.checked;
+      localStorage.setItem('autoSpeak', autoSpeakToggle.checked);
+    };
+
+    fontSizeBtns.forEach(btn => {
+      btn.onclick = () => {
+        const size = btn.dataset.size;
+        document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + size;
+        if (document.body.classList.contains('dark-mode')) document.body.classList.add('dark-mode');
+        localStorage.setItem('fontSize', size);
+        fontSizeBtns.forEach(b => {
+          b.style.background = b === btn ? 'white' : 'rgba(255,255,255,0.2)';
+          b.style.fontWeight = b === btn ? 'bold' : 'normal';
+        });
+      };
+    });
+
+    settingsBtn.onmouseenter = () => {
+      settingsBtn.style.transform = 'translateY(-3px)';
+      settingsBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.5)';
+    };
+    settingsBtn.onmouseleave = () => {
+      settingsBtn.style.transform = 'translateY(0)';
+      settingsBtn.style.boxShadow = '0 4px 15px rgba(156, 39, 176, 0.4)';
+    };
+    
+    // Confetti animation
+    // Phase 5: Enhanced Confetti Animation
+    function createConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4', '#32cd32', '#ff1493', '#00bfff', '#ffd700'];
+      const shapes = ['circle', 'square', 'triangle'];
+      const confettiCount = 150;
+      
+      for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-10px';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          if (shape === 'circle') {
+            confetti.style.borderRadius = '50%';
+          } else if (shape === 'triangle') {
+            confetti.style.width = '0';
+            confetti.style.height = '0';
+            confetti.style.borderLeft = '7px solid transparent';
+            confetti.style.borderRight = '7px solid transparent';
+            confetti.style.borderBottom = `14px solid ${confetti.style.backgroundColor}`;
+            confetti.style.backgroundColor = 'transparent';
+          } else {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          if (shape !== 'triangle') {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          confetti.style.opacity = Math.random() * 0.6 + 0.4;
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => confetti.remove(), 4500);
+        }, i * 20);
+      }
+      
+      const burst = document.createElement('div');
+      burst.className = 'celebration-burst';
+      burst.innerHTML = '🎉';
+      burst.style.fontSize = '100px';
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 600);
+    }
+    
+    // Sound Effects
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      const settings = JSON.parse(localStorage.getItem('hindi_settings') || '{"soundEnabled": true}');
+      if (!settings.soundEnabled) return;
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      if (type === 'correct') {
+        oscillator.frequency.value = 800;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        oscillator.frequency.value = 200;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      } else if (type === 'click') {
+        oscillator.frequency.value = 600;
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+    }
+    
+    // Achievement System
+    const achievements = {
+      first_letter: { name: '🎯 First Letter', desc: 'Learn your first Hindi letter', unlocked: false },
+      vowel_master: { name: '⭐ Vowel Master', desc: 'Learn all 12 vowels', unlocked: false },
+      half_way: { name: '🔥 Half Way', desc: 'Learn 24 letters', unlocked: false },
+      all_learned: { name: '🏆 Hindi Master', desc: 'Learn all 48 letters', unlocked: false },
+      perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
+      quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
+    };
+    const savedAchievements = JSON.parse(localStorage.getItem('hindi_achievements') || '{}');
+    Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
+    let stats = JSON.parse(localStorage.getItem('hindi_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    function checkAchievements() {
+      let newUnlock = false;
+      if (!achievements.first_letter.unlocked && learnedLetters.size >= 1) { achievements.first_letter.unlocked = true; showAchievement(achievements.first_letter); newUnlock = true; }
+      if (!achievements.vowel_master.unlocked && learnedLetters.size >= 12) { achievements.vowel_master.unlocked = true; showAchievement(achievements.vowel_master); newUnlock = true; }
+      if (!achievements.half_way.unlocked && learnedLetters.size >= 24) { achievements.half_way.unlocked = true; showAchievement(achievements.half_way); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedLetters.size >= 48) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (newUnlock) saveAchievements();
+    }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('hindi_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('hindi_stats', JSON.stringify(stats)); }
+    function showAchievement(achievement) {
+      const badge = document.createElement('div');
+      badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
+      badge.innerHTML = `<div style="font-size: 1.5em; margin-bottom: 5px;">${achievement.name}</div><div style="font-size: 0.9em; opacity: 0.8;">${achievement.desc}</div>`;
+      document.body.appendChild(badge);
+      if (!document.getElementById('achieveAnim')) { const style = document.createElement('style'); style.id = 'achieveAnim'; style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }'; document.head.appendChild(style); }
+      speak(`Achievement unlocked: ${achievement.name}`);
+      setTimeout(() => { badge.style.transition = 'all 0.5s'; badge.style.transform = 'translateX(400px)'; badge.style.opacity = '0'; setTimeout(() => badge.remove(), 500); }, 3000);
+    }
+    
+    // Stats Modal
+    if (statsBtn && statsModal && closeStats) {
+    
+    function showStats() {
+      const currentStats = JSON.parse(localStorage.getItem('hindi_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+      const savedAchievements = JSON.parse(localStorage.getItem('hindi_achievements') || 'null');
+      if (savedAchievements) {
+        Object.keys(savedAchievements).forEach(key => {
+          if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
+        });
+      }
+      
+      const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
+      
+      document.getElementById('statsContent').innerHTML = `
+        <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
+            <div style="opacity: 0.9;">Total Quizzes</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
+            <div style="opacity: 0.9;">Questions Answered</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
+            <div style="opacity: 0.9;">Overall Accuracy</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
+            <div style="opacity: 0.9;">High Score</div>
+          </div>
+        </div>
+      `;
+      
+      const achievementsList = document.getElementById('achievementsList');
+      achievementsList.innerHTML = '';
+      Object.entries(achievements).forEach(([key, achievement]) => {
+        const badgeDiv = document.createElement('div');
+        badgeDiv.style.cssText = `
+          background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
+          padding: 20px;
+          border-radius: 15px;
+          text-align: center;
+          opacity: ${achievement.unlocked ? '1' : '0.5'};
+          transition: transform 0.3s;
+          ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
+        `;
+        badgeDiv.innerHTML = `
+          <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
+          <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
+            ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
+          </div>
+          <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
+          ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
+        `;
+        achievementsList.appendChild(badgeDiv);
+      });
+      
+      statsModal.style.display = 'flex';
+      if (typeof playSound === 'function') playSound('click');
+    }
+    
+    statsBtn.addEventListener('click', showStats);
+    closeStats.addEventListener('click', () => {
+      statsModal.style.display = 'none';
+      if (typeof playSound === 'function') playSound('click');
+    });
+    
+    // Close modal when clicking outside (on backdrop)
+    statsModal.addEventListener('click', (e) => {
+      if (e.target === statsModal) {
+        statsModal.style.display = 'none';
+        if (typeof playSound === 'function') playSound('click');
+      }
+    });
+    
+    statsBtn.onmouseover = () => {
+      statsBtn.style.transform = 'translateY(-2px)';
+      statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
+    };
+    statsBtn.onmouseleave = () => {
+      statsBtn.style.transform = 'translateY(0)';
+      statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
+    };
+    
+    } // End of statsBtn && statsModal && closeStats check
+    
+    // Achievement system is already defined above before stats modal
+    const originalShowQuizResults = showQuizResults;
+    showQuizResults = function() {
+      stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      if (percentage > stats.highScore) stats.highScore = percentage;
+      if (percentage === 100 && !achievements.perfect_quiz.unlocked) { achievements.perfect_quiz.unlocked = true; setTimeout(() => showAchievement(achievements.perfect_quiz), 1000); saveAchievements(); }
+      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) { achievements.quiz_master.unlocked = true; setTimeout(() => showAchievement(achievements.quiz_master), 1500); saveAchievements(); }
+      saveStats(); originalShowQuizResults();
+    };
+    
+    // Initialize progress counter
+    updateProgress();
+    checkAchievements();
+  </script>
+</body>
+</html>

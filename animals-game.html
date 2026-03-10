@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animals Learning Game</title>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      text-align: center;
+      margin: 0;
+      padding: 100px 0 0 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+    }
+    body.dark-mode { background: linear-gradient(135deg, #0a3d62 0%, #1e272e 100%); }
+    body.font-small { font-size: 14px; }
+    body.font-medium { font-size: 16px; }
+    body.font-large { font-size: 18px; }
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    .switch input:checked + span { background-color: #4caf50; }
+    .switch input:checked + span:before { transform: translateX(26px); }
+    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
+    /* Phase 5: Smooth Transition Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
+      pointer-events: none;
+      animation: sparkle 17s linear infinite;
+    }
+    @keyframes sparkle {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    h1 {
+      color: #fff;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: animalGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes animalGlow {
+      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(67,206,162,0.6); }
+      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+    }
+    .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
+    @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
+    .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
+    @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
+    @media (max-width: 768px) { body { padding: 10px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .animal-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .animal-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .animal-item { font-size: 2.5em !important; padding: 15px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .animal-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .animal-item { font-size: 2em !important; padding: 12px !important; } }
+    .control-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 25px auto;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 700px;
+      position: relative;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+    .control-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #43cea2;
+      border-radius: 15px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #185a9d;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      min-width: 130px;
+    }
+    .control-btn:hover:not(:disabled) {
+      background: linear-gradient(145deg, #43cea2, #37b88d);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(67, 206, 162, 0.4);
+    }
+    .control-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .progress-counter {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #43cea2;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #185a9d;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      min-width: 150px;
+    }
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 40px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 80vh;
+      position: relative;
+      z-index: 1;
+    }
+    .left-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .animals-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 500px;
+      margin-top: 20px;
+    }
+    .animal-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #43cea2;
+      border-radius: 15px;
+      font-size: 1.3em;
+      font-weight: bold;
+      padding: 15px 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin: 0;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      color: #185a9d;
+      position: relative;
+      overflow: hidden;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    /* Phase 5: 3D Flip Animation */
+    .animal-btn.flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    /* Phase 5: Ripple Effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .animal-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(67,206,162,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .animal-btn:hover::before {
+      left: 100%;
+    }
+    .animal-btn:hover {
+      background: linear-gradient(145deg, #b2f5ea, #81e6d9);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(67, 206, 162, 0.4);
+      border-color: #2c7a7b;
+    }
+    .animal-btn:active {
+      transform: translateY(0) scale(0.95);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .right-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 350px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .right-pane::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 26s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animal-name {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: #fff;
+      min-height: 80px;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+      animation: bounce 0.6s ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 20%, 60%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      80% { transform: translateY(-10px); }
+    }
+    .animal-display-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .animal-image {
+      width: 250px;
+      height: 250px;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+      border: 4px solid rgba(255, 255, 255, 0.9);
+      transition: all 0.6s ease;
+      animation: fadeInScale 0.8s ease-out;
+      cursor: pointer;
+      padding: 20px;
+    }
+    .animal-image:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 20px 50px rgba(67, 206, 162, 0.5);
+    }
+    .animal-info {
+      margin-top: 25px;
+      font-size: 1.4em;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+      max-width: 350px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1s ease-out;
+      text-align: center;
+    }
+    .animal-sound {
+      margin-top: 15px;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      font-weight: bold;
+      animation: pulse 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(-10deg); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg); 
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+  <div class="navigation">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
+    <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
+    <a href="birds.html" class="nav-btn">Birds</a>
+  </div>
+  
+  <h1>🐾 Learn Animals 🐾</h1>
+  
+  <div class="control-panel">
+    <button id="randomBtn" class="control-btn" aria-label="Show random animal" tabindex="0">
+      🎲 Random
+    </button>
+    <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
+      🎯 Quiz
+    </button>
+    <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
+      ⚙️ Settings
+    </button>
+    <button id="speakBtn" class="control-btn" aria-label="Speak current animal" tabindex="0" disabled>
+      🔊 Speak
+    </button>
+    <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
+      🔄 Reset
+    </button>
+    <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
+    <div class="progress-counter" id="progressCounter" aria-live="polite">
+      0 / 37 learned
+    </div>
+  </div>
+  
+  <!-- Quiz Modal -->
+  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(145deg, #43cea2, #185a9d); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
+      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Animals Quiz</h2>
+      
+      <div style="margin: 20px 0;">
+        <img id="quizAnimalImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
+      </div>
+      
+      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What animal is this?</p>
+      
+      <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
+      
+      <p id="quizFeedback" style="font-size: 1.3em; font-weight: bold; margin: 15px 0; min-height: 30px;"></p>
+      
+      <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
+      
+      <button id="nextQuizBtn" style="display: none; background: linear-gradient(145deg, #43cea2, #185a9d); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
+        Next →
+      </button>
+    </div>
+  </div>
+  
+  <!-- Stats Modal -->
+  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+    <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); padding: 30px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; margin: 20px auto;">
+      <h2 style="color: white; margin-bottom: 20px; text-align: center;">📊 Your Statistics</h2>
+      <div id="statsContent"></div>
+      <h3 style="color: white; margin: 30px 0 15px 0; text-align: center;">🏆 Achievements</h3>
+      <div id="achievementsDisplay">
+        <div id="achievementsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
+      </div>
+      <button id="closeStats" style="width: 100%; padding: 15px; background: white; color: #2196f3; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; position: relative; z-index: 10;">Close</button>
+    </div>
+  </div>
+  
+  <!-- Settings Modal -->
+  <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
+      <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🌙 Dark Mode</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="darkModeToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #43cea2; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
+            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🔊 Sound Effects</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="soundToggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4caf50; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🗣️ Auto-Speak</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="autoSpeakToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+      </div>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%;">✓ Save Settings</button>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="animals-grid" id="animalsGrid"></div>
+    </div>
+    <div class="right-pane">
+      <div class="animal-name" id="animalName"></div>
+      <div class="animal-display-container" id="animalDisplayContainer" style="display:none;">
+        <img class="animal-image" id="animalImage" src="" alt="">
+        <div class="animal-sound" id="animalSound"></div>
+        <div class="animal-info" id="animalInfo"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Phase 5: Particle Background System
+    (function() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+      
+      const particles = [];
+      const particleCount = 50;
+      
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedX = Math.random() * 0.5 - 0.25;
+          this.speedY = Math.random() * 0.5 - 0.25;
+          this.opacity = Math.random() * 0.5 + 0.2;
+          this.color = `rgba(255, 255, 255, ${this.opacity})`;
+        }
+        
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      
+      function init() {
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      
+      init();
+      animate();
+    })();
+
+    // Phase 5: Ripple Effect Function
+    function createRipple(e) {
+      const button = e.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.add('ripple');
+      
+      button.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    }
+
+    const animals = {
+      'Alligator': {
+        img: 'https://api.iconify.design/noto/crocodile.svg?width=96&height=96',
+        sound: '🐊 Snap!',
+        info: 'Alligators are big reptiles with strong jaws!'
+      },
+      'Ant': {
+        img: 'https://api.iconify.design/noto/ant.svg?width=96&height=96',
+        sound: '🐜 Busy!',
+        info: 'Ants are tiny but very strong!'
+      },
+      'Bear': {
+        img: 'https://api.iconify.design/noto/bear.svg?width=96&height=96',
+        sound: '🐻 Growl!',
+        info: 'Bears are big and love honey!'
+      },
+      'Butterfly': {
+        img: 'https://api.iconify.design/noto/butterfly.svg?width=96&height=96',
+        sound: '🦋 Flutter!',
+        info: 'Butterflies have colorful wings!'
+      },
+      'Cat': {
+        img: 'https://api.iconify.design/noto/cat-face.svg?width=96&height=96',
+        sound: '🐱 Meow!',
+        info: 'Cats are cute and furry pets!'
+      },
+      'Chicken': {
+        img: 'https://api.iconify.design/noto/chicken.svg?width=96&height=96',
+        sound: '🐔 Cluck Cluck!',
+        info: 'Chickens lay eggs for us!'
+      },
+      'Cow': {
+        img: 'https://api.iconify.design/noto/cow-face.svg?width=96&height=96',
+        sound: '🐮 Moo!',
+        info: 'Cows give us milk!'
+      },
+      'Dog': {
+        img: 'https://api.iconify.design/noto/dog-face.svg?width=96&height=96',
+        sound: '🐶 Woof Woof!',
+        info: 'Dogs are loyal and friendly friends!'
+      },
+      'Duck': {
+        img: 'https://api.iconify.design/noto/duck.svg?width=96&height=96',
+        sound: '🦆 Quack Quack!',
+        info: 'Ducks swim in ponds and lakes!'
+      },
+      'Elephant': {
+        img: 'https://api.iconify.design/noto/elephant.svg?width=96&height=96',
+        sound: '🐘 Trumpet!',
+        info: 'Elephants are the largest land animals!'
+      },
+      'Fish': {
+        img: 'https://api.iconify.design/noto/tropical-fish.svg?width=96&height=96',
+        sound: '🐠 Blub Blub!',
+        info: 'Fish swim underwater with fins!'
+      },
+      'Fox': {
+        img: 'https://api.iconify.design/noto/fox.svg?width=96&height=96',
+        sound: '🦊 Yip!',
+        info: 'Foxes are clever and have bushy tails!'
+      },
+      'Giraffe': {
+        img: 'https://api.iconify.design/noto/giraffe.svg?width=96&height=96',
+        sound: '🦒 Hum!',
+        info: 'Giraffes have the longest necks!'
+      },
+      'Horse': {
+        img: 'https://api.iconify.design/noto/horse-face.svg?width=96&height=96',
+        sound: '🐴 Neigh!',
+        info: 'Horses love to run and gallop!'
+      },
+      'Iguana': {
+        img: 'https://api.iconify.design/noto/iguana.svg?width=96&height=96',
+        sound: '🦎 Hiss!',
+        info: 'Iguanas are colorful lizards!'
+      },
+      'Jellyfish': {
+        img: 'https://api.iconify.design/noto/jellyfish.svg?width=96&height=96',
+        sound: '🪼 Float!',
+        info: 'Jellyfish swim gracefully in the ocean!'
+      },
+      'Koala': {
+        img: 'https://api.iconify.design/noto/koala.svg?width=96&height=96',
+        sound: '🐨 Grunt!',
+        info: 'Koalas sleep most of the day!'
+      },
+      'Lion': {
+        img: 'https://api.iconify.design/noto/lion.svg?width=96&height=96',
+        sound: '🦁 Roar!',
+        info: 'The Lion is the king of the jungle!'
+      },
+      'Monkey': {
+        img: 'https://api.iconify.design/noto/monkey-face.svg?width=96&height=96',
+        sound: '🐵 Ooh Ooh Ah Ah!',
+        info: 'Monkeys love to swing from trees!'
+      },
+      'Nightingale': {
+        img: 'https://api.iconify.design/noto/nightingale.svg?width=96&height=96',
+        sound: '🐦 Sing!',
+        info: 'Nightingales have beautiful songs!'
+      },
+      'Octopus': {
+        img: 'https://api.iconify.design/noto/octopus.svg?width=96&height=96',
+        sound: '🐙 Squirt!',
+        info: 'Octopuses have eight arms!'
+      },
+      'Owl': {
+        img: 'https://api.iconify.design/noto/owl.svg?width=96&height=96',
+        sound: '🦉 Hoot Hoot!',
+        info: 'Owls are wise night birds!'
+      },
+      'Panda': {
+        img: 'https://api.iconify.design/noto/panda.svg?width=96&height=96',
+        sound: '🐼 Chirp!',
+        info: 'Pandas love to eat bamboo!'
+      },
+      'Penguin': {
+        img: 'https://api.iconify.design/noto/penguin.svg?width=96&height=96',
+        sound: '🐧 Honk!',
+        info: 'Penguins waddle on ice and swim!'
+      },
+      'Pig': {
+        img: 'https://api.iconify.design/noto/pig-face.svg?width=96&height=96',
+        sound: '🐷 Oink Oink!',
+        info: 'Pigs love to roll in mud!'
+      },
+      'Quail': {
+        img: 'https://api.iconify.design/noto/quail.svg?width=96&height=96',
+        sound: '🦆 Bob-white!',
+        info: 'Quails are small ground birds!'
+      },
+      'Rabbit': {
+        img: 'https://api.iconify.design/noto/rabbit-face.svg?width=96&height=96',
+        sound: '🐰 Squeak!',
+        info: 'Rabbits hop and have long ears!'
+      },
+      'Sheep': {
+        img: 'https://api.iconify.design/noto/ewe.svg?width=96&height=96',
+        sound: '🐑 Baa!',
+        info: 'Sheep have soft woolly coats!'
+      },
+      'Snake': {
+        img: 'https://api.iconify.design/noto/snake.svg?width=96&height=96',
+        sound: '🐍 Hiss!',
+        info: 'Snakes slither on the ground!'
+      },
+      'Tiger': {
+        img: 'https://api.iconify.design/noto/tiger.svg?width=96&height=96',
+        sound: '🐯 Growl!',
+        info: 'Tigers have beautiful orange and black stripes!'
+      },
+      'Turtle': {
+        img: 'https://api.iconify.design/noto/turtle.svg?width=96&height=96',
+        sound: '🐢 Snap!',
+        info: 'Turtles carry their house on their back!'
+      },
+      'Unicorn': {
+        img: 'https://api.iconify.design/noto/unicorn.svg?width=96&height=96',
+        sound: '🦄 Whinny!',
+        info: 'Unicorns are magical horses with a horn!'
+      },
+      'Vulture': {
+        img: 'https://api.iconify.design/noto/vulture.svg?width=96&height=96',
+        sound: '🦅 Screech!',
+        info: 'Vultures soar high in the sky!'
+      },
+      'Whale': {
+        img: 'https://api.iconify.design/noto/whale.svg?width=96&height=96',
+        sound: '🐋 Whooosh!',
+        info: 'Whales are the biggest animals in the ocean!'
+      },
+      'Wolf': {
+        img: 'https://api.iconify.design/noto/wolf.svg?width=96&height=96',
+        sound: '🐺 Howl!',
+        info: 'Wolves howl at the moon!'
+      },
+      'Yak': {
+        img: 'https://api.iconify.design/noto/yak.svg?width=96&height=96',
+        sound: '🦬 Grunt!',
+        info: 'Yaks have thick fur and live in mountains!'
+      },
+      'Zebra': {
+        img: 'https://api.iconify.design/noto/zebra.svg?width=96&height=96',
+        sound: '🦓 Bray!',
+        info: 'Zebras have black and white stripes!'
+      }
+    };
+    
+    // State management
+    let currentAnimal = '';
+    let learnedAnimals = new Set(JSON.parse(localStorage.getItem('animals_learned') || '[]'));
+    const animalNames = Object.keys(animals);
+    
+    // DOM elements
+    const animalsGrid = document.getElementById('animalsGrid');
+    const animalName = document.getElementById('animalName');
+    const animalImage = document.getElementById('animalImage');
+    const animalDisplayContainer = document.getElementById('animalDisplayContainer');
+    const animalSound = document.getElementById('animalSound');
+    const animalInfo = document.getElementById('animalInfo');
+    const randomBtn = document.getElementById('randomBtn');
+    const speakBtn = document.getElementById('speakBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const progressCounter = document.getElementById('progressCounter');
+    const statsBtn = document.getElementById('statsBtn');
+    const statsModal = document.getElementById('statsModal');
+    const closeStats = document.getElementById('closeStats');
+    
+    // Text-to-speech function
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.8;
+        utterance.pitch = 1.2;
+        utterance.volume = 1;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+    
+    // Display animal function
+    function displayAnimal(animal) {
+      currentAnimal = animal;
+      const animalData = animals[animal];
+      
+      // Update animal name
+      animalName.textContent = animal;
+      animalName.style.animation = 'none';
+      animalName.offsetHeight;
+      animalName.style.animation = 'bounce 0.6s ease-in-out';
+      
+      // Show display container
+      animalDisplayContainer.style.display = 'flex';
+      
+      // Update animal image with fallback
+      animalImage.src = animalData.img;
+      animalImage.alt = animal;
+      animalImage.style.animation = 'none';
+      animalImage.offsetHeight;
+      animalImage.style.animation = 'fadeInScale 0.8s ease-out';
+      
+      animalImage.onerror = () => {
+        animalImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="48">🐾</text></svg>';
+      };
+      
+      // Update animal sound
+      animalSound.textContent = animalData.sound;
+      animalSound.style.animation = 'none';
+      animalSound.offsetHeight;
+      animalSound.style.animation = 'pulse 2s ease-in-out infinite';
+      
+      // Update animal info
+      animalInfo.textContent = animalData.info;
+      animalInfo.style.animation = 'none';
+      animalInfo.offsetHeight;
+      animalInfo.style.animation = 'fadeIn 1s ease-out';
+      
+      // Mark as learned
+      if (!learnedAnimals.has(animal)) {
+        learnedAnimals.add(animal);
+        localStorage.setItem('animals_learned', JSON.stringify([...learnedAnimals]));
+        updateProgress();
+        
+        // Check achievements
+        checkAchievements();
+      }
+      
+      // Update button styling
+      document.querySelectorAll('.animal-btn').forEach(btn => {
+        if (btn.textContent === animal) {
+          btn.style.backgroundColor = '#43cea2';
+          btn.style.color = 'white';
+        }
+      });
+      
+      // Enable speak button
+      speakBtn.disabled = false;
+      
+      // Add click interaction to image
+      animalImage.onclick = () => {
+        animalImage.style.transform = 'scale(1.3) rotate(360deg)';
+        animalSound.style.transform = 'scale(1.5)';
+        animalSound.style.color = '#43cea2';
+        setTimeout(() => {
+          animalImage.style.transform = 'scale(1) rotate(0deg)';
+          animalSound.style.transform = 'scale(1)';
+          animalSound.style.color = '#fff';
+        }, 600);
+        speak(animal + '. ' + animalData.sound);
+      };
+      
+      // Auto-speak
+      speak(animal + '. ' + animalData.sound);
+    }
+    
+    // Update progress counter
+    function updateProgress() {
+      progressCounter.textContent = `${learnedAnimals.size} / 37 learned`;
+    }
+    
+    // Show random animal
+    function showRandom() {
+      const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+      displayAnimal(randomAnimal);
+    }
+    
+    // Reset progress
+    function reset() {
+      learnedAnimals.clear();
+      localStorage.removeItem('animals_learned');
+      currentAnimal = '';
+      animalName.textContent = 'Click an animal to learn!';
+      animalDisplayContainer.style.display = 'none';
+      speakBtn.disabled = true;
+      
+      // Reset achievements
+      Object.keys(achievements).forEach(key => {
+        achievements[key].unlocked = false;
+      });
+      localStorage.removeItem('animals_achievements');
+      
+      // Reset statistics
+      stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
+      localStorage.removeItem('animals_stats');
+      
+      updateProgress();
+      
+      // Reset all button colors
+      document.querySelectorAll('.animal-btn').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+      });
+      
+      // Show confirmation
+      speak('Progress reset complete');
+    }
+    
+    // Create animal buttons
+    animalNames.forEach(animal => {
+      const btn = document.createElement('button');
+      btn.className = 'animal-btn';
+      btn.textContent = animal;
+      btn.setAttribute('aria-label', `Learn about ${animal}`);
+      btn.tabIndex = 0;
+      
+      // Mark learned animals
+      if (learnedAnimals.has(animal)) {
+        btn.style.backgroundColor = '#43cea2';
+        btn.style.color = 'white';
+      }
+      
+      // Phase 5: Add flip and ripple effects
+      btn.onclick = (e) => {
+        btn.classList.add('flipping');
+        setTimeout(() => btn.classList.remove('flipping'), 600);
+        createRipple(e);
+        displayAnimal(animal);
+      };
+      
+      animalsGrid.appendChild(btn);
+    });
+    
+    // Control button event listeners
+    randomBtn.onclick = () => { playSound('click'); showRandom(); };
+    speakBtn.onclick = () => {
+      if (currentAnimal) {
+        playSound('click');
+        const animalData = animals[currentAnimal];
+        speak(currentAnimal + '. ' + animalData.sound);
+      }
+    };
+    resetBtn.onclick = () => { playSound('click'); reset(); };
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // R key for random
+      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        showRandom();
+      }
+      
+      // Space key to speak current animal
+      if (e.key === ' ' && currentAnimal && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        const animalData = animals[currentAnimal];
+        speak(currentAnimal + '. ' + animalData.sound);
+      }
+      
+      // Escape key to reset
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        reset();
+      }
+      
+      // Arrow keys to navigate
+      if (currentAnimal && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault();
+        const currentIndex = animalNames.indexOf(currentAnimal);
+        let nextIndex;
+        
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % animalNames.length;
+        } else {
+          nextIndex = (currentIndex - 1 + animalNames.length) % animalNames.length;
+        }
+        
+        displayAnimal(animalNames[nextIndex]);
+      }
+      
+      // Type animal name to jump to it
+      if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+        const typedLetter = e.key.toUpperCase();
+        const matchingAnimal = animalNames.find(animal => animal.startsWith(typedLetter));
+        if (matchingAnimal) {
+          displayAnimal(matchingAnimal);
+        }
+      }
+    });
+    
+    // Quiz Mode Implementation
+    const quizBtn = document.getElementById('quizBtn');
+    const quizModal = document.getElementById('quizModal');
+    const closeQuiz = document.getElementById('closeQuiz');
+    const quizAnimalImage = document.getElementById('quizAnimalImage');
+    const quizOptions = document.getElementById('quizOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    const quizScore = document.getElementById('quizScore');
+    const nextQuizBtn = document.getElementById('nextQuizBtn');
+    
+    let quizState = {
+      currentQuestion: 0,
+      correctAnswers: 0,
+      totalQuestions: 10,
+      currentCorrectAnimal: '',
+      answered: false
+    };
+    
+    function startQuiz() {
+      quizState = {
+        currentQuestion: 0,
+        correctAnswers: 0,
+        totalQuestions: 10,
+        currentCorrectAnimal: '',
+        answered: false
+      };
+      quizModal.style.display = 'flex';
+      nextQuestion();
+    }
+    
+    function nextQuestion() {
+      if (quizState.currentQuestion >= quizState.totalQuestions) {
+        showQuizResults();
+        return;
+      }
+      
+      quizState.currentQuestion++;
+      quizState.answered = false;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      
+      // Pick random animal
+      const correctAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+      quizState.currentCorrectAnimal = correctAnimal;
+      
+      // Show animal image
+      quizAnimalImage.src = animals[correctAnimal].img;
+      quizAnimalImage.alt = correctAnimal;
+      
+      // Generate 4 options (1 correct + 3 wrong)
+      const options = [correctAnimal];
+      while (options.length < 4) {
+        const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+        if (!options.includes(randomAnimal)) {
+          options.push(randomAnimal);
+        }
+      }
+      
+      // Shuffle options
+      options.sort(() => Math.random() - 0.5);
+      
+      // Create option buttons
+      quizOptions.innerHTML = '';
+      options.forEach(animal => {
+        const btn = document.createElement('button');
+        btn.textContent = animal;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #43cea2; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #185a9d;';
+        
+        btn.onclick = () => checkAnswer(animal, btn);
+        
+        btn.onmouseenter = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1.05)';
+            btn.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+          }
+        };
+        btn.onmouseleave = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = 'none';
+          }
+        };
+        
+        quizOptions.appendChild(btn);
+      });
+      
+      updateQuizScore();
+    }
+    
+    function checkAnswer(selectedAnimal, btn) {
+      if (quizState.answered) return;
+      
+      quizState.answered = true;
+      const correct = selectedAnimal === quizState.currentCorrectAnimal;
+      
+      if (correct) {
+        quizState.correctAnswers++;
+        btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#2e7d32';
+        quizFeedback.innerHTML = `✅ Correct! It's a ${selectedAnimal}`;
+        quizFeedback.style.color = '#4caf50';
+        playSound('correct');
+        speak(`Correct! It's a ${selectedAnimal}. ${animals[selectedAnimal].sound}`);
+      } else {
+        btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#c62828';
+        playSound('wrong');
+        
+        // Highlight correct answer
+        const buttons = quizOptions.querySelectorAll('button');
+        buttons.forEach(b => {
+          if (b.textContent === quizState.currentCorrectAnimal) {
+            b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+            b.style.color = 'white';
+            b.style.borderColor = '#2e7d32';
+          }
+        });
+        
+        quizFeedback.innerHTML = `❌ Wrong! It's a ${quizState.currentCorrectAnimal}`;
+        quizFeedback.style.color = '#f44336';
+        speak(`Wrong! It's a ${quizState.currentCorrectAnimal}. ${animals[quizState.currentCorrectAnimal].sound}`);
+      }
+      
+      updateQuizScore();
+      
+      // Show next button after delay
+      setTimeout(() => {
+        nextQuizBtn.style.display = 'block';
+      }, 1500);
+    }
+    
+    function updateQuizScore() {
+      quizScore.textContent = `Score: ${quizState.correctAnswers}/${quizState.currentQuestion}  |  Question ${quizState.currentQuestion}/${quizState.totalQuestions}`;
+    }
+    
+    function showQuizResults() {
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      let message = '';
+      let emoji = '';
+      
+      if (percentage === 100) {
+        message = 'Perfect! You know all the animals! 🌟';
+        emoji = '🏆';
+        createConfetti();
+      } else if (percentage >= 80) {
+        message = 'Excellent! You\'re an animal expert! 👏';
+        emoji = '⭐';
+        createConfetti();
+      } else if (percentage >= 60) {
+        message = 'Good job! Keep learning about animals! 💪';
+        emoji = '👍';
+      } else {
+        message = 'Keep practicing! You\'ll learn them all! 📚';
+        emoji = '💡';
+      }
+      
+      quizOptions.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center;">
+          <div style="font-size: 5em; margin: 20px 0;">${emoji}</div>
+          <h3 style="color: white; font-size: 2em; margin: 20px 0;">Quiz Complete!</h3>
+          <p style="color: white; font-size: 1.5em; margin: 15px 0;">Your Score: ${quizState.correctAnswers} / ${quizState.totalQuestions}</p>
+          <p style="color: white; font-size: 1.3em; margin: 15px 0;">${percentage.toFixed(0)}% Correct</p>
+          <p style="color: white; font-size: 1.2em; margin: 20px 0;">${message}</p>
+          <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            🔄 Try Again
+          </button>
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #43cea2, #185a9d); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            ✓ Done
+          </button>
+        </div>
+      `;
+      quizFeedback.textContent = '';
+      quizAnimalImage.style.display = 'none';
+      nextQuizBtn.style.display = 'none';
+      
+      speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
+    }
+    
+    // Quiz event listeners
+    quizBtn.onclick = startQuiz;
+    closeQuiz.onclick = () => {
+      quizModal.style.display = 'none';
+    };
+    nextQuizBtn.onclick = nextQuestion;
+    
+    // Close modal on outside click
+    quizModal.onclick = (e) => {
+      if (e.target === quizModal) {
+        quizModal.style.display = 'none';
+      }
+    };
+    
+    // Add hover effect to quiz button
+    quizBtn.onmouseenter = () => {
+      quizBtn.style.transform = 'translateY(-3px)';
+      quizBtn.style.boxShadow = '0 6px 20px rgba(255, 152, 0, 0.5)';
+    };
+    quizBtn.onmouseleave = () => {
+      quizBtn.style.transform = 'translateY(0)';
+      quizBtn.style.boxShadow = '0 4px 15px rgba(255, 152, 0, 0.4)';
+    };
+    
+    // Settings Panel
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettings = document.getElementById('closeSettings');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const autoSpeakToggle = document.getElementById('autoSpeakToggle');
+    const fontSizeBtns = document.querySelectorAll('.fontSizeBtn');
+
+    const settings = {
+      darkMode: localStorage.getItem('darkMode') === 'true',
+      soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
+      autoSpeak: localStorage.getItem('autoSpeak') === 'true',
+      fontSize: localStorage.getItem('fontSize') || 'medium'
+    };
+
+    if (settings.darkMode) {
+      document.body.classList.add('dark-mode');
+      darkModeToggle.checked = true;
+    }
+    soundToggle.checked = settings.soundEnabled;
+    autoSpeakToggle.checked = settings.autoSpeak;
+    document.body.className += ' font-' + settings.fontSize;
+
+    fontSizeBtns.forEach(btn => {
+      if (btn.dataset.size === settings.fontSize) {
+        btn.style.background = 'white';
+        btn.style.fontWeight = 'bold';
+      }
+    });
+
+    settingsBtn.onclick = () => settingsModal.style.display = 'flex';
+    closeSettings.onclick = () => settingsModal.style.display = 'none';
+    settingsModal.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
+
+    darkModeToggle.onchange = () => {
+      document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    };
+
+    soundToggle.onchange = () => {
+      settings.soundEnabled = soundToggle.checked;
+      localStorage.setItem('soundEnabled', soundToggle.checked);
+    };
+
+    autoSpeakToggle.onchange = () => {
+      settings.autoSpeak = autoSpeakToggle.checked;
+      localStorage.setItem('autoSpeak', autoSpeakToggle.checked);
+    };
+
+    fontSizeBtns.forEach(btn => {
+      btn.onclick = () => {
+        const size = btn.dataset.size;
+        document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + size;
+        if (document.body.classList.contains('dark-mode')) document.body.classList.add('dark-mode');
+        localStorage.setItem('fontSize', size);
+        fontSizeBtns.forEach(b => {
+          b.style.background = b === btn ? 'white' : 'rgba(255,255,255,0.2)';
+          b.style.fontWeight = b === btn ? 'bold' : 'normal';
+        });
+      };
+    });
+
+    settingsBtn.onmouseenter = () => {
+      settingsBtn.style.transform = 'translateY(-3px)';
+      settingsBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.5)';
+    };
+    settingsBtn.onmouseleave = () => {
+      settingsBtn.style.transform = 'translateY(0)';
+      settingsBtn.style.boxShadow = '0 4px 15px rgba(156, 39, 176, 0.4)';
+    };
+    
+    // Confetti animation
+    // Phase 5: Enhanced Confetti Animation
+    function createConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4', '#32cd32', '#ff1493', '#00bfff', '#ffd700'];
+      const shapes = ['circle', 'square', 'triangle'];
+      const confettiCount = 150;
+      
+      for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-10px';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Random shapes
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          if (shape === 'circle') {
+            confetti.style.borderRadius = '50%';
+          } else if (shape === 'triangle') {
+            confetti.style.width = '0';
+            confetti.style.height = '0';
+            confetti.style.borderLeft = '7px solid transparent';
+            confetti.style.borderRight = '7px solid transparent';
+            confetti.style.borderBottom = `14px solid ${confetti.style.backgroundColor}`;
+            confetti.style.backgroundColor = 'transparent';
+          } else {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          if (shape !== 'triangle') {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          confetti.style.opacity = Math.random() * 0.6 + 0.4;
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => confetti.remove(), 4500);
+        }, i * 20);
+      }
+      
+      // Add celebration burst
+      const burst = document.createElement('div');
+      burst.className = 'celebration-burst';
+      burst.innerHTML = '🎉';
+      burst.style.fontSize = '100px';
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 600);
+    }
+    
+    // Sound Effects
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      const settings = JSON.parse(localStorage.getItem('animals_settings') || '{"soundEnabled": true}');
+      if (!settings.soundEnabled) return;
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      if (type === 'correct') {
+        oscillator.frequency.value = 800;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        oscillator.frequency.value = 200;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      } else if (type === 'click') {
+        oscillator.frequency.value = 600;
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+    }
+    
+    // Stats Modal
+    // Achievement System - Define early
+    const achievements = {
+      first_animal: { name: '🎯 First Animal', desc: 'Learn your first animal', unlocked: false },
+      zoo_keeper: { name: '⭐ Zoo Keeper', desc: 'Learn 20 animals', unlocked: false },
+      all_learned: { name: '🏆 Animal Expert', desc: 'Learn all 37 animals', unlocked: false },
+      perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
+      quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
+    };
+    const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
+    Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
+    let stats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    
+    function checkAchievements() {
+      let newUnlock = false;
+      if (!achievements.first_animal.unlocked && learnedAnimals.size >= 1) { achievements.first_animal.unlocked = true; showAchievement(achievements.first_animal); newUnlock = true; }
+      if (!achievements.zoo_keeper.unlocked && learnedAnimals.size >= 20) { achievements.zoo_keeper.unlocked = true; showAchievement(achievements.zoo_keeper); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedAnimals.size >= 37) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (newUnlock) saveAchievements();
+    }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('animals_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('animals_stats', JSON.stringify(stats)); }
+    function showAchievement(achievement) {
+      const badge = document.createElement('div');
+      badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
+      badge.innerHTML = `<div style="font-size: 1.5em; margin-bottom: 5px;">${achievement.name}</div><div style="font-size: 0.9em; opacity: 0.8;">${achievement.desc}</div>`;
+      document.body.appendChild(badge);
+      if (!document.getElementById('achieveAnim')) { const style = document.createElement('style'); style.id = 'achieveAnim'; style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }'; document.head.appendChild(style); }
+      speak(`Achievement unlocked: ${achievement.name}`);
+      setTimeout(() => { badge.style.transition = 'all 0.5s'; badge.style.transform = 'translateX(400px)'; badge.style.opacity = '0'; setTimeout(() => badge.remove(), 500); }, 3000);
+    }
+    
+    // Stats Modal (statsBtn, statsModal, closeStats declared at top)
+    if (statsBtn && statsModal && closeStats) {
+      function showStats() {
+        const currentStats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+        const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
+        
+        // Update achievements with saved state
+        Object.keys(savedAchievements).forEach(key => {
+          if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
+        });
+      
+        const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
+        
+        document.getElementById('statsContent').innerHTML = `
+          <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
+              <div style="opacity: 0.9;">Total Quizzes</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
+              <div style="opacity: 0.9;">Questions Answered</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
+              <div style="opacity: 0.9;">Overall Accuracy</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
+            <div style="opacity: 0.9;">High Score</div>
+          </div>
+        </div>
+      `;
+      
+      const achievementsList = document.getElementById('achievementsList');
+      achievementsList.innerHTML = '';
+      Object.entries(achievements).forEach(([key, achievement]) => {
+        const badgeDiv = document.createElement('div');
+        badgeDiv.style.cssText = `
+          background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
+          padding: 20px;
+          border-radius: 15px;
+          text-align: center;
+          opacity: ${achievement.unlocked ? '1' : '0.5'};
+          transition: transform 0.3s;
+          ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
+        `;
+        badgeDiv.innerHTML = `
+          <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
+          <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
+            ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
+          </div>
+          <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
+          ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
+        `;
+        achievementsList.appendChild(badgeDiv);
+      });
+      
+        statsModal.style.display = 'flex';
+        if (typeof playSound === 'function') playSound('click');
+      }
+      
+      statsBtn.addEventListener('click', showStats);
+      closeStats.addEventListener('click', () => {
+        statsModal.style.display = 'none';
+        if (typeof playSound === 'function') playSound('click');
+      });
+      
+      // Close modal when clicking outside (on backdrop)
+      statsModal.addEventListener('click', (e) => {
+        if (e.target === statsModal) {
+          statsModal.style.display = 'none';
+          if (typeof playSound === 'function') playSound('click');
+        }
+      });
+      
+      statsBtn.onmouseover = () => {
+        statsBtn.style.transform = 'translateY(-2px)';
+        statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
+      };
+      statsBtn.onmouseleave = () => {
+        statsBtn.style.transform = 'translateY(0)';
+        statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
+      };
+    }
+    
+    const originalShowQuizResults = showQuizResults;
+    showQuizResults = function() {
+      stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      if (percentage > stats.highScore) stats.highScore = percentage;
+      if (percentage === 100 && !achievements.perfect_quiz.unlocked) { achievements.perfect_quiz.unlocked = true; setTimeout(() => showAchievement(achievements.perfect_quiz), 1000); saveAchievements(); }
+      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) { achievements.quiz_master.unlocked = true; setTimeout(() => showAchievement(achievements.quiz_master), 1500); saveAchievements(); }
+      saveStats(); originalShowQuizResults();
+    };
+    
+    // Initialize progress counter
+    updateProgress();
+    checkAchievements();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alphabet Click Game</title>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      text-align: center;
+      margin: 0;
+      padding: 100px 0 0 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+    }
+    body.dark-mode {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    body.font-small { font-size: 14px; }
+    body.font-medium { font-size: 16px; }
+    body.font-large { font-size: 18px; }
+    /* Toggle Switch Styles */
+    .switch input:checked + span {
+      background-color: #4caf50;
+    }
+    .switch input:checked + span:before {
+      transform: translateX(26px);
+    }
+    .switch span:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.15)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.12)"/></svg>') repeat;
+      pointer-events: none;
+      animation: sparkle 20s linear infinite;
+    }
+    @keyframes sparkle {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    
+    /* Particle Background Canvas */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    
+    h1 {
+      color: #fff;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.3); }
+      to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.6); }
+    }
+    /* Smooth Transition Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
+    }
+    /* Confetti Animation */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #f0f;
+      position: absolute;
+      animation: confetti-fall 3s linear forwards;
+      z-index: 9999;
+    }
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(0) rotateZ(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotateZ(720deg);
+        opacity: 0;
+      }
+    }
+    .celebration-burst {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform: translate(-50%, -50%);
+      animation: burst 0.6s ease-out;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    @keyframes burst {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+      }
+    }
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      body { padding: 10px; font-size: 14px; }
+      h1 { font-size: 2em !important; margin: 10px 0 !important; }
+      .letter-display { font-size: 8em !important; width: 200px !important; height: 200px !important; }
+      .control-panel { flex-direction: column; gap: 10px; padding: 10px; }
+      button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; }
+      .keyboard-grid { grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)) !important; gap: 8px !important; padding: 10px !important; }
+      .keyboard-key { font-size: 1.3em !important; padding: 15px !important; min-height: 50px; }
+      .progress-display { font-size: 1em !important; padding: 8px 15px !important; }
+      .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; }
+      .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .quiz-option { padding: 15px !important; font-size: 1.2em !important; }
+      .settings-modal-content { width: 95% !important; padding: 20px !important; }
+      .setting-group { flex-direction: column; align-items: flex-start !important; }
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 1.5em !important; }
+      .letter-display { font-size: 6em !important; width: 150px !important; height: 150px !important; }
+      button { padding: 10px 20px !important; font-size: 0.9em !important; }
+      .keyboard-key { font-size: 1.1em !important; padding: 12px !important; min-height: 45px; }
+    }
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 40px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 80vh;
+      position: relative;
+      z-index: 1;
+    }
+    .left-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 18px;
+      width: 100%;
+      max-width: 500px;
+      margin-top: 20px;
+    }
+    .alphabet-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 2px solid #4caf50;
+      border-radius: 15px;
+      font-size: 2.5em;
+      font-weight: bold;
+      padding: 25px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      color: #4caf50;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    /* 3D Flip Animation */
+    .alphabet-btn.flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    /* Ripple Effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .alphabet-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      transition: left 0.5s;
+    }
+    .alphabet-btn:hover::before {
+      left: 100%;
+    }
+    .alphabet-btn:hover {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+      border-color: #2e7d32;
+    }
+    .alphabet-btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .right-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 350px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .right-pane::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .word-display {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: #fff;
+      min-height: 70px;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: bounce 0.6s ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 20%, 60%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      80% { transform: translateY(-10px); }
+    }
+    .image-display {
+      height: 350px;
+      max-width: 400px;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.5s ease;
+      position: relative;
+      z-index: 1;
+      animation: fadeInScale 0.8s ease-out;
+    }
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(-10deg); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg); 
+      }
+    }
+    .image-display:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+  
+  <div class="navigation">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
+    <a href="animals-game.html" class="nav-btn">Animals</a>
+    <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
+    <a href="birds.html" class="nav-btn">Birds</a>
+  </div>
+  
+  <h1>Alphabet Click Game</h1>
+  
+  <!-- Control Panel -->
+  <div style="text-align: center; margin: 20px auto; position: relative; z-index: 1;">
+    <button id="randomBtn" style="background: linear-gradient(145deg, #ffeb3b, #fbc02d); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(251, 192, 45, 0.4); margin: 0 10px; transition: all 0.3s;">
+      🎲 Random
+    </button>
+    <button id="quizBtn" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      🎯 Quiz Mode
+    </button>
+    <button id="settingsBtn" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      ⚙️ Settings
+    </button>
+    <button id="speakBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      🔊 Speak
+    </button>
+    <button id="resetBtn" style="background: linear-gradient(145deg, #f44336, #c62828); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      🔄 Reset
+    </button>
+    <button id="statsBtn" style="background: linear-gradient(145deg, #2196f3, #1976d2); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      📊 Stats
+    </button>
+    <div style="display: inline-block; background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 20px; margin: 0 10px; font-weight: bold; color: #667eea;">
+      <span id="progressCounter">0 / 26</span> learned
+    </div>
+  </div>
+  
+  <!-- Stats Modal -->
+  <!-- Stats Modal with Enhanced Glassmorphism -->
+  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto; animation: fadeIn 0.3s ease;">
+    <div style="background: rgba(33, 150, 243, 0.95); backdrop-filter: blur(40px); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1); position: relative; margin: 20px auto; animation: slideUp 0.4s ease;">
+      <button id="closeStats" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s; z-index: 10;">✕</button>
+      
+      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px; text-align: center; animation: fadeInDown 0.5s ease;">📊 Your Statistics</h2>
+      
+      <div id="statsContent" style="background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); animation: fadeInUp 0.6s ease;">
+        <!-- Stats will be populated here -->
+      </div>
+      
+      <div id="achievementsDisplay" style="margin-top: 25px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); animation: fadeInUp 0.7s ease;">
+        <h3 style="color: white; text-align: center; margin-bottom: 15px;">🏆 Achievements</h3>
+        <div id="achievementsList" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+          <!-- Achievements will be populated here -->
+        </div>
+      </div>
+      
+      <button onclick="document.getElementById('statsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        ✓ Close
+      </button>
+    </div>
+  </div>
+  
+  <!-- Quiz Modal -->
+  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
+      
+      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px;">🎯 Alphabet Quiz</h2>
+      
+      <div id="quizQuestion" style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(10px);">
+        <img id="quizImage" src="" alt="" style="width: 200px; height: 200px; margin: 0 auto; display: block; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <p style="color: white; font-size: 1.8em; margin-top: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Which letter is this?</p>
+      </div>
+      
+      <div id="quizOptions" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+        <!-- Options will be generated here -->
+      </div>
+      
+      <div id="quizFeedback" style="min-height: 60px; color: white; font-size: 1.3em; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; color: white; font-size: 1.1em;">
+        <span id="quizScore">Score: 0/0</span>
+        <button id="nextQuizBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 20px; font-weight: bold; color: white; cursor: pointer; display: none;">Next Question ➜</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Settings Modal -->
+  <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
+      
+      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
+      
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px; backdrop-filter: blur(10px);">
+        
+        <!-- Dark Mode Toggle -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🌙 Dark Mode</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="darkModeToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        
+        <!-- Font Size -->
+        <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em; transition: all 0.3s;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #764ba2; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s;">Medium</button>
+            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em; transition: all 0.3s;">Large</button>
+          </div>
+        </div>
+        
+        <!-- Sound Toggle -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🔊 Sound Effects</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="soundToggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4caf50; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        
+        <!-- Auto-Speak Toggle -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="color: white; font-size: 1.2em; font-weight: bold;">🗣️ Auto-Speak</label>
+          <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+            <input type="checkbox" id="autoSpeakToggle" style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 34px;"></span>
+          </label>
+        </div>
+        
+      </div>
+      
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        ✓ Save Settings
+      </button>
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="alphabet-grid" id="alphabetGrid"></div>
+    </div>
+    <div class="right-pane">
+      <div class="word-display" id="wordDisplay"></div>
+      <img class="image-display" id="imageDisplay" src="" alt="" style="display:none;" />
+      <div style="margin-top: 15px; color: rgba(255,255,255,0.8); font-size: 0.9em; text-align: center;">
+        💡 Tip: Press Arrow keys to navigate, R for random, Space to speak
+      </div>
+    </div>
+  </div>
+  <script>
+    // Particle Background System
+    (function() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+      
+      const particles = [];
+      const particleCount = 50;
+      
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedX = Math.random() * 0.5 - 0.25;
+          this.speedY = Math.random() * 0.5 - 0.25;
+          this.opacity = Math.random() * 0.5 + 0.2;
+          this.color = `rgba(255, 255, 255, ${this.opacity})`;
+        }
+        
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      
+      function init() {
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      
+      init();
+      animate();
+    })();
+    
+    // Ripple Effect Function
+    function createRipple(e) {
+      const button = e.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.add('ripple');
+      
+      button.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    }
+    
+    // Data
+    const alphabetWords = {
+      A: { word: 'Apple', img: 'https://api.iconify.design/noto/red-apple.svg?width=96&height=96' },
+      B: { word: 'Ball', img: 'https://api.iconify.design/noto/soccer-ball.svg?width=96&height=96' },
+      C: { word: 'Cat', img: 'https://api.iconify.design/noto/cat-face.svg?width=96&height=96' },
+      D: { word: 'Dog', img: 'https://api.iconify.design/noto/dog-face.svg?width=96&height=96' },
+      E: { word: 'Elephant', img: 'https://api.iconify.design/noto/elephant.svg?width=96&height=96' },
+      F: { word: 'Fish', img: 'https://api.iconify.design/noto/fish.svg?width=96&height=96' },
+      G: { word: 'Giraffe', img: 'https://api.iconify.design/noto/giraffe.svg?width=96&height=96' },
+      H: { word: 'House', img: 'https://api.iconify.design/noto/house.svg?width=96&height=96' },
+      I: { word: 'Ice Cream', img: 'https://api.iconify.design/noto/ice-cream.svg?width=96&height=96' },
+      J: { word: 'Juice', img: 'https://api.iconify.design/noto/beverage-box.svg?width=96&height=96' },
+      K: { word: 'Kite', img: 'https://api.iconify.design/noto/kite.svg?width=96&height=96' },
+      L: { word: 'Lion', img: 'https://api.iconify.design/noto/lion.svg?width=96&height=96' },
+      M: { word: 'Monkey', img: 'https://api.iconify.design/noto/monkey-face.svg?width=96&height=96' },
+      N: { word: 'Nurse', img: 'https://api.iconify.design/noto/health-worker.svg?width=96&height=96' },
+      O: { word: 'Orange', img: 'https://api.iconify.design/noto/tangerine.svg?width=96&height=96' },
+      P: { word: 'Pizza', img: 'https://api.iconify.design/noto/pizza.svg?width=96&height=96' },
+      Q: { word: 'Queen', img: 'https://api.iconify.design/noto/princess.svg?width=96&height=96' },
+      R: { word: 'Rabbit', img: 'https://api.iconify.design/noto/rabbit-face.svg?width=96&height=96' },
+      S: { word: 'Sun', img: 'https://api.iconify.design/noto/sun-with-face.svg?width=96&height=96' },
+      T: { word: 'Train', img: 'https://api.iconify.design/noto/locomotive.svg?width=96&height=96' },
+      U: { word: 'Umbrella', img: 'https://api.iconify.design/noto/umbrella-with-rain-drops.svg?width=96&height=96' },
+      V: { word: 'Van', img: 'https://api.iconify.design/noto/delivery-truck.svg?width=96&height=96' },
+      W: { word: 'Watermelon', img: 'https://api.iconify.design/noto/watermelon.svg?width=96&height=96' },
+      X: { word: 'Xylophone', img: 'https://api.iconify.design/noto/musical-keyboard.svg?width=96&height=96' },
+      Y: { word: 'Yacht', img: 'https://api.iconify.design/noto/sailboat.svg?width=96&height=96' },
+      Z: { word: 'Zebra', img: 'https://api.iconify.design/noto/zebra.svg?width=96&height=96' }
+    };
+    
+    // State management
+    let currentLetter = null;
+    let learnedLetters = new Set(JSON.parse(localStorage.getItem('alphabet_learned') || '[]'));
+    
+    // Achievement System - Defined early so it's available everywhere
+    const achievements = {
+      first_learn: { name: '🎯 First Letter', desc: 'Learn your first letter', unlocked: false },
+      half_way: { name: '⭐ Half Way', desc: 'Learn 13 letters', unlocked: false },
+      all_learned: { name: '🏆 Alphabet Master', desc: 'Learn all 26 letters', unlocked: false },
+      perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
+      quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
+    };
+    
+    // Load achievements from localStorage
+    const savedAchievements = JSON.parse(localStorage.getItem('alphabet_achievements') || '{}');
+    Object.keys(savedAchievements).forEach(key => {
+      if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
+    });
+    
+    // Load statistics
+    let stats = JSON.parse(localStorage.getItem('alphabet_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    
+    // Achievement functions
+    function checkAchievements() {
+      let newUnlock = false;
+      
+      if (!achievements.first_learn.unlocked && learnedLetters.size >= 1) {
+        achievements.first_learn.unlocked = true;
+        showAchievement(achievements.first_learn);
+        newUnlock = true;
+      }
+      if (!achievements.half_way.unlocked && learnedLetters.size >= 13) {
+        achievements.half_way.unlocked = true;
+        showAchievement(achievements.half_way);
+        newUnlock = true;
+      }
+      if (!achievements.all_learned.unlocked && learnedLetters.size >= 26) {
+        achievements.all_learned.unlocked = true;
+        showAchievement(achievements.all_learned);
+        newUnlock = true;
+      }
+      
+      if (newUnlock) {
+        saveAchievements();
+      }
+    }
+    
+    function saveAchievements() {
+      const toSave = {};
+      Object.keys(achievements).forEach(key => {
+        toSave[key] = achievements[key].unlocked;
+      });
+      localStorage.setItem('alphabet_achievements', JSON.stringify(toSave));
+    }
+    
+    function saveStats() {
+      localStorage.setItem('alphabet_stats', JSON.stringify(stats));
+    }
+    
+    function showAchievement(achievement) {
+      const badge = document.createElement('div');
+      badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
+      badge.innerHTML = `
+        <div style="font-size: 1.5em; margin-bottom: 5px;">${achievement.name}</div>
+        <div style="font-size: 0.9em; opacity: 0.8;">${achievement.desc}</div>
+      `;
+      document.body.appendChild(badge);
+      
+      const style = document.createElement('style');
+      style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+      document.head.appendChild(style);
+      
+      // Speech will be called after speak function is defined
+      if (typeof speak === 'function') {
+        speak(`Achievement unlocked: ${achievement.name}`);
+      }
+      
+      setTimeout(() => {
+        badge.style.transition = 'all 0.5s';
+        badge.style.transform = 'translateX(400px)';
+        badge.style.opacity = '0';
+        setTimeout(() => badge.remove(), 500);
+      }, 3000);
+    }
+    
+    // DOM elements
+    const alphabetGrid = document.getElementById('alphabetGrid');
+    const wordDisplay = document.getElementById('wordDisplay');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const progressCounter = document.getElementById('progressCounter');
+    const randomBtn = document.getElementById('randomBtn');
+    const speakBtn = document.getElementById('speakBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    // Text-to-speech function
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.8;
+        utterance.pitch = 1.2;
+        utterance.volume = 1;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+    
+    // Display letter function
+    function displayLetter(letter) {
+      currentLetter = letter;
+      const data = alphabetWords[letter];
+      
+      wordDisplay.textContent = `${letter} for ${data.word}`;
+      wordDisplay.style.animation = 'none';
+      wordDisplay.offsetHeight;
+      wordDisplay.style.animation = 'bounce 0.6s ease-in-out';
+      
+      // Image with fallback
+      imageDisplay.src = data.img;
+      imageDisplay.alt = data.word;
+      imageDisplay.style.display = 'block';
+      imageDisplay.style.animation = 'none';
+      imageDisplay.offsetHeight;
+      imageDisplay.style.animation = 'fadeInScale 0.8s ease-out';
+      
+      imageDisplay.onerror = () => {
+        imageDisplay.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" font-size="60" text-anchor="middle" dy=".3em">' + letter + '</text></svg>';
+      };
+      
+      // Mark as learned
+      learnedLetters.add(letter);
+      localStorage.setItem('alphabet_learned', JSON.stringify([...learnedLetters]));
+      updateProgress();
+      
+      // Check for achievements (now defined earlier in code)
+      checkAchievements();
+      
+      // Update button styles
+      document.querySelectorAll('.alphabet-btn').forEach(btn => {
+        if (btn.textContent === letter) {
+          btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
+        }
+      });
+      
+      // Auto-speak
+      speak(`${letter} for ${data.word}`);
+    }
+    
+    // Update progress
+    function updateProgress() {
+      progressCounter.textContent = `${learnedLetters.size} / 26`;
+    }
+    
+    // Random letter
+    function showRandom() {
+      const letters = Object.keys(alphabetWords);
+      const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+      displayLetter(randomLetter);
+    }
+    
+    // Reset
+    function reset() {
+      // Clear display
+      wordDisplay.textContent = '';
+      imageDisplay.style.display = 'none';
+      currentLetter = null;
+      
+      // Clear learned letters
+      learnedLetters.clear();
+      localStorage.removeItem('alphabet_learned');
+      
+      // Reset achievements
+      Object.keys(achievements).forEach(key => {
+        achievements[key].unlocked = false;
+      });
+      localStorage.removeItem('alphabet_achievements');
+      
+      // Reset statistics
+      stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
+      localStorage.removeItem('alphabet_stats');
+      
+      // Reset all button styles
+      document.querySelectorAll('.alphabet-btn').forEach(btn => {
+        btn.style.background = 'linear-gradient(145deg, #ffffff, #f0f0f0)';
+      });
+      
+      // Update progress counter
+      updateProgress();
+      
+      // Show confirmation
+      speak('Progress reset complete');
+    }
+    
+    // Create alphabet buttons
+    Object.keys(alphabetWords).forEach(letter => {
+      const btn = document.createElement('button');
+      btn.className = 'alphabet-btn';
+      btn.textContent = letter;
+      btn.setAttribute('aria-label', `Letter ${letter}`);
+      btn.setAttribute('tabindex', '0');
+      
+      // Check if already learned
+      if (learnedLetters.has(letter)) {
+        btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
+      }
+      
+      btn.onclick = (e) => {
+        // 3D Flip Animation
+        btn.classList.add('flipping');
+        setTimeout(() => btn.classList.remove('flipping'), 600);
+        
+        // Ripple Effect
+        createRipple(e);
+        
+        // Display letter
+        displayLetter(letter);
+      };
+      
+      btn.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.classList.add('flipping');
+          setTimeout(() => btn.classList.remove('flipping'), 600);
+          displayLetter(letter);
+        }
+      };
+      
+      alphabetGrid.appendChild(btn);
+    });
+    
+    // Button events
+    randomBtn.onclick = () => {
+      showRandom();
+      playSound('click');
+    };
+    speakBtn.onclick = () => {
+      if (currentLetter) {
+        speak(`${currentLetter} for ${alphabetWords[currentLetter].word}`);
+        playSound('click');
+      }
+    };
+    resetBtn.onclick = () => {
+      reset();
+      playSound('click');
+    };
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const letters = Object.keys(alphabetWords);
+      
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        showRandom();
+      } else if (e.key === ' ' && currentLetter) {
+        e.preventDefault();
+        speak(`${currentLetter} for ${alphabetWords[currentLetter].word}`);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        reset();
+      } else if (e.key === 'ArrowRight' && currentLetter) {
+        e.preventDefault();
+        const currentIndex = letters.indexOf(currentLetter);
+        const nextIndex = (currentIndex + 1) % letters.length;
+        displayLetter(letters[nextIndex]);
+      } else if (e.key === 'ArrowLeft' && currentLetter) {
+        e.preventDefault();
+        const currentIndex = letters.indexOf(currentLetter);
+        const prevIndex = (currentIndex - 1 + letters.length) % letters.length;
+        displayLetter(letters[prevIndex]);
+      } else if (e.key.match(/^[a-zA-Z]$/) && letters.includes(e.key.toUpperCase())) {
+        e.preventDefault();
+        displayLetter(e.key.toUpperCase());
+      }
+    });
+    
+    // Button hover effects
+    [randomBtn, speakBtn, resetBtn].forEach(btn => {
+      btn.onmouseenter = () => {
+        btn.style.transform = 'translateY(-3px)';
+        btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+      };
+      btn.onmouseleave = () => {
+        btn.style.transform = 'translateY(0)';
+        btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+      };
+    });
+    
+    // Quiz Mode Implementation
+    const quizBtn = document.getElementById('quizBtn');
+    const quizModal = document.getElementById('quizModal');
+    const closeQuiz = document.getElementById('closeQuiz');
+    const quizImage = document.getElementById('quizImage');
+    const quizOptions = document.getElementById('quizOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    const quizScore = document.getElementById('quizScore');
+    const nextQuizBtn = document.getElementById('nextQuizBtn');
+    
+    let quizState = {
+      currentQuestion: 0,
+      correctAnswers: 0,
+      totalQuestions: 10,
+      currentCorrectLetter: '',
+      answered: false
+    };
+    
+    function startQuiz() {
+      quizState = {
+        currentQuestion: 0,
+        correctAnswers: 0,
+        totalQuestions: 10,
+        currentCorrectLetter: '',
+        answered: false
+      };
+      quizModal.style.display = 'flex';
+      nextQuestion();
+    }
+    
+    function nextQuestion() {
+      if (quizState.currentQuestion >= quizState.totalQuestions) {
+        showQuizResults();
+        return;
+      }
+      
+      quizState.currentQuestion++;
+      quizState.answered = false;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      
+      // Pick random letter
+      const letters = Object.keys(alphabetWords);
+      const correctLetter = letters[Math.floor(Math.random() * letters.length)];
+      quizState.currentCorrectLetter = correctLetter;
+      
+      // Show image
+      quizImage.src = alphabetWords[correctLetter].img;
+      quizImage.alt = alphabetWords[correctLetter].word;
+      
+      // Generate 4 options (1 correct + 3 wrong)
+      const options = [correctLetter];
+      while (options.length < 4) {
+        const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+        if (!options.includes(randomLetter)) {
+          options.push(randomLetter);
+        }
+      }
+      
+      // Shuffle options
+      options.sort(() => Math.random() - 0.5);
+      
+      // Create option buttons
+      quizOptions.innerHTML = '';
+      options.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.textContent = letter;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #667eea; border-radius: 15px; font-size: 2em; font-weight: bold; padding: 20px; cursor: pointer; transition: all 0.3s; color: #667eea;';
+        
+        btn.onclick = () => checkAnswer(letter, btn);
+        
+        btn.onmouseenter = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1.05)';
+            btn.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+          }
+        };
+        btn.onmouseleave = () => {
+          if (!quizState.answered) {
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = 'none';
+          }
+        };
+        
+        quizOptions.appendChild(btn);
+      });
+      
+      updateQuizScore();
+    }
+    
+    function checkAnswer(selectedLetter, btn) {
+      if (quizState.answered) return;
+      
+      quizState.answered = true;
+      const correct = selectedLetter === quizState.currentCorrectLetter;
+      
+      if (correct) {
+        quizState.correctAnswers++;
+        btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#2e7d32';
+        quizFeedback.innerHTML = '✅ Correct! ' + selectedLetter + ' for ' + alphabetWords[selectedLetter].word;
+        quizFeedback.style.color = '#4caf50';
+        playSound('correct');
+        speak('Correct! ' + selectedLetter + ' for ' + alphabetWords[selectedLetter].word);
+      } else {
+        btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#c62828';
+        playSound('wrong');
+        
+        // Highlight correct answer
+        const buttons = quizOptions.querySelectorAll('button');
+        buttons.forEach(b => {
+          if (b.textContent === quizState.currentCorrectLetter) {
+            b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
+            b.style.color = 'white';
+            b.style.borderColor = '#2e7d32';
+          }
+        });
+        
+        quizFeedback.innerHTML = '❌ Wrong! Correct answer: ' + quizState.currentCorrectLetter + ' for ' + alphabetWords[quizState.currentCorrectLetter].word;
+        quizFeedback.style.color = '#f44336';
+        speak('Wrong! It\'s ' + quizState.currentCorrectLetter + ' for ' + alphabetWords[quizState.currentCorrectLetter].word);
+      }
+      
+      updateQuizScore();
+      
+      // Show next button after delay
+      setTimeout(() => {
+        nextQuizBtn.style.display = 'block';
+      }, 1000);
+    }
+    
+    function updateQuizScore() {
+      quizScore.textContent = `Score: ${quizState.correctAnswers}/${quizState.currentQuestion}  |  Question ${quizState.currentQuestion}/${quizState.totalQuestions}`;
+    }
+    
+    // Confetti celebration function
+    function createConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4', '#32cd32', '#ff1493', '#00bfff', '#ffd700'];
+      const shapes = ['circle', 'square', 'triangle'];
+      const confettiCount = 150;
+      
+      for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-10px';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Random shapes
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          if (shape === 'circle') {
+            confetti.style.borderRadius = '50%';
+          } else if (shape === 'triangle') {
+            confetti.style.width = '0';
+            confetti.style.height = '0';
+            confetti.style.borderLeft = '7px solid transparent';
+            confetti.style.borderRight = '7px solid transparent';
+            confetti.style.borderBottom = `14px solid ${confetti.style.backgroundColor}`;
+            confetti.style.backgroundColor = 'transparent';
+          } else {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          if (shape !== 'triangle') {
+            confetti.style.width = (Math.random() * 12 + 6) + 'px';
+            confetti.style.height = (Math.random() * 12 + 6) + 'px';
+          }
+          
+          confetti.style.opacity = Math.random() * 0.6 + 0.4;
+          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => confetti.remove(), 4500);
+        }, i * 20);
+      }
+      
+      // Add celebration burst
+      const burst = document.createElement('div');
+      burst.className = 'celebration-burst';
+      burst.innerHTML = '🎉';
+      burst.style.fontSize = '100px';
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 600);
+    }
+    
+    function showQuizResults() {
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      let message = '';
+      let emoji = '';
+      
+      if (percentage === 100) {
+        message = 'Perfect! You\'re an alphabet master! 🌟';
+        emoji = '🏆';
+        createConfetti(); // Trigger confetti for perfect score
+      } else if (percentage >= 80) {
+        message = 'Excellent work! Keep it up! 👏';
+        emoji = '⭐';
+        createConfetti(); // Trigger confetti for excellent score
+      } else if (percentage >= 60) {
+        message = 'Good job! Practice more to improve! 💪';
+        emoji = '👍';
+      } else {
+        message = 'Keep practicing! You\'ll get better! 📚';
+        emoji = '💡';
+      }
+      
+      quizOptions.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center;">
+          <div style="font-size: 5em; margin: 20px 0;">${emoji}</div>
+          <h3 style="color: white; font-size: 2em; margin: 20px 0;">Quiz Complete!</h3>
+          <p style="color: white; font-size: 1.5em; margin: 15px 0;">Your Score: ${quizState.correctAnswers} / ${quizState.totalQuestions}</p>
+          <p style="color: white; font-size: 1.3em; margin: 15px 0;">${percentage.toFixed(0)}% Correct</p>
+          <p style="color: white; font-size: 1.2em; margin: 20px 0;">${message}</p>
+          <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            🔄 Try Again
+          </button>
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #667eea, #764ba2); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+            ✓ Done
+          </button>
+        </div>
+      `;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      
+      speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
+    }
+    
+    // Quiz event listeners
+    quizBtn.onclick = startQuiz;
+    closeQuiz.onclick = () => {
+      quizModal.style.display = 'none';
+    };
+    nextQuizBtn.onclick = nextQuestion;
+    
+    // Close modal on outside click
+    quizModal.onclick = (e) => {
+      if (e.target === quizModal) {
+        quizModal.style.display = 'none';
+      }
+    };
+    
+    // Add hover effect to quiz button
+    quizBtn.onmouseenter = () => {
+      quizBtn.style.transform = 'translateY(-3px)';
+      quizBtn.style.boxShadow = '0 6px 20px rgba(255, 152, 0, 0.5)';
+    };
+    quizBtn.onmouseleave = () => {
+      quizBtn.style.transform = 'translateY(0)';
+      quizBtn.style.boxShadow = '0 4px 15px rgba(255, 152, 0, 0.4)';
+    };
+    
+    // Sound Effects System
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      const settings = JSON.parse(localStorage.getItem('alphabet_settings') || '{"soundEnabled": true}');
+      if (!settings.soundEnabled) return;
+      
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      if (type === 'correct') {
+        oscillator.frequency.value = 800;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        oscillator.frequency.value = 200;
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      } else if (type === 'click') {
+        oscillator.frequency.value = 600;
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+    }
+    
+    // Settings Panel Implementation
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettings = document.getElementById('closeSettings');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const autoSpeakToggle = document.getElementById('autoSpeakToggle');
+    const fontSizeBtns = document.querySelectorAll('.fontSizeBtn');
+    
+    // Load settings from localStorage
+    const settings = {
+      darkMode: localStorage.getItem('darkMode') === 'true',
+      soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
+      autoSpeak: localStorage.getItem('autoSpeak') === 'true',
+      fontSize: localStorage.getItem('fontSize') || 'medium'
+    };
+    
+    // Apply saved settings
+    if (settings.darkMode) {
+      document.body.classList.add('dark-mode');
+      darkModeToggle.checked = true;
+    }
+    soundToggle.checked = settings.soundEnabled;
+    autoSpeakToggle.checked = settings.autoSpeak;
+    document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + settings.fontSize;
+    
+    fontSizeBtns.forEach(btn => {
+      if (btn.dataset.size === settings.fontSize) {
+        btn.style.background = 'white';
+        btn.style.color = '#764ba2';
+        btn.style.fontWeight = 'bold';
+      } else {
+        btn.style.background = 'rgba(255,255,255,0.2)';
+        btn.style.color = 'white';
+        btn.style.fontWeight = 'normal';
+      }
+    });
+    
+    // Settings event listeners
+    settingsBtn.onclick = () => {
+      settingsModal.style.display = 'flex';
+    };
+    
+    closeSettings.onclick = () => {
+      settingsModal.style.display = 'none';
+    };
+    
+    settingsModal.onclick = (e) => {
+      if (e.target === settingsModal) {
+        settingsModal.style.display = 'none';
+      }
+    };
+    
+    // Dark mode toggle
+    darkModeToggle.onchange = () => {
+      if (darkModeToggle.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'false');
+      }
+    };
+    
+    // Sound toggle
+    soundToggle.onchange = () => {
+      settings.soundEnabled = soundToggle.checked;
+      localStorage.setItem('soundEnabled', soundToggle.checked);
+    };
+    
+    // Auto-speak toggle
+    autoSpeakToggle.onchange = () => {
+      settings.autoSpeak = autoSpeakToggle.checked;
+      localStorage.setItem('autoSpeak', autoSpeakToggle.checked);
+    };
+    
+    // Font size buttons
+    fontSizeBtns.forEach(btn => {
+      btn.onclick = () => {
+        const size = btn.dataset.size;
+        document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + size;
+        if (document.body.classList.contains('dark-mode')) {
+          document.body.classList.add('dark-mode');
+        }
+        localStorage.setItem('fontSize', size);
+        
+        fontSizeBtns.forEach(b => {
+          if (b === btn) {
+            b.style.background = 'white';
+            b.style.color = '#764ba2';
+            b.style.fontWeight = 'bold';
+          } else {
+            b.style.background = 'rgba(255,255,255,0.2)';
+            b.style.color = 'white';
+            b.style.fontWeight = 'normal';
+          }
+        });
+      };
+    });
+    
+    // Update speak function to respect settings
+    const originalSpeak = window.speak;
+    window.speak = function(text) {
+      if (settings.soundEnabled || soundToggle.checked) {
+        originalSpeak(text);
+      }
+    };
+    
+    // Auto-speak on letter display
+    const originalDisplayLetter2 = displayLetter;
+    displayLetter = function(letter) {
+      originalDisplayLetter2(letter);
+      if (settings.autoSpeak || autoSpeakToggle.checked) {
+        setTimeout(() => speak(letter + ' for ' + alphabetWords[letter].word), 300);
+      }
+    };
+    
+    // Add hover effect to settings button
+    settingsBtn.onmouseenter = () => {
+      settingsBtn.style.transform = 'translateY(-3px)';
+      settingsBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.5)';
+    };
+    settingsBtn.onmouseleave = () => {
+      settingsBtn.style.transform = 'translateY(0)';
+      settingsBtn.style.boxShadow = '0 4px 15px rgba(156, 39, 176, 0.4)';
+    };
+    
+    // Stats Modal
+    const statsBtn = document.getElementById('statsBtn');
+    const statsModal = document.getElementById('statsModal');
+    const closeStats = document.getElementById('closeStats');
+    
+    if (statsBtn && statsModal && closeStats) {
+      function showStats() {
+        const currentStats = JSON.parse(localStorage.getItem('alphabet_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+        const savedAchievements = JSON.parse(localStorage.getItem('alphabet_achievements') || '{}');
+        
+        // Update achievements object with saved state
+        Object.keys(savedAchievements).forEach(key => {
+          if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
+        });
+        
+        const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
+        
+        document.getElementById('statsContent').innerHTML = `
+          <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
+              <div style="opacity: 0.9;">Total Quizzes</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
+              <div style="opacity: 0.9;">Questions Answered</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
+              <div style="opacity: 0.9;">Overall Accuracy</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
+              <div style="opacity: 0.9;">High Score</div>
+            </div>
+          </div>
+        `;
+        
+        const achievementsList = document.getElementById('achievementsList');
+        achievementsList.innerHTML = '';
+        Object.entries(achievements).forEach(([key, achievement]) => {
+          const badgeDiv = document.createElement('div');
+          badgeDiv.style.cssText = `
+            background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            opacity: ${achievement.unlocked ? '1' : '0.5'};
+            transition: transform 0.3s, box-shadow 0.3s;
+            ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
+          `;
+          badgeDiv.innerHTML = `
+            <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
+            <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
+              ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
+            </div>
+            <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
+            ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
+          `;
+          achievementsList.appendChild(badgeDiv);
+        });
+        
+        statsModal.style.display = 'flex';
+        if (typeof playSound === 'function') {
+          playSound('click');
+        }
+      }
+      
+      statsBtn.addEventListener('click', showStats);
+      closeStats.addEventListener('click', () => {
+        statsModal.style.display = 'none';
+        if (typeof playSound === 'function') {
+          playSound('click');
+        }
+      });
+      
+      // Close modal when clicking outside (on backdrop)
+      statsModal.addEventListener('click', (e) => {
+        if (e.target === statsModal) {
+          statsModal.style.display = 'none';
+          if (typeof playSound === 'function') {
+            playSound('click');
+          }
+        }
+      });
+      
+      statsBtn.onmouseover = () => {
+        statsBtn.style.transform = 'translateY(-2px)';
+        statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
+      };
+      statsBtn.onmouseleave = () => {
+        statsBtn.style.transform = 'translateY(0)';
+        statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
+      };
+    }
+
+
+    
+    // Update quiz completion to save stats and check achievements
+    const originalShowQuizResults = showQuizResults;
+    showQuizResults = function() {
+      stats.totalQuizzes++;
+      stats.totalCorrect += quizState.correctAnswers;
+      stats.totalQuestions += quizState.totalQuestions;
+      const percentage = (quizState.correctAnswers / quizState.totalQuestions) * 100;
+      if (percentage > stats.highScore) {
+        stats.highScore = percentage;
+      }
+      
+      if (percentage === 100 && !achievements.perfect_quiz.unlocked) {
+        achievements.perfect_quiz.unlocked = true;
+        setTimeout(() => showAchievement(achievements.perfect_quiz), 1000);
+        saveAchievements();
+      }
+      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) {
+        achievements.quiz_master.unlocked = true;
+        setTimeout(() => showAchievement(achievements.quiz_master), 1500);
+        saveAchievements();
+      }
+      
+      saveStats();
+      originalShowQuizResults();
+    };
+    
+    // Initialize
+    updateProgress();
+    checkAchievements();
+  </script>
+</body>
+</html>
