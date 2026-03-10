@@ -290,7 +290,20 @@
       100%{transform:translateY(105vh) rotateZ(720deg);opacity:0;}
     }
 
-    /* ── RESPONSIVE ── */
+    /* ── RESPONSIVE: tablet landscape / short viewports ── */
+    @media(max-height:750px) and (min-width:701px){
+      .left-pane{gap:8px;padding:12px 14px 14px;}
+      .top-card{width:230px;height:318px;}
+      .ghost    {width:230px;height:318px;}
+      .card-emoji-big{font-size:4.8em;}
+      .card-name-big{font-size:1.8em;}
+      .machine{padding:12px 16px 16px;gap:10px;}
+      .scrn-emoji{font-size:3.4em;}
+      .scrn-img{width:100px;height:100px;}
+      .press-btn{padding:12px 14px;font-size:1.1em;}
+    }
+
+    /* ── RESPONSIVE: mobile ── */
     @media(max-width:700px){
       body{overflow-y:auto;}
       .layout{flex-direction:column;height:auto;min-height:100vh;}
