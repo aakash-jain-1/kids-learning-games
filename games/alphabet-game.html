@@ -392,10 +392,16 @@
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
     }
-    @media (max-width: 768px) {
-      #particleCanvas { display: none !important; }
-      body::before { animation: none !important; }
+    @media (max-height: 900px) and (min-width: 701px) {
+      .main-container { margin-top: 10px; height: calc(100vh - 70px); }
+      .right-pane { overflow-y: auto; overflow-x: hidden; }
+      .image-display { height: 180px !important; }
+      .word-display { min-height: unset !important; margin-bottom: 10px !important; font-size: 2.4em !important; }
     }
+    /* Performance: background animations disabled */
+    body::before { display: none; }
+    #particleCanvas { display: none; }
+    .right-pane::before { animation: none; }
   </style>
 </head>
 <body>
