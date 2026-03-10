@@ -269,49 +269,49 @@
     </div>
     
     <div class="games-grid">
-      <a href="alphabet-game.html" class="game-card alphabets">
+      <a href="games/alphabet-game.html" class="game-card alphabets">
         <div class="game-icon">🔤</div>
         <h2>Alphabets</h2>
         <p>Learn A to Z with fun words and pictures!</p>
       </a>
       
-      <a href="numbers-game.html" class="game-card numbers">
+      <a href="games/numbers-game.html" class="game-card numbers">
         <div class="game-icon">🔢</div>
         <h2>Numbers</h2>
         <p>Count from 1 to 10 with colorful objects!</p>
       </a>
       
-      <a href="colors-game.html" class="game-card colors">
+      <a href="games/colors-game.html" class="game-card colors">
         <div class="game-icon">🌈</div>
         <h2>Colors</h2>
         <p>Discover beautiful colors and shapes!</p>
       </a>
       
-      <a href="shapes-game.html" class="game-card shapes">
+      <a href="games/shapes-game.html" class="game-card shapes">
         <div class="game-icon">⬛</div>
         <h2>Shapes</h2>
         <p>Explore circles, squares, stars and more!</p>
       </a>
       
-      <a href="animals-game.html" class="game-card animals">
+      <a href="games/animals-game.html" class="game-card animals">
         <div class="game-icon">🐾</div>
         <h2>Animals</h2>
         <p>Meet amazing animals and their sounds!</p>
       </a>
 
-      <a href="hindi-alphabets.html" class="game-card alphabets">
+      <a href="games/hindi-alphabets.html" class="game-card alphabets">
         <div class="game-icon">🇮🇳</div>
         <h2>Hindi Alphabets</h2>
         <p>Learn हिंदी वर्णमाला with words!</p>
       </a>
 
-      <a href="birds.html" class="game-card animals">
+      <a href="games/birds.html" class="game-card animals">
         <div class="game-icon">🦜</div>
         <h2>Birds</h2>
         <p>Discover beautiful birds of the world!</p>
       </a>
 
-      <a href="flashcards-game.html" class="game-card" style="border-top:5px solid #f7971e;">
+      <a href="games/flashcards-game.html" class="game-card" style="border-top:5px solid #f7971e;">
         <div class="game-icon">🃏</div>
         <h2>Flash Cards</h2>
         <p>Flip cards to learn Animals, Food, Shapes, Colors & more!</p>
@@ -368,6 +368,7 @@
       installBtn.classList.remove('show');
     });
   </script>
-
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>

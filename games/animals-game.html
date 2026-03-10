@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shapes Learning Game</title>
+  <title>Animals Learning Game</title>
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -14,7 +14,7 @@
     }
     body {
       font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
       text-align: center;
       margin: 0;
       padding: 100px 0 0 0;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       transition: all 0.3s ease;
     }
-    body.dark-mode { background: linear-gradient(135deg, #2c003e 0%, #3d0d4d 100%); }
+    body.dark-mode { background: linear-gradient(135deg, #0a3d62 0%, #1e272e 100%); }
     body.font-small { font-size: 14px; }
     body.font-medium { font-size: 16px; }
     body.font-large { font-size: 18px; }
@@ -37,6 +37,10 @@
       z-index: 0;
       opacity: 0.6;
     }
+    .switch input:checked + span { background-color: #4caf50; }
+    .switch input:checked + span:before { transform: translateX(26px); }
+    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
+    /* Phase 5: Smooth Transition Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -57,31 +61,6 @@
       0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
       50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
     }
-    .flipping {
-      animation: flip3d 0.6s ease-in-out;
-    }
-    @keyframes flip3d {
-      0% { transform: rotateY(0deg); }
-      50% { transform: rotateY(90deg); }
-      100% { transform: rotateY(0deg); }
-    }
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      transform: scale(0);
-      animation: ripple-animation 0.6s ease-out;
-      pointer-events: none;
-    }
-    @keyframes ripple-animation {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-    .switch input:checked + span { background-color: #4caf50; }
-    .switch input:checked + span:before { transform: translateX(26px); }
-    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
     body::before {
       content: '';
       position: absolute;
@@ -91,7 +70,7 @@
       bottom: 0;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
       pointer-events: none;
-      animation: sparkle 16s linear infinite;
+      animation: sparkle 17s linear infinite;
     }
     @keyframes sparkle {
       0% { transform: translateY(0px) rotate(0deg); }
@@ -104,21 +83,21 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       position: relative;
       z-index: 1;
-      animation: shapeGlow 3s ease-in-out infinite alternate;
+      animation: animalGlow 3s ease-in-out infinite alternate;
     }
-    @keyframes shapeGlow {
-      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(240,147,251,0.6); }
-      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(245,87,108,0.6); }
-      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(255,200,221,0.6); }
-      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(245,87,108,0.6); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(240,147,251,0.6); }
+    @keyframes animalGlow {
+      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(67,206,162,0.6); }
+      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
     }
     .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
     @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
     .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
     @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
-    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .shape-display { width: 200px !important; height: 200px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .shape-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .shape-item { padding: 15px !important; font-size: 1em !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
-    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .shape-display { width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .shape-item { padding: 12px !important; font-size: 0.9em !important; } }
+    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .animal-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .animal-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .animal-item { font-size: 2.5em !important; padding: 15px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .animal-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .animal-item { font-size: 2em !important; padding: 12px !important; } }
     .control-panel {
       display: flex;
       justify-content: center;
@@ -138,22 +117,22 @@
     }
     .control-btn {
       background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #f093fb;
+      border: 3px solid #43cea2;
       border-radius: 15px;
       padding: 12px 24px;
       font-size: 1.2em;
       font-weight: bold;
-      color: #7b1fa2;
+      color: #185a9d;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       min-width: 130px;
     }
     .control-btn:hover:not(:disabled) {
-      background: linear-gradient(145deg, #f093fb, #f5576c);
+      background: linear-gradient(145deg, #43cea2, #37b88d);
       color: white;
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(240, 147, 251, 0.4);
+      box-shadow: 0 6px 15px rgba(67, 206, 162, 0.4);
     }
     .control-btn:active:not(:disabled) {
       transform: translateY(0);
@@ -165,12 +144,12 @@
     }
     .progress-counter {
       background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #f093fb;
+      border: 2px solid #43cea2;
       border-radius: 12px;
       padding: 10px 20px;
       font-size: 1.3em;
       font-weight: bold;
-      color: #7b1fa2;
+      color: #185a9d;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
       min-width: 150px;
     }
@@ -202,56 +181,80 @@
       max-height: 80vh;
       overflow-y: auto;
     }
-    .shapes-grid {
+    .animals-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
       margin-top: 20px;
     }
-    .shape-btn {
+    .animal-btn {
       background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #ff6b9d;
+      border: 3px solid #43cea2;
       border-radius: 15px;
-      font-size: 1.4em;
+      font-size: 1.3em;
       font-weight: bold;
-      padding: 15px 10px;
+      padding: 15px 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       width: 100%;
       margin: 0;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      color: #c2185b;
+      color: #185a9d;
       position: relative;
       overflow: hidden;
-      min-height: 70px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
       transform-style: preserve-3d;
       perspective: 1000px;
     }
-    .shape-btn::before {
+    /* Phase 5: 3D Flip Animation */
+    .animal-btn.flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    /* Phase 5: Ripple Effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .animal-btn::before {
       content: '';
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,107,157,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(67,206,162,0.3), transparent);
       transition: left 0.5s;
     }
-    .shape-btn:hover::before {
+    .animal-btn:hover::before {
       left: 100%;
     }
-    .shape-btn:hover {
-      background: linear-gradient(145deg, #ffc0cb, #ffb6c1);
+    .animal-btn:hover {
+      background: linear-gradient(145deg, #b2f5ea, #81e6d9);
       transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
-      border-color: #d81b60;
+      box-shadow: 0 12px 30px rgba(67, 206, 162, 0.4);
+      border-color: #2c7a7b;
     }
-    .shape-btn:active {
+    .animal-btn:active {
       transform: translateY(0) scale(0.95);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
@@ -280,14 +283,14 @@
       width: 200%;
       height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: rotate 28s linear infinite;
+      animation: rotate 26s linear infinite;
       pointer-events: none;
     }
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .shape-name {
+    .animal-name {
       font-size: 3.5em;
       font-weight: bold;
       color: #fff;
@@ -304,7 +307,7 @@
       40% { transform: translateY(-20px); }
       80% { transform: translateY(-10px); }
     }
-    .shape-display-container {
+    .animal-display-container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -314,124 +317,27 @@
       margin: 0 auto;
       position: relative;
       z-index: 1;
-      min-height: 350px;
     }
-    .shape-display {
-      width: 200px;
-      height: 200px;
-      background: linear-gradient(145deg, #ff6b9d, #c2185b);
+    .animal-image {
+      width: 250px;
+      height: 250px;
+      object-fit: contain;
+      border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.95);
       border: 4px solid rgba(255, 255, 255, 0.9);
       transition: all 0.6s ease;
-      animation: fadeInRotate 0.8s ease-out;
+      animation: fadeInScale 0.8s ease-out;
       cursor: pointer;
-      position: relative;
+      padding: 20px;
     }
-    .shape-display:hover {
-      transform: scale(1.15) rotate(10deg);
-      box-shadow: 0 20px 50px rgba(255, 107, 157, 0.5);
+    .animal-image:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 20px 50px rgba(67, 206, 162, 0.5);
     }
-    .shape-display.circle {
-      border-radius: 50%;
-    }
-    .shape-display.square {
-      border-radius: 15px;
-    }
-    .shape-display.rectangle {
-      width: 250px;
-      height: 150px;
-      border-radius: 15px;
-    }
-    .shape-display.triangle {
-      width: 0;
-      height: 0;
-      border-left: 100px solid transparent;
-      border-right: 100px solid transparent;
-      border-bottom: 173px solid;
-      border-bottom-color: #ff6b9d;
-      background: transparent !important;
-      border-radius: 0;
-    }
-    .shape-display.diamond {
-      width: 140px;
-      height: 140px;
-      transform: rotate(45deg);
-      border-radius: 15px;
-    }
-    .shape-display.diamond:hover {
-      transform: rotate(45deg) scale(1.15);
-    }
-    .shape-display.pentagon {
-      width: 180px;
-      height: 180px;
-      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      border-radius: 0;
-    }
-    .shape-display.hexagon {
-      width: 180px;
-      height: 180px;
-      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-      border-radius: 0;
-    }
-    .shape-display.octagon {
-      width: 180px;
-      height: 180px;
-      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-      border-radius: 0;
-    }
-    .shape-display.star {
-      width: 200px;
-      height: 200px;
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      border-radius: 0;
-    }
-    .shape-display.star:hover {
-      transform: scale(1.15) rotate(10deg);
-    }
-    .shape-display.heart {
-      width: 200px;
-      height: 200px;
-      clip-path: path('M100,180 C25,100 0,60 0,40 C0,20 15,0 40,0 C60,0 80,10 100,35 C120,10 140,0 160,0 C185,0 200,20 200,40 C200,60 175,100 100,180 Z');
-      border-radius: 0;
-    }
-    .shape-display.heart:hover {
-      transform: scale(1.15) rotate(5deg);
-    }
-    .shape-display.oval {
-      width: 250px;
-      height: 150px;
-      border-radius: 50%;
-    }
-    .shape-display.parallelogram {
-      width: 200px;
-      height: 150px;
-      transform: skew(-20deg);
-      border-radius: 10px;
-    }
-    .shape-display.parallelogram:hover {
-      transform: skew(-20deg) scale(1.15);
-    }
-    .shape-display.trapezoid {
-      width: 200px;
-      height: 150px;
-      clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-      border-radius: 0;
-    }
-    .shape-display.crescent {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      box-shadow: 60px 0 0 0 #ff6b9d inset;
-      background: transparent !important;
-      border: none;
-    }
-    .shape-display.crescent:hover {
-      transform: scale(1.15) rotate(10deg);
-      box-shadow: 60px 0 0 0 #ff6b9d inset, 0 20px 50px rgba(255, 107, 157, 0.5);
-    }
-    .shape-info {
-      margin-top: 30px;
-      font-size: 1.3em;
+    .animal-info {
+      margin-top: 25px;
+      font-size: 1.4em;
       color: #fff;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
       max-width: 350px;
@@ -439,11 +345,22 @@
       position: relative;
       z-index: 1;
       animation: fadeIn 1s ease-out;
+      text-align: center;
     }
-    @keyframes fadeInRotate {
+    .animal-sound {
+      margin-top: 15px;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      font-weight: bold;
+      animation: pulse 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes fadeInScale {
       0% { 
         opacity: 0; 
-        transform: scale(0.3) rotate(-30deg); 
+        transform: scale(0.5) rotate(-10deg); 
       }
       100% { 
         opacity: 1; 
@@ -453,6 +370,10 @@
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
     .navigation {
       position: fixed;
@@ -471,7 +392,7 @@
       flex-wrap: wrap;
     }
     .nav-btn {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
@@ -489,18 +410,14 @@
     }
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
+      .animals-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+      .animal-btn { font-size: 1em !important; padding: 10px 4px !important; min-height: unset !important; }
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
-      .shape-name { font-size: 1.8em !important; min-height: auto !important; margin-bottom: 10px !important; }
-      .shape-display { width: 130px !important; height: 130px !important; }
-      .shape-display-container { min-height: unset !important; }
-      .control-panel { flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; padding: 8px !important; margin: 6px auto !important; }
-      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.88em !important; }
-      #statsBtn { padding: 8px 12px !important; font-size: 0.88em !important; margin: 0 !important; border-radius: 12px !important; }
-      .progress-counter { min-width: unset !important; padding: 6px 10px !important; font-size: 0.9em !important; }
-      .shapes-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
-      .shape-btn { font-size: 1em !important; padding: 8px 4px !important; min-height: 50px !important; }
-      h1 { margin: 2px 0 4px !important; }
+      .animal-name { font-size: 1.6em !important; min-height: auto !important; margin-bottom: 8px !important; }
+      .animal-image { width: 150px !important; height: 150px !important; padding: 10px !important; }
+      .animal-info { font-size: 0.95em !important; max-width: 100% !important; }
+      .animal-sound { font-size: 1.3em !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
@@ -517,19 +434,19 @@
 <body>
   <canvas id="particleCanvas"></canvas>
   <div class="navigation">
-    <a href="index.html" class="nav-btn">Home</a>
+    <a href="../index.html" class="nav-btn">Home</a>
     <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
     <a href="numbers-game.html" class="nav-btn">Numbers</a>
     <a href="colors-game.html" class="nav-btn">Colors</a>
-    <a href="animals-game.html" class="nav-btn">Animals</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
     <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
     <a href="birds.html" class="nav-btn">Birds</a>
   </div>
   
-  <h1>⬛ Learn Shapes ⬛</h1>
+  <h1>🐾 Learn Animals 🐾</h1>
   
   <div class="control-panel">
-    <button id="randomBtn" class="control-btn" aria-label="Show random shape" tabindex="0">
+    <button id="randomBtn" class="control-btn" aria-label="Show random animal" tabindex="0">
       🎲 Random
     </button>
     <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
@@ -538,7 +455,7 @@
     <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
       ⚙️ Settings
     </button>
-    <button id="speakBtn" class="control-btn" aria-label="Speak current shape" tabindex="0" disabled>
+    <button id="speakBtn" class="control-btn" aria-label="Speak current animal" tabindex="0" disabled>
       🔊 Speak
     </button>
     <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
@@ -546,21 +463,21 @@
     </button>
     <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
     <div class="progress-counter" id="progressCounter" aria-live="polite">
-      0 / 14 learned
+      0 / 37 learned
     </div>
   </div>
   
   <!-- Quiz Modal -->
   <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
+    <div style="background: linear-gradient(145deg, #43cea2, #185a9d); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
       <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
-      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Shapes Quiz</h2>
+      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Animals Quiz</h2>
       
-      <div style="margin: 20px 0; display: flex; justify-content: center; align-items: center; min-height: 200px;">
-        <div id="quizShapeDisplay" style="width: 180px; height: 180px; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.3);"></div>
+      <div style="margin: 20px 0;">
+        <img id="quizAnimalImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
       </div>
       
-      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What shape is this?</p>
+      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What animal is this?</p>
       
       <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
       
@@ -568,7 +485,7 @@
       
       <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
       
-      <button id="nextQuizBtn" style="display: none; background: linear-gradient(135deg, #f093fb, #f5576c); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
+      <button id="nextQuizBtn" style="display: none; background: linear-gradient(145deg, #43cea2, #185a9d); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
         Next →
       </button>
     </div>
@@ -589,7 +506,7 @@
   
   <!-- Settings Modal -->
   <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+    <div style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
       <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
       <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
       <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
@@ -604,7 +521,7 @@
           <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
           <div style="display: flex; gap: 10px; justify-content: center;">
             <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #f093fb; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #43cea2; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
             <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
           </div>
         </div>
@@ -629,13 +546,14 @@
   
   <div class="main-container">
     <div class="left-pane">
-      <div class="shapes-grid" id="shapesGrid"></div>
+      <div class="animals-grid" id="animalsGrid"></div>
     </div>
     <div class="right-pane">
-      <div class="shape-name" id="shapeName"></div>
-      <div class="shape-display-container" id="shapeDisplayContainer" style="display:none;">
-        <div class="shape-display" id="shapeDisplay"></div>
-        <div class="shape-info" id="shapeInfo"></div>
+      <div class="animal-name" id="animalName"></div>
+      <div class="animal-display-container" id="animalDisplayContainer" style="display:none;">
+        <img class="animal-image" id="animalImage" src="" alt="">
+        <div class="animal-sound" id="animalSound"></div>
+        <div class="animal-info" id="animalInfo"></div>
       </div>
     </div>
   </div>
@@ -723,77 +641,206 @@
       setTimeout(() => ripple.remove(), 600);
     }
 
-    const shapes = {
-      'Circle': {
-        class: 'circle',
-        info: 'A Circle is round and has no corners!'
+    const animals = {
+      'Alligator': {
+        img: 'https://api.iconify.design/noto/crocodile.svg?width=96&height=96',
+        sound: '🐊 Snap!',
+        info: 'Alligators are big reptiles with strong jaws!'
       },
-      'Square': {
-        class: 'square',
-        info: 'A Square has 4 equal sides and 4 corners!'
+      'Ant': {
+        img: 'https://api.iconify.design/noto/ant.svg?width=96&height=96',
+        sound: '🐜 Busy!',
+        info: 'Ants are tiny but very strong!'
       },
-      'Rectangle': {
-        class: 'rectangle',
-        info: 'A Rectangle has 4 sides and 4 corners!'
+      'Bear': {
+        img: 'https://api.iconify.design/noto/bear.svg?width=96&height=96',
+        sound: '🐻 Growl!',
+        info: 'Bears are big and love honey!'
       },
-      'Triangle': {
-        class: 'triangle',
-        info: 'A Triangle has 3 sides and 3 corners!'
+      'Butterfly': {
+        img: 'https://api.iconify.design/noto/butterfly.svg?width=96&height=96',
+        sound: '🦋 Flutter!',
+        info: 'Butterflies have colorful wings!'
       },
-      'Diamond': {
-        class: 'diamond',
-        info: 'A Diamond is a square turned on its side!'
+      'Cat': {
+        img: 'https://api.iconify.design/noto/cat-face.svg?width=96&height=96',
+        sound: '🐱 Meow!',
+        info: 'Cats are cute and furry pets!'
       },
-      'Pentagon': {
-        class: 'pentagon',
-        info: 'A Pentagon has 5 sides and 5 corners!'
+      'Chicken': {
+        img: 'https://api.iconify.design/noto/chicken.svg?width=96&height=96',
+        sound: '🐔 Cluck Cluck!',
+        info: 'Chickens lay eggs for us!'
       },
-      'Hexagon': {
-        class: 'hexagon',
-        info: 'A Hexagon has 6 sides and 6 corners!'
+      'Cow': {
+        img: 'https://api.iconify.design/noto/cow-face.svg?width=96&height=96',
+        sound: '🐮 Moo!',
+        info: 'Cows give us milk!'
       },
-      'Octagon': {
-        class: 'octagon',
-        info: 'An Octagon has 8 sides and 8 corners!'
+      'Dog': {
+        img: 'https://api.iconify.design/noto/dog-face.svg?width=96&height=96',
+        sound: '🐶 Woof Woof!',
+        info: 'Dogs are loyal and friendly friends!'
       },
-      'Star': {
-        class: 'star',
-        info: 'A Star shines bright with 5 points!'
+      'Duck': {
+        img: 'https://api.iconify.design/noto/duck.svg?width=96&height=96',
+        sound: '🦆 Quack Quack!',
+        info: 'Ducks swim in ponds and lakes!'
       },
-      'Heart': {
-        class: 'heart',
-        info: 'A Heart shape shows love! ❤️'
+      'Elephant': {
+        img: 'https://api.iconify.design/noto/elephant.svg?width=96&height=96',
+        sound: '🐘 Trumpet!',
+        info: 'Elephants are the largest land animals!'
       },
-      'Oval': {
-        class: 'oval',
-        info: 'An Oval is like a stretched circle!'
+      'Fish': {
+        img: 'https://api.iconify.design/noto/tropical-fish.svg?width=96&height=96',
+        sound: '🐠 Blub Blub!',
+        info: 'Fish swim underwater with fins!'
       },
-      'Parallelogram': {
-        class: 'parallelogram',
-        info: 'A Parallelogram has 4 slanted sides!'
+      'Fox': {
+        img: 'https://api.iconify.design/noto/fox.svg?width=96&height=96',
+        sound: '🦊 Yip!',
+        info: 'Foxes are clever and have bushy tails!'
       },
-      'Trapezoid': {
-        class: 'trapezoid',
-        info: 'A Trapezoid has 4 sides, 2 are parallel!'
+      'Giraffe': {
+        img: 'https://api.iconify.design/noto/giraffe.svg?width=96&height=96',
+        sound: '🦒 Hum!',
+        info: 'Giraffes have the longest necks!'
       },
-      'Crescent': {
-        class: 'crescent',
-        info: 'A Crescent looks like the moon! 🌙'
+      'Horse': {
+        img: 'https://api.iconify.design/noto/horse-face.svg?width=96&height=96',
+        sound: '🐴 Neigh!',
+        info: 'Horses love to run and gallop!'
+      },
+      'Iguana': {
+        img: 'https://api.iconify.design/noto/iguana.svg?width=96&height=96',
+        sound: '🦎 Hiss!',
+        info: 'Iguanas are colorful lizards!'
+      },
+      'Jellyfish': {
+        img: 'https://api.iconify.design/noto/jellyfish.svg?width=96&height=96',
+        sound: '🪼 Float!',
+        info: 'Jellyfish swim gracefully in the ocean!'
+      },
+      'Koala': {
+        img: 'https://api.iconify.design/noto/koala.svg?width=96&height=96',
+        sound: '🐨 Grunt!',
+        info: 'Koalas sleep most of the day!'
+      },
+      'Lion': {
+        img: 'https://api.iconify.design/noto/lion.svg?width=96&height=96',
+        sound: '🦁 Roar!',
+        info: 'The Lion is the king of the jungle!'
+      },
+      'Monkey': {
+        img: 'https://api.iconify.design/noto/monkey-face.svg?width=96&height=96',
+        sound: '🐵 Ooh Ooh Ah Ah!',
+        info: 'Monkeys love to swing from trees!'
+      },
+      'Nightingale': {
+        img: 'https://api.iconify.design/noto/nightingale.svg?width=96&height=96',
+        sound: '🐦 Sing!',
+        info: 'Nightingales have beautiful songs!'
+      },
+      'Octopus': {
+        img: 'https://api.iconify.design/noto/octopus.svg?width=96&height=96',
+        sound: '🐙 Squirt!',
+        info: 'Octopuses have eight arms!'
+      },
+      'Owl': {
+        img: 'https://api.iconify.design/noto/owl.svg?width=96&height=96',
+        sound: '🦉 Hoot Hoot!',
+        info: 'Owls are wise night birds!'
+      },
+      'Panda': {
+        img: 'https://api.iconify.design/noto/panda.svg?width=96&height=96',
+        sound: '🐼 Chirp!',
+        info: 'Pandas love to eat bamboo!'
+      },
+      'Penguin': {
+        img: 'https://api.iconify.design/noto/penguin.svg?width=96&height=96',
+        sound: '🐧 Honk!',
+        info: 'Penguins waddle on ice and swim!'
+      },
+      'Pig': {
+        img: 'https://api.iconify.design/noto/pig-face.svg?width=96&height=96',
+        sound: '🐷 Oink Oink!',
+        info: 'Pigs love to roll in mud!'
+      },
+      'Quail': {
+        img: 'https://api.iconify.design/noto/quail.svg?width=96&height=96',
+        sound: '🦆 Bob-white!',
+        info: 'Quails are small ground birds!'
+      },
+      'Rabbit': {
+        img: 'https://api.iconify.design/noto/rabbit-face.svg?width=96&height=96',
+        sound: '🐰 Squeak!',
+        info: 'Rabbits hop and have long ears!'
+      },
+      'Sheep': {
+        img: 'https://api.iconify.design/noto/ewe.svg?width=96&height=96',
+        sound: '🐑 Baa!',
+        info: 'Sheep have soft woolly coats!'
+      },
+      'Snake': {
+        img: 'https://api.iconify.design/noto/snake.svg?width=96&height=96',
+        sound: '🐍 Hiss!',
+        info: 'Snakes slither on the ground!'
+      },
+      'Tiger': {
+        img: 'https://api.iconify.design/noto/tiger.svg?width=96&height=96',
+        sound: '🐯 Growl!',
+        info: 'Tigers have beautiful orange and black stripes!'
+      },
+      'Turtle': {
+        img: 'https://api.iconify.design/noto/turtle.svg?width=96&height=96',
+        sound: '🐢 Snap!',
+        info: 'Turtles carry their house on their back!'
+      },
+      'Unicorn': {
+        img: 'https://api.iconify.design/noto/unicorn.svg?width=96&height=96',
+        sound: '🦄 Whinny!',
+        info: 'Unicorns are magical horses with a horn!'
+      },
+      'Vulture': {
+        img: 'https://api.iconify.design/noto/vulture.svg?width=96&height=96',
+        sound: '🦅 Screech!',
+        info: 'Vultures soar high in the sky!'
+      },
+      'Whale': {
+        img: 'https://api.iconify.design/noto/whale.svg?width=96&height=96',
+        sound: '🐋 Whooosh!',
+        info: 'Whales are the biggest animals in the ocean!'
+      },
+      'Wolf': {
+        img: 'https://api.iconify.design/noto/wolf.svg?width=96&height=96',
+        sound: '🐺 Howl!',
+        info: 'Wolves howl at the moon!'
+      },
+      'Yak': {
+        img: 'https://api.iconify.design/noto/yak.svg?width=96&height=96',
+        sound: '🦬 Grunt!',
+        info: 'Yaks have thick fur and live in mountains!'
+      },
+      'Zebra': {
+        img: 'https://api.iconify.design/noto/zebra.svg?width=96&height=96',
+        sound: '🦓 Bray!',
+        info: 'Zebras have black and white stripes!'
       }
     };
     
     // State management
-    let currentShape = '';
-    let learnedShapes = new Set(JSON.parse(localStorage.getItem('shapes_learned') || '[]'));
-    const shapeNames = Object.keys(shapes);
-    let colorIndex = 0;
+    let currentAnimal = '';
+    let learnedAnimals = new Set(JSON.parse(localStorage.getItem('animals_learned') || '[]'));
+    const animalNames = Object.keys(animals);
     
     // DOM elements
-    const shapesGrid = document.getElementById('shapesGrid');
-    const shapeName = document.getElementById('shapeName');
-    const shapeDisplay = document.getElementById('shapeDisplay');
-    const shapeDisplayContainer = document.getElementById('shapeDisplayContainer');
-    const shapeInfo = document.getElementById('shapeInfo');
+    const animalsGrid = document.getElementById('animalsGrid');
+    const animalName = document.getElementById('animalName');
+    const animalImage = document.getElementById('animalImage');
+    const animalDisplayContainer = document.getElementById('animalDisplayContainer');
+    const animalSound = document.getElementById('animalSound');
+    const animalInfo = document.getElementById('animalInfo');
     const randomBtn = document.getElementById('randomBtn');
     const speakBtn = document.getElementById('speakBtn');
     const resetBtn = document.getElementById('resetBtn');
@@ -801,24 +848,6 @@
     const statsBtn = document.getElementById('statsBtn');
     const statsModal = document.getElementById('statsModal');
     const closeStats = document.getElementById('closeStats');
-    
-    // Color palette for shapes
-    const colors = [
-      'linear-gradient(145deg, #ff6b9d, #c2185b)',
-      'linear-gradient(145deg, #4caf50, #2e7d32)',
-      'linear-gradient(145deg, #2196f3, #1976d2)',
-      'linear-gradient(145deg, #ff9800, #f57c00)',
-      'linear-gradient(145deg, #9c27b0, #7b1fa2)',
-      'linear-gradient(145deg, #00bcd4, #0097a7)',
-      'linear-gradient(145deg, #ffeb3b, #f9a825)',
-      'linear-gradient(145deg, #f44336, #c62828)',
-      'linear-gradient(145deg, #8bc34a, #689f38)',
-      'linear-gradient(145deg, #ff5722, #d84315)',
-      'linear-gradient(145deg, #3f51b5, #303f9f)',
-      'linear-gradient(145deg, #e91e63, #ad1457)',
-      'linear-gradient(145deg, #009688, #00695c)',
-      'linear-gradient(145deg, #ffc107, #ffa000)'
-    ];
     
     // Text-to-speech function
     function speak(text) {
@@ -832,51 +861,47 @@
       }
     }
     
-    // Display shape function
-    function displayShape(shapeName) {
-      currentShape = shapeName;
-      const shapeData = shapes[shapeName];
-      const currentColor = colors[colorIndex % colors.length];
-      colorIndex++;
+    // Display animal function
+    function displayAnimal(animal) {
+      currentAnimal = animal;
+      const animalData = animals[animal];
       
-      // Update shape name
-      document.getElementById('shapeName').textContent = shapeName;
-      document.getElementById('shapeName').style.animation = 'none';
-      document.getElementById('shapeName').offsetHeight;
-      document.getElementById('shapeName').style.animation = 'bounce 0.6s ease-in-out';
+      // Update animal name
+      animalName.textContent = animal;
+      animalName.style.animation = 'none';
+      animalName.offsetHeight;
+      animalName.style.animation = 'bounce 0.6s ease-in-out';
       
-      // Show shape display container
-      shapeDisplayContainer.style.display = 'flex';
+      // Show display container
+      animalDisplayContainer.style.display = 'flex';
       
-      // Reset and apply new shape class
-      shapeDisplay.className = 'shape-display ' + shapeData.class;
+      // Update animal image with fallback
+      animalImage.src = animalData.img;
+      animalImage.alt = animal;
+      animalImage.style.animation = 'none';
+      animalImage.offsetHeight;
+      animalImage.style.animation = 'fadeInScale 0.8s ease-out';
       
-      // Apply color based on shape type
-      if (shapeData.class === 'triangle') {
-        shapeDisplay.style.borderBottomColor = currentColor.match(/#[0-9a-f]{6}/i)[0];
-        shapeDisplay.style.background = 'transparent';
-      } else if (shapeData.class === 'crescent') {
-        const color = currentColor.match(/#[0-9a-f]{6}/i)[0];
-        shapeDisplay.style.boxShadow = `60px 0 0 0 ${color} inset`;
-      } else {
-        shapeDisplay.style.background = currentColor;
-      }
+      animalImage.onerror = () => {
+        animalImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="48">🐾</text></svg>';
+      };
       
-      // Animate shape
-      shapeDisplay.style.animation = 'none';
-      shapeDisplay.offsetHeight;
-      shapeDisplay.style.animation = 'fadeInRotate 0.8s ease-out';
+      // Update animal sound
+      animalSound.textContent = animalData.sound;
+      animalSound.style.animation = 'none';
+      animalSound.offsetHeight;
+      animalSound.style.animation = 'pulse 2s ease-in-out infinite';
       
-      // Update shape info
-      shapeInfo.textContent = shapeData.info;
-      shapeInfo.style.animation = 'none';
-      shapeInfo.offsetHeight;
-      shapeInfo.style.animation = 'fadeIn 1s ease-out';
+      // Update animal info
+      animalInfo.textContent = animalData.info;
+      animalInfo.style.animation = 'none';
+      animalInfo.offsetHeight;
+      animalInfo.style.animation = 'fadeIn 1s ease-out';
       
       // Mark as learned
-      if (!learnedShapes.has(shapeName)) {
-        learnedShapes.add(shapeName);
-        localStorage.setItem('shapes_learned', JSON.stringify([...learnedShapes]));
+      if (!learnedAnimals.has(animal)) {
+        learnedAnimals.add(animal);
+        localStorage.setItem('animals_learned', JSON.stringify([...learnedAnimals]));
         updateProgress();
         
         // Check achievements
@@ -884,9 +909,9 @@
       }
       
       // Update button styling
-      document.querySelectorAll('.shape-btn').forEach(btn => {
-        if (btn.textContent === shapeName) {
-          btn.style.backgroundColor = '#f093fb';
+      document.querySelectorAll('.animal-btn').forEach(btn => {
+        if (btn.textContent === animal) {
+          btn.style.backgroundColor = '#43cea2';
           btn.style.color = 'white';
         }
       });
@@ -894,99 +919,97 @@
       // Enable speak button
       speakBtn.disabled = false;
       
-      // Add click interaction to shape
-      shapeDisplay.onclick = () => {
-        shapeDisplay.style.transform = shapeDisplay.style.transform.includes('scale') 
-          ? 'scale(1)' 
-          : 'scale(1.3) rotate(360deg)';
+      // Add click interaction to image
+      animalImage.onclick = () => {
+        animalImage.style.transform = 'scale(1.3) rotate(360deg)';
+        animalSound.style.transform = 'scale(1.5)';
+        animalSound.style.color = '#43cea2';
         setTimeout(() => {
-          if (shapeData.class === 'diamond') {
-            shapeDisplay.style.transform = 'rotate(45deg)';
-          } else if (shapeData.class === 'parallelogram') {
-            shapeDisplay.style.transform = 'skew(-20deg)';
-          } else {
-            shapeDisplay.style.transform = 'scale(1) rotate(0deg)';
-          }
+          animalImage.style.transform = 'scale(1) rotate(0deg)';
+          animalSound.style.transform = 'scale(1)';
+          animalSound.style.color = '#fff';
         }, 600);
-        speak(shapeName);
+        speak(animal + '. ' + animalData.sound);
       };
       
       // Auto-speak
-      speak(shapeName + '. ' + shapeData.info);
+      speak(animal + '. ' + animalData.sound);
     }
     
     // Update progress counter
     function updateProgress() {
-      progressCounter.textContent = `${learnedShapes.size} / 14 learned`;
+      progressCounter.textContent = `${learnedAnimals.size} / 37 learned`;
     }
     
-    // Show random shape
+    // Show random animal
     function showRandom() {
-      const randomShape = shapeNames[Math.floor(Math.random() * shapeNames.length)];
-      displayShape(randomShape);
+      const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+      displayAnimal(randomAnimal);
     }
     
     // Reset progress
     function reset() {
-      learnedShapes.clear();
-      localStorage.removeItem('shapes_learned');
-      currentShape = '';
-      shapeName.textContent = 'Click a shape to learn!';
-      shapeDisplayContainer.style.display = 'none';
+      learnedAnimals.clear();
+      localStorage.removeItem('animals_learned');
+      currentAnimal = '';
+      animalName.textContent = 'Click an animal to learn!';
+      animalDisplayContainer.style.display = 'none';
       speakBtn.disabled = true;
-      updateProgress();
-      
-      // Reset all button colors
-      document.querySelectorAll('.shape-btn').forEach(btn => {
-        btn.style.backgroundColor = '';
-        btn.style.color = '';
-      });
       
       // Reset achievements
       Object.keys(achievements).forEach(key => {
         achievements[key].unlocked = false;
       });
-      localStorage.removeItem('shapes_achievements');
+      localStorage.removeItem('animals_achievements');
       
       // Reset statistics
       stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
-      localStorage.removeItem('shapes_stats');
+      localStorage.removeItem('animals_stats');
+      
+      updateProgress();
+      
+      // Reset all button colors
+      document.querySelectorAll('.animal-btn').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+      });
       
       // Show confirmation
       speak('Progress reset complete');
     }
     
-    // Create shape buttons
-    shapeNames.forEach(shapeName => {
+    // Create animal buttons
+    animalNames.forEach(animal => {
       const btn = document.createElement('button');
-      btn.className = 'shape-btn';
-      btn.textContent = shapeName;
-      btn.setAttribute('aria-label', `Learn about ${shapeName}`);
+      btn.className = 'animal-btn';
+      btn.textContent = animal;
+      btn.setAttribute('aria-label', `Learn about ${animal}`);
       btn.tabIndex = 0;
       
-      // Mark learned shapes
-      if (learnedShapes.has(shapeName)) {
-        btn.style.backgroundColor = '#f093fb';
+      // Mark learned animals
+      if (learnedAnimals.has(animal)) {
+        btn.style.backgroundColor = '#43cea2';
         btn.style.color = 'white';
       }
       
+      // Phase 5: Add flip and ripple effects
       btn.onclick = (e) => {
         btn.classList.add('flipping');
         setTimeout(() => btn.classList.remove('flipping'), 600);
         createRipple(e);
-        displayShape(shapeName);
+        displayAnimal(animal);
       };
       
-      shapesGrid.appendChild(btn);
+      animalsGrid.appendChild(btn);
     });
     
     // Control button event listeners
     randomBtn.onclick = () => { playSound('click'); showRandom(); };
     speakBtn.onclick = () => {
-      if (currentShape) {
+      if (currentAnimal) {
         playSound('click');
-        const shapeData = shapes[currentShape];
-        speak(currentShape + '. ' + shapeData.info);
+        const animalData = animals[currentAnimal];
+        speak(currentAnimal + '. ' + animalData.sound);
       }
     };
     resetBtn.onclick = () => { playSound('click'); reset(); };
@@ -999,11 +1022,11 @@
         showRandom();
       }
       
-      // Space key to speak current shape
-      if (e.key === ' ' && currentShape && !e.ctrlKey && !e.altKey) {
+      // Space key to speak current animal
+      if (e.key === ' ' && currentAnimal && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
-        const shapeData = shapes[currentShape];
-        speak(currentShape + '. ' + shapeData.info);
+        const animalData = animals[currentAnimal];
+        speak(currentAnimal + '. ' + animalData.sound);
       }
       
       // Escape key to reset
@@ -1013,26 +1036,26 @@
       }
       
       // Arrow keys to navigate
-      if (currentShape && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      if (currentAnimal && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
         e.preventDefault();
-        const currentIndex = shapeNames.indexOf(currentShape);
+        const currentIndex = animalNames.indexOf(currentAnimal);
         let nextIndex;
         
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          nextIndex = (currentIndex + 1) % shapeNames.length;
+          nextIndex = (currentIndex + 1) % animalNames.length;
         } else {
-          nextIndex = (currentIndex - 1 + shapeNames.length) % shapeNames.length;
+          nextIndex = (currentIndex - 1 + animalNames.length) % animalNames.length;
         }
         
-        displayShape(shapeNames[nextIndex]);
+        displayAnimal(animalNames[nextIndex]);
       }
       
-      // Type shape name to jump to it
+      // Type animal name to jump to it
       if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
         const typedLetter = e.key.toUpperCase();
-        const matchingShape = shapeNames.find(shape => shape.startsWith(typedLetter));
-        if (matchingShape) {
-          displayShape(matchingShape);
+        const matchingAnimal = animalNames.find(animal => animal.startsWith(typedLetter));
+        if (matchingAnimal) {
+          displayAnimal(matchingAnimal);
         }
       }
     });
@@ -1041,7 +1064,7 @@
     const quizBtn = document.getElementById('quizBtn');
     const quizModal = document.getElementById('quizModal');
     const closeQuiz = document.getElementById('closeQuiz');
-    const quizShapeDisplay = document.getElementById('quizShapeDisplay');
+    const quizAnimalImage = document.getElementById('quizAnimalImage');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
     const quizScore = document.getElementById('quizScore');
@@ -1051,7 +1074,7 @@
       currentQuestion: 0,
       correctAnswers: 0,
       totalQuestions: 10,
-      currentCorrectShape: '',
+      currentCorrectAnimal: '',
       answered: false
     };
     
@@ -1060,7 +1083,7 @@
         currentQuestion: 0,
         correctAnswers: 0,
         totalQuestions: 10,
-        currentCorrectShape: '',
+        currentCorrectAnimal: '',
         answered: false
       };
       quizModal.style.display = 'flex';
@@ -1078,21 +1101,20 @@
       quizFeedback.textContent = '';
       nextQuizBtn.style.display = 'none';
       
-      // Pick random shape
-      const correctShape = shapeNames[Math.floor(Math.random() * shapeNames.length)];
-      quizState.currentCorrectShape = correctShape;
+      // Pick random animal
+      const correctAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+      quizState.currentCorrectAnimal = correctAnimal;
       
-      // Show shape
-      const shapeData = shapes[correctShape];
-      quizShapeDisplay.className = 'shape-display ' + shapeData.class;
-      quizShapeDisplay.style.background = '#ff6b9d';
+      // Show animal image
+      quizAnimalImage.src = animals[correctAnimal].img;
+      quizAnimalImage.alt = correctAnimal;
       
       // Generate 4 options (1 correct + 3 wrong)
-      const options = [correctShape];
+      const options = [correctAnimal];
       while (options.length < 4) {
-        const randomShape = shapeNames[Math.floor(Math.random() * shapeNames.length)];
-        if (!options.includes(randomShape)) {
-          options.push(randomShape);
+        const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+        if (!options.includes(randomAnimal)) {
+          options.push(randomAnimal);
         }
       }
       
@@ -1101,12 +1123,12 @@
       
       // Create option buttons
       quizOptions.innerHTML = '';
-      options.forEach(shape => {
+      options.forEach(animal => {
         const btn = document.createElement('button');
-        btn.textContent = shape;
-        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #f093fb; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #f5576c;';
+        btn.textContent = animal;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #43cea2; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #185a9d;';
         
-        btn.onclick = () => checkAnswer(shape, btn);
+        btn.onclick = () => checkAnswer(animal, btn);
         
         btn.onmouseenter = () => {
           if (!quizState.answered) {
@@ -1127,21 +1149,21 @@
       updateQuizScore();
     }
     
-    function checkAnswer(selectedShape, btn) {
+    function checkAnswer(selectedAnimal, btn) {
       if (quizState.answered) return;
       
       quizState.answered = true;
-      const correct = selectedShape === quizState.currentCorrectShape;
+      const correct = selectedAnimal === quizState.currentCorrectAnimal;
       
       if (correct) {
         quizState.correctAnswers++;
         btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
         btn.style.color = 'white';
         btn.style.borderColor = '#2e7d32';
-        quizFeedback.innerHTML = `✅ Correct! It's a ${selectedShape}`;
+        quizFeedback.innerHTML = `✅ Correct! It's a ${selectedAnimal}`;
         quizFeedback.style.color = '#4caf50';
         playSound('correct');
-        speak(`Correct! It's a ${selectedShape}. ${shapes[selectedShape].info}`);
+        speak(`Correct! It's a ${selectedAnimal}. ${animals[selectedAnimal].sound}`);
       } else {
         btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
         btn.style.color = 'white';
@@ -1151,16 +1173,16 @@
         // Highlight correct answer
         const buttons = quizOptions.querySelectorAll('button');
         buttons.forEach(b => {
-          if (b.textContent === quizState.currentCorrectShape) {
+          if (b.textContent === quizState.currentCorrectAnimal) {
             b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
             b.style.color = 'white';
             b.style.borderColor = '#2e7d32';
           }
         });
         
-        quizFeedback.innerHTML = `❌ Wrong! It's a ${quizState.currentCorrectShape}`;
+        quizFeedback.innerHTML = `❌ Wrong! It's a ${quizState.currentCorrectAnimal}`;
         quizFeedback.style.color = '#f44336';
-        speak(`Wrong! It's a ${quizState.currentCorrectShape}. ${shapes[quizState.currentCorrectShape].info}`);
+        speak(`Wrong! It's a ${quizState.currentCorrectAnimal}. ${animals[quizState.currentCorrectAnimal].sound}`);
       }
       
       updateQuizScore();
@@ -1181,15 +1203,15 @@
       let emoji = '';
       
       if (percentage === 100) {
-        message = 'Perfect! You know all the shapes! 🌟';
+        message = 'Perfect! You know all the animals! 🌟';
         emoji = '🏆';
         createConfetti();
       } else if (percentage >= 80) {
-        message = 'Excellent! You\'re a shape expert! 👏';
+        message = 'Excellent! You\'re an animal expert! 👏';
         emoji = '⭐';
         createConfetti();
       } else if (percentage >= 60) {
-        message = 'Good job! Keep learning shapes! 💪';
+        message = 'Good job! Keep learning about animals! 💪';
         emoji = '👍';
       } else {
         message = 'Keep practicing! You\'ll learn them all! 📚';
@@ -1206,13 +1228,13 @@
           <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             🔄 Try Again
           </button>
-          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(135deg, #f093fb, #f5576c); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #43cea2, #185a9d); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             ✓ Done
           </button>
         </div>
       `;
       quizFeedback.textContent = '';
-      quizShapeDisplay.style.display = 'none';
+      quizAnimalImage.style.display = 'none';
       nextQuizBtn.style.display = 'none';
       
       speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
@@ -1329,6 +1351,7 @@
           confetti.style.top = '-10px';
           confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
           
+          // Random shapes
           const shape = shapes[Math.floor(Math.random() * shapes.length)];
           if (shape === 'circle') {
             confetti.style.borderRadius = '50%';
@@ -1358,6 +1381,7 @@
         }, i * 20);
       }
       
+      // Add celebration burst
       const burst = document.createElement('div');
       burst.className = 'celebration-burst';
       burst.innerHTML = '🎉';
@@ -1369,7 +1393,7 @@
     // Sound Effects
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
-      const settings = JSON.parse(localStorage.getItem('shapes_settings') || '{"soundEnabled": true}');
+      const settings = JSON.parse(localStorage.getItem('animals_settings') || '{"soundEnabled": true}');
       if (!settings.soundEnabled) return;
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -1396,26 +1420,28 @@
       }
     }
     
-    // Achievement System
+    // Stats Modal
+    // Achievement System - Define early
     const achievements = {
-      first_shape: { name: '🎯 First Shape', desc: 'Learn your first shape', unlocked: false },
-      geometry_fan: { name: '⭐ Geometry Fan', desc: 'Learn 7 shapes', unlocked: false },
-      all_learned: { name: '🏆 Shape Master', desc: 'Learn all 14 shapes', unlocked: false },
+      first_animal: { name: '🎯 First Animal', desc: 'Learn your first animal', unlocked: false },
+      zoo_keeper: { name: '⭐ Zoo Keeper', desc: 'Learn 20 animals', unlocked: false },
+      all_learned: { name: '🏆 Animal Expert', desc: 'Learn all 37 animals', unlocked: false },
       perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
       quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
     };
-    const savedAchievements = JSON.parse(localStorage.getItem('shapes_achievements') || '{}');
+    const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
     Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
-    let stats = JSON.parse(localStorage.getItem('shapes_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    let stats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    
     function checkAchievements() {
       let newUnlock = false;
-      if (!achievements.first_shape.unlocked && learnedShapes.size >= 1) { achievements.first_shape.unlocked = true; showAchievement(achievements.first_shape); newUnlock = true; }
-      if (!achievements.geometry_fan.unlocked && learnedShapes.size >= 7) { achievements.geometry_fan.unlocked = true; showAchievement(achievements.geometry_fan); newUnlock = true; }
-      if (!achievements.all_learned.unlocked && learnedShapes.size >= 14) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (!achievements.first_animal.unlocked && learnedAnimals.size >= 1) { achievements.first_animal.unlocked = true; showAchievement(achievements.first_animal); newUnlock = true; }
+      if (!achievements.zoo_keeper.unlocked && learnedAnimals.size >= 20) { achievements.zoo_keeper.unlocked = true; showAchievement(achievements.zoo_keeper); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedAnimals.size >= 37) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
       if (newUnlock) saveAchievements();
     }
-    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('shapes_achievements', JSON.stringify(toSave)); }
-    function saveStats() { localStorage.setItem('shapes_stats', JSON.stringify(stats)); }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('animals_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('animals_stats', JSON.stringify(stats)); }
     function showAchievement(achievement) {
       const badge = document.createElement('div');
       badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
@@ -1426,36 +1452,35 @@
       setTimeout(() => { badge.style.transition = 'all 0.5s'; badge.style.transform = 'translateX(400px)'; badge.style.opacity = '0'; setTimeout(() => badge.remove(), 500); }, 3000);
     }
     
-    // Stats Modal
+    // Stats Modal (statsBtn, statsModal, closeStats declared at top)
     if (statsBtn && statsModal && closeStats) {
-    
-    function showStats() {
-      const currentStats = JSON.parse(localStorage.getItem('shapes_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
-      const savedAchievements = JSON.parse(localStorage.getItem('shapes_achievements') || 'null');
-      if (savedAchievements) {
+      function showStats() {
+        const currentStats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+        const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
+        
+        // Update achievements with saved state
         Object.keys(savedAchievements).forEach(key => {
           if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
         });
-      }
       
-      const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
-      
-      document.getElementById('statsContent').innerHTML = `
-        <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
-          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-            <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
-            <div style="opacity: 0.9;">Total Quizzes</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-            <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
-            <div style="opacity: 0.9;">Questions Answered</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-            <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
-            <div style="opacity: 0.9;">Overall Accuracy</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-            <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
+        const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
+        
+        document.getElementById('statsContent').innerHTML = `
+          <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
+              <div style="opacity: 0.9;">Total Quizzes</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
+              <div style="opacity: 0.9;">Questions Answered</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
+              <div style="opacity: 0.9;">Overall Accuracy</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
             <div style="opacity: 0.9;">High Score</div>
           </div>
         </div>
@@ -1485,36 +1510,34 @@
         achievementsList.appendChild(badgeDiv);
       });
       
-      statsModal.style.display = 'flex';
-      if (typeof playSound === 'function') playSound('click');
-    }
-    
-    statsBtn.addEventListener('click', showStats);
-    closeStats.addEventListener('click', () => {
-      statsModal.style.display = 'none';
-      if (typeof playSound === 'function') playSound('click');
-    });
-    
-    // Close modal when clicking outside (on backdrop)
-    statsModal.addEventListener('click', (e) => {
-      if (e.target === statsModal) {
-        statsModal.style.display = 'none';
+        statsModal.style.display = 'flex';
         if (typeof playSound === 'function') playSound('click');
       }
-    });
+      
+      statsBtn.addEventListener('click', showStats);
+      closeStats.addEventListener('click', () => {
+        statsModal.style.display = 'none';
+        if (typeof playSound === 'function') playSound('click');
+      });
+      
+      // Close modal when clicking outside (on backdrop)
+      statsModal.addEventListener('click', (e) => {
+        if (e.target === statsModal) {
+          statsModal.style.display = 'none';
+          if (typeof playSound === 'function') playSound('click');
+        }
+      });
+      
+      statsBtn.onmouseover = () => {
+        statsBtn.style.transform = 'translateY(-2px)';
+        statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
+      };
+      statsBtn.onmouseleave = () => {
+        statsBtn.style.transform = 'translateY(0)';
+        statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
+      };
+    }
     
-    statsBtn.onmouseover = () => {
-      statsBtn.style.transform = 'translateY(-2px)';
-      statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
-    };
-    statsBtn.onmouseleave = () => {
-      statsBtn.style.transform = 'translateY(0)';
-      statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
-    };
-    
-    } // End of statsBtn && statsModal && closeStats check
-    
-    // Achievement system is now defined above before stats modal
     const originalShowQuizResults = showQuizResults;
     showQuizResults = function() {
       stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
@@ -1530,6 +1553,8 @@
     checkAchievements();
   </script>
 
-  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>

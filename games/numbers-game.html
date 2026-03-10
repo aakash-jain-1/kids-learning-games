@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colors Learning Game</title>
+  <title>Numbers Learning Game</title>
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -14,7 +14,7 @@
     }
     body {
       font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 50%, #88d8a3 100%);
       text-align: center;
       margin: 0;
       padding: 100px 0 0 0;
@@ -23,10 +23,45 @@
       overflow-x: hidden;
       transition: all 0.3s ease;
     }
-    body.dark-mode { background: linear-gradient(135deg, #2c003e 0%, #1a1a2e 100%); }
+    body.dark-mode {
+      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    }
     body.font-small { font-size: 14px; }
     body.font-medium { font-size: 16px; }
     body.font-large { font-size: 18px; }
+    .switch input:checked + span {
+      background-color: #4caf50;
+    }
+    .switch input:checked + span:before {
+      transform: translateX(26px);
+    }
+    .switch span:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
+      pointer-events: none;
+      animation: sparkle 18s linear infinite;
+    }
+    @keyframes sparkle {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    /* Particle Background Canvas */
     #particleCanvas {
       position: fixed;
       top: 0;
@@ -37,7 +72,23 @@
       z-index: 0;
       opacity: 0.6;
     }
-    /* Phase 5: Smooth Transition Animations */
+    h1 {
+      color: #fff;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: numberGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes numberGlow {
+      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(86,171,47,0.6); }
+      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(168,230,207,0.6); }
+      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(136,216,163,0.6); }
+      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(46,125,50,0.6); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(102,187,106,0.6); }
+    }
+    /* Smooth Transition Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -58,7 +109,11 @@
       0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
       50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
     }
-    /* Phase 5: 3D Flip Animation */
+    .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
+    @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
+    .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
+    @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
+    /* 3D Flip Animation */
     .flipping {
       animation: flip3d 0.6s ease-in-out;
     }
@@ -67,7 +122,7 @@
       50% { transform: rotateY(90deg); }
       100% { transform: rotateY(0deg); }
     }
-    /* Phase 5: Ripple Effect */
+    /* Ripple Effect */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -82,101 +137,8 @@
         opacity: 0;
       }
     }
-    .switch input:checked + span { background-color: #4caf50; }
-    .switch input:checked + span:before { transform: translateX(26px); }
-    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
-      pointer-events: none;
-      animation: sparkle 15s linear infinite;
-    }
-    @keyframes sparkle {
-      0% { transform: translateY(0px) rotate(0deg); }
-      100% { transform: translateY(-100px) rotate(360deg); }
-    }
-    h1 {
-      color: #fff;
-      font-size: 3.5em;
-      margin-top: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 1;
-      animation: colorGlow 3s ease-in-out infinite alternate;
-    }
-    @keyframes colorGlow {
-      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,100,100,0.4); }
-      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(100,255,100,0.4); }
-      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(100,100,255,0.4); }
-      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,100,0.4); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,100,255,0.4); }
-    }
-    .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
-    @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
-    .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
-    @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
-    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .color-shape { width: 150px !important; height: 150px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .color-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .color-item { padding: 15px !important; font-size: 1em !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
-    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .color-shape { width: 120px !important; height: 120px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .color-item { padding: 12px !important; font-size: 0.9em !important; } }
-    .control-panel {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin: 25px auto;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      max-width: 700px;
-      position: relative;
-      z-index: 10;
-      flex-wrap: wrap;
-    }
-    .control-btn {
-      background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #ff9a9e;
-      border-radius: 15px;
-      padding: 12px 24px;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #d63384;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      min-width: 130px;
-    }
-    .control-btn:hover:not(:disabled) {
-      background: linear-gradient(145deg, #ff9a9e, #ff6b8a);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4);
-    }
-    .control-btn:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-    .control-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .progress-counter {
-      background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #ff9a9e;
-      border-radius: 12px;
-      padding: 10px 20px;
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #d63384;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      min-width: 150px;
-    }
+    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .number-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .objects-grid { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)) !important; gap: 8px !important; } .object-item { font-size: 2em !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .number-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } }
     .main-container {
       display: flex;
       justify-content: center;
@@ -203,18 +165,19 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    .colors-grid {
+    .numbers-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       margin-top: 20px;
     }
-    .color-btn {
-      border: 3px solid #fff;
+    .number-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #4caf50;
       border-radius: 15px;
-      font-size: 2em;
+      font-size: 2.5em;
       font-weight: bold;
       padding: 20px 0;
       cursor: pointer;
@@ -222,32 +185,32 @@
       width: 100%;
       margin: 0;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      color: #fff;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      color: #2e7d32;
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
       perspective: 1000px;
     }
-    .color-btn::before {
+    .number-btn::before {
       content: '';
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(76,175,80,0.3), transparent);
       transition: left 0.5s;
     }
-    .color-btn:hover::before {
+    .number-btn:hover::before {
       left: 100%;
     }
-    .color-btn:hover {
+    .number-btn:hover {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
       transform: translateY(-5px) scale(1.08);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-      border-color: #ffffff;
+      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+      border-color: #1b5e20;
     }
-    .color-btn:active {
+    .number-btn:active {
       transform: translateY(0) scale(0.95);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
@@ -276,20 +239,20 @@
       width: 200%;
       height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: rotate 25s linear infinite;
+      animation: rotate 30s linear infinite;
       pointer-events: none;
     }
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .color-name {
+    .number-word {
       font-size: 3.5em;
       font-weight: bold;
       color: #fff;
       min-height: 80px;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
       position: relative;
       z-index: 1;
@@ -300,153 +263,61 @@
       40% { transform: translateY(-20px); }
       80% { transform: translateY(-10px); }
     }
-    .shapes-container {
+    .objects-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 25px;
+      gap: 15px;
       width: 100%;
       max-width: 400px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
+      min-height: 300px;
+      padding: 20px;
     }
-    .shape {
-      width: 120px;
-      height: 120px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    .count-object {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #4caf50, #2e7d32);
       border: 3px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
       transition: all 0.6s ease;
       animation: fadeInScale 0.8s ease-out;
       cursor: pointer;
-    }
-    .shape:hover {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    }
-    .circle {
-      border-radius: 50%;
-    }
-    .square {
-      border-radius: 10px;
-    }
-    .triangle {
-      width: 0;
-      height: 0;
-      border-left: 60px solid transparent;
-      border-right: 60px solid transparent;
-      border-bottom: 104px solid;
-      border-radius: 0;
-      background: transparent !important;
-      margin-top: 10px;
-    }
-    .diamond {
-      width: 85px;
-      height: 85px;
-      transform: rotate(45deg);
-      border-radius: 10px;
-    }
-    .star {
       position: relative;
-      width: 0;
-      height: 0;
-      border-left: 50px solid transparent;
-      border-right: 50px solid transparent;
-      border-bottom: 70px solid;
-      transform: rotate(35deg);
-      border-radius: 0;
-      background: transparent !important;
     }
-    .star:before {
-      content: '';
+    .count-object::before {
+      content: '★';
       position: absolute;
-      left: -50px;
-      top: -45px;
-      width: 0;
-      height: 0;
-      border-left: 50px solid transparent;
-      border-right: 50px solid transparent;
-      border-bottom: 70px solid;
-      transform: rotate(-70deg);
-    }
-    .hexagon {
-      width: 80px;
-      height: 80px;
-      background: #000;
-      position: relative;
-      margin: 20px 0;
-      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-      border-radius: 0;
-    }
-    .rectangle {
-      width: 140px;
-      height: 80px;
-      border-radius: 10px;
-    }
-    .fan {
-      width: 120px;
-      height: 120px;
-      position: relative;
-      border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, 0.8);
-      background: transparent;
-    }
-    .fan-rotating {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      animation: spin 1.5s linear infinite;
-    }
-    .fan .blade {
-      position: absolute;
-      width: 65px;
-      height: 35px;
-      top: 50%;
-      left: 50%;
-      transform-origin: 12px 50%;
-      border-radius: 60% 90% 30% 80%;
-      box-shadow: inset 2px 1px 6px rgba(0,0,0,0.4), 0 4px 8px rgba(0,0,0,0.3);
-      border: 2px solid rgba(0,0,0,0.3);
-    }
-    .fan .blade:before {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 25px;
-      background: rgba(0,0,0,0.2);
-      left: 5px;
-      top: 5px;
-      border-radius: 60% 80% 20% 70%;
-      box-shadow: inset 2px 0 3px rgba(0,0,0,0.4);
-    }
-    .fan .blade:nth-child(1) {
-      transform: translate(-12px, -50%) rotate(0deg);
-    }
-    .fan .blade:nth-child(2) {
-      transform: translate(-12px, -50%) rotate(90deg);
-    }
-    .fan .blade:nth-child(3) {
-      transform: translate(-12px, -50%) rotate(180deg);
-    }
-    .fan .blade:nth-child(4) {
-      transform: translate(-12px, -50%) rotate(270deg);
-    }
-    .fan .center {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #333;
-      border: 2px solid #666;
-      z-index: 2;
+      color: #fff;
+      font-size: 1.5em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .count-object:hover {
+      transform: scale(1.2) rotate(15deg);
+      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.5);
+    }
+    .count-object:nth-child(even) {
+      background: linear-gradient(145deg, #ff9800, #f57c00);
+      animation-delay: 0.1s;
+    }
+    .count-object:nth-child(3n) {
+      background: linear-gradient(145deg, #e91e63, #c2185b);
+      animation-delay: 0.2s;
+    }
+    .count-object:nth-child(4n) {
+      background: linear-gradient(145deg, #2196f3, #1976d2);
+      animation-delay: 0.3s;
+    }
+    .count-object:nth-child(5n) {
+      background: linear-gradient(145deg, #9c27b0, #7b1fa2);
+      animation-delay: 0.4s;
     }
     @keyframes fadeInScale {
       0% { 
@@ -457,10 +328,6 @@
         opacity: 1; 
         transform: scale(1) rotate(0deg); 
       }
-    }
-    .color-display:hover {
-      transform: scale(1.05);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
     .navigation {
       position: fixed;
@@ -479,7 +346,7 @@
       flex-wrap: wrap;
     }
     .nav-btn {
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
@@ -490,33 +357,37 @@
       transition: all 0.3s ease;
       text-decoration: none;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     .nav-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
+    .large-number {
+      font-size: 6em;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+      margin-bottom: 10px;
+      animation: pulse 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
+      .numbers-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+      .number-btn { font-size: 1.6em !important; padding: 12px 0 !important; }
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
-      .color-name { font-size: 1.8em !important; min-height: auto !important; margin-bottom: 10px !important; }
-      .shape { width: 70px !important; height: 70px !important; }
-      .triangle { border-left-width: 35px !important; border-right-width: 35px !important; border-bottom-width: 60px !important; }
-      .shapes-container { gap: 12px !important; max-width: 100% !important; }
-      .control-panel { flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; padding: 8px !important; margin: 6px auto !important; }
-      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.88em !important; }
-      #statsBtn { padding: 8px 12px !important; font-size: 0.88em !important; margin: 0 !important; border-radius: 12px !important; }
-      .progress-counter { min-width: unset !important; padding: 6px 10px !important; font-size: 0.9em !important; }
-      .colors-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
-      .color-btn { font-size: 1.2em !important; padding: 10px 0 !important; }
-      h1 { margin: 2px 0 4px !important; }
+      .large-number { font-size: 3em !important; }
+      .number-word { font-size: 1.8em !important; min-height: auto !important; margin-bottom: 8px !important; }
+      .objects-container { min-height: unset !important; padding: 8px !important; gap: 8px !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
-      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
     }
     @media (max-width: 768px) {
       #particleCanvas { display: none !important; }
@@ -525,84 +396,92 @@
   </style>
 </head>
 <body>
+  <!-- Particle Background Canvas -->
   <canvas id="particleCanvas"></canvas>
   <div class="navigation">
-    <a href="index.html" class="nav-btn">Home</a>
+    <a href="../index.html" class="nav-btn">Home</a>
     <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
-    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
     <a href="shapes-game.html" class="nav-btn">Shapes</a>
     <a href="animals-game.html" class="nav-btn">Animals</a>
     <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
     <a href="birds.html" class="nav-btn">Birds</a>
   </div>
   
-  <h1>🌈 Learn Colors 🌈</h1>
+  <h1>🔢 Learn Numbers 🔢</h1>
   
-  <div class="control-panel">
-    <button id="randomBtn" class="control-btn" aria-label="Show random color" tabindex="0">
+  <!-- Control Panel -->
+  <div style="text-align: center; margin: 20px auto; position: relative; z-index: 1;">
+    <button id="randomBtn" style="background: linear-gradient(145deg, #ffeb3b, #fbc02d); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(251, 192, 45, 0.4); margin: 0 10px; transition: all 0.3s;">
       🎲 Random
     </button>
-    <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
-      🎯 Quiz
+    <button id="quizBtn" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+      🎯 Quiz Mode
     </button>
-    <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
+    <button id="settingsBtn" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
       ⚙️ Settings
     </button>
-    <button id="speakBtn" class="control-btn" aria-label="Speak current color" tabindex="0" disabled>
+    <button id="speakBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
       🔊 Speak
     </button>
-    <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
+    <button id="resetBtn" style="background: linear-gradient(145deg, #f44336, #c62828); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
       🔄 Reset
     </button>
     <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
-    <div class="progress-counter" id="progressCounter" aria-live="polite">
-      0 / 12 learned
+    <div style="display: inline-block; background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 20px; margin: 0 10px; font-weight: bold; color: #56ab2f;">
+      <span id="progressCounter">0 / 10</span> learned
     </div>
   </div>
   
   <!-- Quiz Modal -->
-  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
-      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
-      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Colors Quiz</h2>
+  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
       
-      <div style="margin: 20px 0;">
-        <div id="quizColorShape" style="width: 150px; height: 150px; border-radius: 50%; margin: 0 auto; box-shadow: 0 5px 20px rgba(0,0,0,0.3);"></div>
+      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px;">🎯 Numbers Quiz</h2>
+      
+      <div id="quizQuestion" style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(10px);">
+        <div id="quizObjects" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
+          <!-- Objects will be generated here -->
+        </div>
+        <p style="color: white; font-size: 1.8em; margin-top: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">How many objects do you see?</p>
       </div>
       
-      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What color is this?</p>
+      <div id="quizOptions" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+        <!-- Options will be generated here -->
+      </div>
       
-      <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
+      <div id="quizFeedback" style="min-height: 60px; color: white; font-size: 1.3em; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+      </div>
       
-      <p id="quizFeedback" style="font-size: 1.3em; font-weight: bold; margin: 15px 0; min-height: 30px;"></p>
-      
-      <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
-      
-      <button id="nextQuizBtn" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
-        Next →
-      </button>
+      <div style="display: flex; justify-content: space-between; align-items: center; color: white; font-size: 1.1em;">
+        <span id="quizScore">Score: 0/0</span>
+        <button id="nextQuizBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 20px; font-weight: bold; color: white; cursor: pointer; display: none;">Next Question ➜</button>
+      </div>
     </div>
   </div>
   
   <!-- Stats Modal -->
-  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
-    <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); padding: 30px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; margin: 20px auto;">
-      <h2 style="color: white; margin-bottom: 20px; text-align: center;">📊 Your Statistics</h2>
-      <div id="statsContent"></div>
+  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto; animation: fadeIn 0.3s ease;">
+    <div style="background: rgba(33, 150, 243, 0.95); backdrop-filter: blur(40px); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1); position: relative; margin: 20px auto; animation: slideUp 0.4s ease;">
+      <button id="closeStats" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s; z-index: 10;">✕</button>
+      <h2 style="color: white; margin-bottom: 20px; text-align: center; animation: fadeInDown 0.5s ease;">📊 Your Statistics</h2>
+      <div id="statsContent" style="animation: fadeInUp 0.6s ease;"></div>
       <h3 style="color: white; margin: 30px 0 15px 0; text-align: center;">🏆 Achievements</h3>
-      <div id="achievementsDisplay">
+      <div id="achievementsDisplay" style="animation: fadeInUp 0.7s ease;">
         <div id="achievementsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
       </div>
-      <button id="closeStats" style="width: 100%; padding: 15px; background: white; color: #2196f3; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; position: relative; z-index: 10;">Close</button>
     </div>
   </div>
   
   <!-- Settings Modal -->
   <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
-      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
-      <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
-      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
+    <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
+      
+      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
+      
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px; backdrop-filter: blur(10px);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
           <label style="color: white; font-size: 1.2em; font-weight: bold;">🌙 Dark Mode</label>
           <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
@@ -613,9 +492,9 @@
         <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
           <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
           <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #667eea; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
-            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
+            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em; transition: all 0.3s;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #56ab2f; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s;">Medium</button>
+            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em; transition: all 0.3s;">Large</button>
           </div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
@@ -633,40 +512,29 @@
           </label>
         </div>
       </div>
-      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%;">✓ Save Settings</button>
+      
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        ✓ Save Settings
+      </button>
     </div>
   </div>
   
   <div class="main-container">
     <div class="left-pane">
-      <div class="colors-grid" id="colorsGrid"></div>
+      <div class="numbers-grid" id="numbersGrid"></div>
     </div>
     <div class="right-pane">
-      <div class="color-name" id="colorName"></div>
-      <div class="shapes-container" id="shapesContainer" style="display:none;">
-        <div class="shape fan" id="fan">
-          <div class="fan-rotating">
-            <div class="blade"></div>
-            <div class="blade"></div>
-            <div class="blade"></div>
-            <div class="blade"></div>
-          </div>
-          <div class="center"></div>
-        </div>
-        <div class="shape circle" id="circle"></div>
-        <div class="shape square" id="square"></div>
-        <div class="shape rectangle" id="rectangle"></div>
-        <div class="shape triangle" id="triangle"></div>
-        <div class="shape diamond" id="diamond"></div>
-        <div class="shape hexagon" id="hexagon">
-          <div class="hex-inner"></div>
-        </div>
+      <div class="large-number" id="largeNumber" style="display:none;"></div>
+      <div class="number-word" id="numberWord"></div>
+      <div class="objects-container" id="objectsContainer" style="display:none;"></div>
+      <div style="margin-top: 15px; color: rgba(255,255,255,0.8); font-size: 0.9em; text-align: center;">
+        💡 Tip: Press number keys 1-9, 0 for 10, R for random, Space to speak
       </div>
     </div>
   </div>
   
   <script>
-    // Phase 5: Particle Background System
+    // Particle Background System
     (function() {
       const canvas = document.getElementById('particleCanvas');
       const ctx = canvas.getContext('2d');
@@ -729,7 +597,7 @@
       if (window.innerWidth > 768) { init(); animate(); }
     })();
 
-    // Phase 5: Ripple Effect Function
+    // Ripple Effect Function
     function createRipple(e) {
       const button = e.currentTarget;
       const rect = button.getBoundingClientRect();
@@ -748,34 +616,33 @@
       setTimeout(() => ripple.remove(), 600);
     }
 
-    const colors = {
-      'Red': '#FF0000',
-      'Blue': '#0000FF',
-      'Green': '#00FF00',
-      'Yellow': '#FFFF00',
-      'Orange': '#FFA500',
-      'Purple': '#800080',
-      'Pink': '#FFC0CB',
-      'Brown': '#8B4513',
-      'Black': '#000000',
-      'White': '#FFFFFF',
-      'Gray': '#808080',
-      'Violet': '#8A2BE2'
+    // Data
+    const numbers = {
+      1: 'One',
+      2: 'Two',
+      3: 'Three',
+      4: 'Four',
+      5: 'Five',
+      6: 'Six',
+      7: 'Seven',
+      8: 'Eight',
+      9: 'Nine',
+      10: 'Ten'
     };
     
     // State management
-    let currentColor = '';
-    let learnedColors = new Set(JSON.parse(localStorage.getItem('colors_learned') || '[]'));
-    const colorNames = Object.keys(colors);
+    let currentNumber = null;
+    let learnedNumbers = new Set(JSON.parse(localStorage.getItem('numbers_learned') || '[]'));
     
     // DOM elements
-    const colorsGrid = document.getElementById('colorsGrid');
-    const colorName = document.getElementById('colorName');
-    const shapesContainer = document.getElementById('shapesContainer');
+    const numbersGrid = document.getElementById('numbersGrid');
+    const numberWord = document.getElementById('numberWord');
+    const largeNumber = document.getElementById('largeNumber');
+    const objectsContainer = document.getElementById('objectsContainer');
+    const progressCounter = document.getElementById('progressCounter');
     const randomBtn = document.getElementById('randomBtn');
     const speakBtn = document.getElementById('speakBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const progressCounter = document.getElementById('progressCounter');
     const statsBtn = document.getElementById('statsBtn');
     const statsModal = document.getElementById('statsModal');
     const closeStats = document.getElementById('closeStats');
@@ -792,250 +659,220 @@
       }
     }
     
-    // Display color function
-    function displayColor(color) {
-      currentColor = color;
+    // Display number function
+    function displayNumber(num) {
+      currentNumber = num;
+      const numValue = parseInt(num);
       
-      colorName.textContent = color;
-      colorName.style.animation = 'none';
-      colorName.offsetHeight;
-      colorName.style.animation = 'bounce 0.6s ease-in-out';
+      // Display large number
+      largeNumber.textContent = num;
+      largeNumber.style.display = 'block';
+      largeNumber.style.animation = 'none';
+      largeNumber.offsetHeight;
+      largeNumber.style.animation = 'pulse 1.5s ease-in-out infinite alternate';
       
-      // Show shapes container
-      shapesContainer.style.display = 'flex';
-      shapesContainer.style.animation = 'none';
-      shapesContainer.offsetHeight;
-      shapesContainer.style.animation = 'fadeInScale 0.8s ease-out';
+      // Display number word
+      numberWord.textContent = numbers[num];
+      numberWord.style.animation = 'none';
+      numberWord.offsetHeight;
+      numberWord.style.animation = 'bounce 0.6s ease-in-out';
       
-      // Apply color to all shapes
-      const shapes = ['circle', 'square', 'rectangle', 'diamond', 'hexagon'];
-      shapes.forEach(shapeId => {
-        const shape = document.getElementById(shapeId);
-        shape.style.backgroundColor = colors[color];
-        
-        // Special border for white color
-        if (color === 'White') {
-          shape.style.border = '3px solid #333';
-        } else {
-          shape.style.border = '3px solid rgba(255, 255, 255, 0.8)';
-        }
-      });
+      // Clear previous objects
+      objectsContainer.innerHTML = '';
+      objectsContainer.style.display = 'flex';
       
-      // Handle fan specially
-      const fan = document.getElementById('fan');
-      const fanBlades = fan.querySelectorAll('.blade');
-      
-      fanBlades.forEach(blade => {
-        blade.style.backgroundColor = colors[color];
-      });
-      
-      if (color === 'White') {
-        fan.style.border = '3px solid #333';
-      } else {
-        fan.style.border = '3px solid rgba(255, 255, 255, 0.8)';
+      // Create counting objects
+      for (let i = 0; i < numValue; i++) {
+        setTimeout(() => {
+          const obj = document.createElement('div');
+          obj.className = 'count-object';
+          obj.style.animationDelay = `${i * 0.1}s`;
+          
+          obj.onclick = () => {
+            obj.style.transform = 'scale(1.5) rotate(360deg)';
+            setTimeout(() => {
+              obj.style.transform = 'scale(1) rotate(0deg)';
+            }, 300);
+          };
+          
+          objectsContainer.appendChild(obj);
+        }, i * 150);
       }
       
-      // Handle triangle specially
-      const triangle = document.getElementById('triangle');
-      triangle.style.borderBottomColor = colors[color];
-      if (color === 'White') {
-        triangle.style.filter = 'drop-shadow(0 0 3px #333)';
-      } else {
-        triangle.style.filter = 'drop-shadow(0 0 3px rgba(255, 255, 255, 0.8))';
-      }
-      
-      // Handle hexagon specially
-      const hexagon = document.getElementById('hexagon');
-      hexagon.style.backgroundColor = colors[color];
-      
-      if (color === 'White') {
-        hexagon.style.border = '3px solid #333';
-      } else {
-        hexagon.style.border = '3px solid rgba(255, 255, 255, 0.8)';
-      }
+      // Animate container
+      objectsContainer.style.animation = 'none';
+      objectsContainer.offsetHeight;
+      objectsContainer.style.animation = 'fadeInScale 0.8s ease-out';
       
       // Mark as learned
-      if (!learnedColors.has(color)) {
-        learnedColors.add(color);
-        localStorage.setItem('colors_learned', JSON.stringify([...learnedColors]));
-        updateProgress();
-        
-        // Check achievements
-        checkAchievements();
-      }
+      learnedNumbers.add(num.toString());
+      localStorage.setItem('numbers_learned', JSON.stringify([...learnedNumbers]));
+      updateProgress();
       
-      // Update button styling - add visual feedback for learned colors
-      document.querySelectorAll('.color-btn').forEach(btn => {
-        if (btn.textContent === color) {
-          btn.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.4)';
-          btn.style.border = '3px solid #ffd700';
-          // Add checkmark if not already present
-          if (!btn.querySelector('.checkmark')) {
-            const checkmark = document.createElement('div');
-            checkmark.className = 'checkmark';
-            checkmark.textContent = '✓';
-            checkmark.style.cssText = 'position: absolute; top: 5px; right: 5px; background: #4caf50; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
-            btn.style.position = 'relative';
-            btn.appendChild(checkmark);
-          }
+      // Update button styles
+      document.querySelectorAll('.number-btn').forEach(btn => {
+        if (btn.textContent === num.toString()) {
+          btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
         }
       });
       
-      // Enable speak button
-      speakBtn.disabled = false;
-      
       // Auto-speak
-      speak(color);
+      speak(`${num}, ${numbers[num]}`);
     }
     
-    // Update progress counter
+    // Update progress
     function updateProgress() {
-      progressCounter.textContent = `${learnedColors.size} / 12 learned`;
+      progressCounter.textContent = `${learnedNumbers.size} / 10`;
     }
     
-    // Show random color
+    // Random number
     function showRandom() {
-      const randomColor = colorNames[Math.floor(Math.random() * colorNames.length)];
-      displayColor(randomColor);
+      const nums = Object.keys(numbers);
+      const randomNum = nums[Math.floor(Math.random() * nums.length)];
+      displayNumber(randomNum);
     }
     
-    // Reset progress
+    // Reset
     function reset() {
-      learnedColors.clear();
-      localStorage.removeItem('colors_learned');
-      currentColor = '';
-      colorName.textContent = 'Click a color to learn!';
-      shapesContainer.style.display = 'none';
-      speakBtn.disabled = true;
+      largeNumber.style.display = 'none';
+      numberWord.textContent = '';
+      objectsContainer.style.display = 'none';
+      objectsContainer.innerHTML = '';
+      currentNumber = null;
+      
+      // Clear learned numbers
+      learnedNumbers.clear();
+      localStorage.removeItem('numbers_learned');
       
       // Reset achievements
       Object.keys(achievements).forEach(key => {
         achievements[key].unlocked = false;
       });
-      localStorage.removeItem('colors_achievements');
+      localStorage.removeItem('numbers_achievements');
       
       // Reset statistics
       stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
-      localStorage.removeItem('colors_stats');
-      
-      updateProgress();
+      localStorage.removeItem('numbers_stats');
       
       // Reset all button styles
-      document.querySelectorAll('.color-btn').forEach(btn => {
-        btn.style.boxShadow = '';
+      document.querySelectorAll('.number-btn').forEach(btn => {
+        btn.style.background = 'linear-gradient(145deg, #ffffff, #f0f0f0)';
       });
+      
+      updateProgress();
       
       // Show confirmation
       speak('Progress reset complete');
     }
     
-    // Create color buttons
-    colorNames.forEach(color => {
+    // Create number buttons
+    Object.keys(numbers).forEach(num => {
       const btn = document.createElement('button');
-      btn.className = 'color-btn';
-      btn.textContent = color;
-      btn.style.backgroundColor = colors[color];
-      btn.setAttribute('aria-label', `Learn about ${color}`);
-      btn.tabIndex = 0;
+      btn.className = 'number-btn';
+      btn.textContent = num;
+      btn.setAttribute('aria-label', `Number ${num}`);
+      btn.setAttribute('tabindex', '0');
       
-      // Adjust text color for better visibility
-      if (color === 'Yellow' || color === 'White' || color === 'Pink') {
-        btn.style.color = '#333';
-        btn.style.textShadow = '1px 1px 3px rgba(255,255,255,0.5)';
-      }
-      
-      // Mark learned colors with checkmark
-      if (learnedColors.has(color)) {
-        btn.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.4)';
-        btn.style.border = '3px solid #ffd700';
-        const checkmark = document.createElement('div');
-        checkmark.className = 'checkmark';
-        checkmark.textContent = '✓';
-        checkmark.style.cssText = 'position: absolute; top: 5px; right: 5px; background: #4caf50; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
-        btn.style.position = 'relative';
-        btn.appendChild(checkmark);
+      // Check if already learned
+      if (learnedNumbers.has(num.toString())) {
+        btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
       }
       
       btn.onclick = (e) => {
+        // 3D Flip Animation
         btn.classList.add('flipping');
         setTimeout(() => btn.classList.remove('flipping'), 600);
+        
+        // Ripple Effect
         createRipple(e);
-        displayColor(color);
+        
+        // Original functionality
+        displayNumber(num);
       };
       
-      colorsGrid.appendChild(btn);
+      btn.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          displayNumber(num);
+        }
+      };
+      
+      numbersGrid.appendChild(btn);
     });
     
-    // Control button event listeners
-    randomBtn.onclick = () => { playSound('click'); showRandom(); };
+    // Button events
+    randomBtn.onclick = showRandom;
     speakBtn.onclick = () => {
-      if (currentColor) {
+      if (currentNumber) {
         playSound('click');
-        speak(currentColor);
+        speak(`${currentNumber}, ${numbers[currentNumber]}`);
       }
     };
     resetBtn.onclick = () => { playSound('click'); reset(); };
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      // R key for random
-      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
+      const nums = Object.keys(numbers);
+      
+      if (e.key === 'r' || e.key === 'R') {
         e.preventDefault();
         showRandom();
-      }
-      
-      // Space key to speak current color
-      if (e.key === ' ' && currentColor && !e.ctrlKey && !e.altKey) {
+      } else if (e.key === ' ' && currentNumber) {
         e.preventDefault();
-        speak(currentColor);
-      }
-      
-      // Escape key to reset
-      if (e.key === 'Escape') {
+        speak(`${currentNumber}, ${numbers[currentNumber]}`);
+      } else if (e.key === 'Escape') {
         e.preventDefault();
         reset();
-      }
-      
-      // Arrow keys to navigate
-      if (currentColor && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      } else if (e.key === 'ArrowRight' && currentNumber) {
         e.preventDefault();
-        const currentIndex = colorNames.indexOf(currentColor);
-        let nextIndex;
-        
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          nextIndex = (currentIndex + 1) % colorNames.length;
-        } else {
-          nextIndex = (currentIndex - 1 + colorNames.length) % colorNames.length;
-        }
-        
-        displayColor(colorNames[nextIndex]);
+        const currentIndex = nums.indexOf(currentNumber.toString());
+        const nextIndex = (currentIndex + 1) % nums.length;
+        displayNumber(nums[nextIndex]);
+      } else if (e.key === 'ArrowLeft' && currentNumber) {
+        e.preventDefault();
+        const currentIndex = nums.indexOf(currentNumber.toString());
+        const prevIndex = (currentIndex - 1 + nums.length) % nums.length;
+        displayNumber(nums[prevIndex]);
+      } else if (e.key >= '1' && e.key <= '9') {
+        e.preventDefault();
+        displayNumber(e.key);
+      } else if (e.key === '0') {
+        e.preventDefault();
+        displayNumber('10');
       }
-      
-      // Type color name to jump to it
-      if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
-        const typedLetter = e.key.toUpperCase();
-        const matchingColor = colorNames.find(color => color.startsWith(typedLetter));
-        if (matchingColor) {
-          displayColor(matchingColor);
-        }
-      }
+    });
+    
+    randomBtn.onclick = () => { playSound('click'); showRandom(); };
+    
+    // Button hover effects
+    [randomBtn, speakBtn, resetBtn, statsBtn].forEach(btn => {
+      btn.onmouseenter = () => {
+        btn.style.transform = 'translateY(-3px)';
+        btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+      };
+      btn.onmouseleave = () => {
+        btn.style.transform = 'translateY(0)';
+        btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+      };
     });
     
     // Quiz Mode Implementation
     const quizBtn = document.getElementById('quizBtn');
     const quizModal = document.getElementById('quizModal');
     const closeQuiz = document.getElementById('closeQuiz');
-    const quizColorShape = document.getElementById('quizColorShape');
+    const quizObjects = document.getElementById('quizObjects');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
     const quizScore = document.getElementById('quizScore');
     const nextQuizBtn = document.getElementById('nextQuizBtn');
     
+    const objectEmojis = ['🍎', '⚽', '🌟', '🎈', '🍕', '🎁', '🍭', '🌺', '🦋', '🎨'];
+    
     let quizState = {
       currentQuestion: 0,
       correctAnswers: 0,
       totalQuestions: 10,
-      currentCorrectColor: '',
+      currentCorrectNumber: 0,
       answered: false
     };
     
@@ -1044,7 +881,7 @@
         currentQuestion: 0,
         correctAnswers: 0,
         totalQuestions: 10,
-        currentCorrectColor: '',
+        currentCorrectNumber: 0,
         answered: false
       };
       quizModal.style.display = 'flex';
@@ -1062,19 +899,28 @@
       quizFeedback.textContent = '';
       nextQuizBtn.style.display = 'none';
       
-      // Pick random color
-      const correctColor = colorNames[Math.floor(Math.random() * colorNames.length)];
-      quizState.currentCorrectColor = correctColor;
+      // Pick random number (1-10)
+      const correctNumber = Math.floor(Math.random() * 10) + 1;
+      quizState.currentCorrectNumber = correctNumber;
       
-      // Show colored shape
-      quizColorShape.style.backgroundColor = colors[correctColor];
+      // Show objects
+      quizObjects.innerHTML = '';
+      const emoji = objectEmojis[Math.floor(Math.random() * objectEmojis.length)];
+      
+      for (let i = 0; i < correctNumber; i++) {
+        const obj = document.createElement('div');
+        obj.style.cssText = 'font-size: 2.5em; animation: fadeIn 0.3s ease-in-out;';
+        obj.style.animationDelay = `${i * 0.05}s`;
+        obj.textContent = emoji;
+        quizObjects.appendChild(obj);
+      }
       
       // Generate 4 options (1 correct + 3 wrong)
-      const options = [correctColor];
+      const options = [correctNumber];
       while (options.length < 4) {
-        const randomColor = colorNames[Math.floor(Math.random() * colorNames.length)];
-        if (!options.includes(randomColor)) {
-          options.push(randomColor);
+        const randomNum = Math.floor(Math.random() * 10) + 1;
+        if (!options.includes(randomNum)) {
+          options.push(randomNum);
         }
       }
       
@@ -1083,12 +929,12 @@
       
       // Create option buttons
       quizOptions.innerHTML = '';
-      options.forEach(color => {
+      options.forEach(num => {
         const btn = document.createElement('button');
-        btn.textContent = color;
-        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #667eea; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #764ba2;';
+        btn.textContent = num;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #56ab2f; border-radius: 15px; font-size: 2em; font-weight: bold; padding: 20px; cursor: pointer; transition: all 0.3s; color: #56ab2f;';
         
-        btn.onclick = () => checkAnswer(color, btn);
+        btn.onclick = () => checkAnswer(num, btn);
         
         btn.onmouseenter = () => {
           if (!quizState.answered) {
@@ -1109,21 +955,21 @@
       updateQuizScore();
     }
     
-    function checkAnswer(selectedColor, btn) {
+    function checkAnswer(selectedNumber, btn) {
       if (quizState.answered) return;
       
       quizState.answered = true;
-      const correct = selectedColor === quizState.currentCorrectColor;
+      const correct = selectedNumber === quizState.currentCorrectNumber;
       
       if (correct) {
         quizState.correctAnswers++;
         btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
         btn.style.color = 'white';
         btn.style.borderColor = '#2e7d32';
-        quizFeedback.innerHTML = `✅ Correct! It's ${selectedColor}`;
+        quizFeedback.innerHTML = `✅ Correct! ${selectedNumber} ${numbers[selectedNumber]}`;
         quizFeedback.style.color = '#4caf50';
         playSound('correct');
-        speak(`Correct! It's ${selectedColor}`);
+        speak(`Correct! ${selectedNumber} ${numbers[selectedNumber]}`);
       } else {
         btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
         btn.style.color = 'white';
@@ -1133,16 +979,16 @@
         // Highlight correct answer
         const buttons = quizOptions.querySelectorAll('button');
         buttons.forEach(b => {
-          if (b.textContent === quizState.currentCorrectColor) {
+          if (parseInt(b.textContent) === quizState.currentCorrectNumber) {
             b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
             b.style.color = 'white';
             b.style.borderColor = '#2e7d32';
           }
         });
         
-        quizFeedback.innerHTML = `❌ Wrong! It's ${quizState.currentCorrectColor}`;
+        quizFeedback.innerHTML = `❌ Wrong! Correct answer: ${quizState.currentCorrectNumber} ${numbers[quizState.currentCorrectNumber]}`;
         quizFeedback.style.color = '#f44336';
-        speak(`Wrong! It's ${quizState.currentCorrectColor}`);
+        speak(`Wrong! It's ${quizState.currentCorrectNumber} ${numbers[quizState.currentCorrectNumber]}`);
       }
       
       updateQuizScore();
@@ -1150,7 +996,7 @@
       // Show next button after delay
       setTimeout(() => {
         nextQuizBtn.style.display = 'block';
-      }, 1500);
+      }, 1000);
     }
     
     function updateQuizScore() {
@@ -1163,18 +1009,18 @@
       let emoji = '';
       
       if (percentage === 100) {
-        message = 'Perfect! You know all the colors! 🌟';
+        message = 'Perfect! You\'re a counting champion! 🌟';
         emoji = '🏆';
         createConfetti();
       } else if (percentage >= 80) {
-        message = 'Excellent! You\'re a color expert! 👏';
+        message = 'Excellent counting! Keep it up! 👏';
         emoji = '⭐';
         createConfetti();
       } else if (percentage >= 60) {
-        message = 'Good job! Keep learning colors! 💪';
+        message = 'Good job! Practice more to improve! 💪';
         emoji = '👍';
       } else {
-        message = 'Keep practicing! You\'ll learn them all! 📚';
+        message = 'Keep practicing! You\'ll get better! 📚';
         emoji = '💡';
       }
       
@@ -1188,13 +1034,13 @@
           <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             🔄 Try Again
           </button>
-          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #56ab2f, #a8e6cf); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             ✓ Done
           </button>
         </div>
       `;
       quizFeedback.textContent = '';
-      quizColorShape.style.display = 'none';
+      quizObjects.innerHTML = '';
       nextQuizBtn.style.display = 'none';
       
       speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
@@ -1232,48 +1078,49 @@
     const soundToggle = document.getElementById('soundToggle');
     const autoSpeakToggle = document.getElementById('autoSpeakToggle');
     const fontSizeBtns = document.querySelectorAll('.fontSizeBtn');
-
+    
     const settings = {
       darkMode: localStorage.getItem('darkMode') === 'true',
       soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
       autoSpeak: localStorage.getItem('autoSpeak') === 'true',
       fontSize: localStorage.getItem('fontSize') || 'medium'
     };
-
+    
     if (settings.darkMode) {
       document.body.classList.add('dark-mode');
       darkModeToggle.checked = true;
     }
     soundToggle.checked = settings.soundEnabled;
     autoSpeakToggle.checked = settings.autoSpeak;
-    document.body.className += ' font-' + settings.fontSize;
-
+    document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + settings.fontSize;
+    
     fontSizeBtns.forEach(btn => {
       if (btn.dataset.size === settings.fontSize) {
         btn.style.background = 'white';
+        btn.style.color = '#56ab2f';
         btn.style.fontWeight = 'bold';
       }
     });
-
+    
     settingsBtn.onclick = () => settingsModal.style.display = 'flex';
     closeSettings.onclick = () => settingsModal.style.display = 'none';
     settingsModal.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
-
+    
     darkModeToggle.onchange = () => {
       document.body.classList.toggle('dark-mode', darkModeToggle.checked);
       localStorage.setItem('darkMode', darkModeToggle.checked);
     };
-
+    
     soundToggle.onchange = () => {
       settings.soundEnabled = soundToggle.checked;
       localStorage.setItem('soundEnabled', soundToggle.checked);
     };
-
+    
     autoSpeakToggle.onchange = () => {
       settings.autoSpeak = autoSpeakToggle.checked;
       localStorage.setItem('autoSpeak', autoSpeakToggle.checked);
     };
-
+    
     fontSizeBtns.forEach(btn => {
       btn.onclick = () => {
         const size = btn.dataset.size;
@@ -1282,11 +1129,12 @@
         localStorage.setItem('fontSize', size);
         fontSizeBtns.forEach(b => {
           b.style.background = b === btn ? 'white' : 'rgba(255,255,255,0.2)';
+          b.style.color = b === btn ? '#56ab2f' : 'white';
           b.style.fontWeight = b === btn ? 'bold' : 'normal';
         });
       };
     });
-
+    
     settingsBtn.onmouseenter = () => {
       settingsBtn.style.transform = 'translateY(-3px)';
       settingsBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.5)';
@@ -1296,8 +1144,7 @@
       settingsBtn.style.boxShadow = '0 4px 15px rgba(156, 39, 176, 0.4)';
     };
     
-    // Confetti animation
-    // Phase 5: Enhanced Confetti Animation
+    // Enhanced Confetti Animation (Phase 5)
     function createConfetti() {
       const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4', '#32cd32', '#ff1493', '#00bfff', '#ffd700'];
       const shapes = ['circle', 'square', 'triangle'];
@@ -1353,7 +1200,7 @@
     // Sound Effects
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
-      const settings = JSON.parse(localStorage.getItem('colors_settings') || '{"soundEnabled": true}');
+      const settings = JSON.parse(localStorage.getItem('numbers_settings') || '{"soundEnabled": true}');
       if (!settings.soundEnabled) return;
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -1383,25 +1230,25 @@
     // Stats Modal
     // Achievement System - Define early
     const achievements = {
-      first_color: { name: '🎯 First Color', desc: 'Learn your first color', unlocked: false },
-      rainbow: { name: '🌈 Rainbow', desc: 'Learn 7 colors', unlocked: false },
-      all_learned: { name: '🏆 Color Master', desc: 'Learn all 12 colors', unlocked: false },
+      first_count: { name: '🎯 First Number', desc: 'Learn your first number', unlocked: false },
+      half_way: { name: '⭐ Half Way', desc: 'Learn 5 numbers', unlocked: false },
+      all_learned: { name: '🏆 Counting Master', desc: 'Learn all 10 numbers', unlocked: false },
       perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
       quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
     };
-    const savedAchievements = JSON.parse(localStorage.getItem('colors_achievements') || '{}');
+    const savedAchievements = JSON.parse(localStorage.getItem('numbers_achievements') || '{}');
     Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
-    let stats = JSON.parse(localStorage.getItem('colors_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    let stats = JSON.parse(localStorage.getItem('numbers_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
     
     function checkAchievements() {
       let newUnlock = false;
-      if (!achievements.first_color.unlocked && learnedColors.size >= 1) { achievements.first_color.unlocked = true; showAchievement(achievements.first_color); newUnlock = true; }
-      if (!achievements.rainbow.unlocked && learnedColors.size >= 7) { achievements.rainbow.unlocked = true; showAchievement(achievements.rainbow); newUnlock = true; }
-      if (!achievements.all_learned.unlocked && learnedColors.size >= 12) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (!achievements.first_count.unlocked && learnedNumbers.size >= 1) { achievements.first_count.unlocked = true; showAchievement(achievements.first_count); newUnlock = true; }
+      if (!achievements.half_way.unlocked && learnedNumbers.size >= 5) { achievements.half_way.unlocked = true; showAchievement(achievements.half_way); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedNumbers.size >= 10) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
       if (newUnlock) saveAchievements();
     }
-    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('colors_achievements', JSON.stringify(toSave)); }
-    function saveStats() { localStorage.setItem('colors_stats', JSON.stringify(stats)); }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('numbers_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('numbers_stats', JSON.stringify(stats)); }
     function showAchievement(achievement) {
       const badge = document.createElement('div');
       badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
@@ -1415,14 +1262,14 @@
     // Stats Modal (statsBtn, statsModal, closeStats declared at top)
     if (statsBtn && statsModal && closeStats) {
       function showStats() {
-        const currentStats = JSON.parse(localStorage.getItem('colors_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
-        const savedAchievements = JSON.parse(localStorage.getItem('colors_achievements') || '{}');
+        const currentStats = JSON.parse(localStorage.getItem('numbers_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+        const savedAchievements = JSON.parse(localStorage.getItem('numbers_achievements') || '{}');
         
         // Update achievements with saved state
         Object.keys(savedAchievements).forEach(key => {
           if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
         });
-      
+        
         const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
         
         document.getElementById('statsContent').innerHTML = `
@@ -1441,35 +1288,35 @@
             </div>
             <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
               <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
-            <div style="opacity: 0.9;">High Score</div>
+              <div style="opacity: 0.9;">High Score</div>
+            </div>
           </div>
-        </div>
-      `;
-      
-      const achievementsList = document.getElementById('achievementsList');
-      achievementsList.innerHTML = '';
-      Object.entries(achievements).forEach(([key, achievement]) => {
-        const badgeDiv = document.createElement('div');
-        badgeDiv.style.cssText = `
-          background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
-          padding: 20px;
-          border-radius: 15px;
-          text-align: center;
-          opacity: ${achievement.unlocked ? '1' : '0.5'};
-          transition: transform 0.3s;
-          ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
         `;
-        badgeDiv.innerHTML = `
-          <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
-          <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
-            ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
-          </div>
-          <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
-          ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
-        `;
-        achievementsList.appendChild(badgeDiv);
-      });
-      
+        
+        const achievementsList = document.getElementById('achievementsList');
+        achievementsList.innerHTML = '';
+        Object.entries(achievements).forEach(([key, achievement]) => {
+          const badgeDiv = document.createElement('div');
+          badgeDiv.style.cssText = `
+            background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            opacity: ${achievement.unlocked ? '1' : '0.5'};
+            transition: transform 0.3s;
+            ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
+          `;
+          badgeDiv.innerHTML = `
+            <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
+            <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
+              ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
+            </div>
+            <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
+            ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
+          `;
+          achievementsList.appendChild(badgeDiv);
+        });
+        
         statsModal.style.display = 'flex';
         if (typeof playSound === 'function') playSound('click');
       }
@@ -1498,6 +1345,8 @@
       };
     }
     
+    const originalDisplayNumber = displayNumber;
+    displayNumber = function(num) { originalDisplayNumber(num); checkAchievements(); };
     const originalShowQuizResults = showQuizResults;
     showQuizResults = function() {
       stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
@@ -1508,11 +1357,13 @@
       saveStats(); originalShowQuizResults();
     };
     
-    // Initialize progress counter
+    // Initialize
     updateProgress();
     checkAchievements();
   </script>
 
-  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>

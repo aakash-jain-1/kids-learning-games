@@ -1,15 +1,15 @@
-const CACHE_NAME = 'kids-learning-games-v5';
+const CACHE_NAME = 'kids-learning-games-v6';
 const urlsToCache = [
   './',
   'index.html',
-  'alphabet-game.html',
-  'numbers-game.html',
-  'colors-game.html',
-  'shapes-game.html',
-  'animals-game.html',
-  'birds.html',
-  'hindi-alphabets.html',
-  'flashcards-game.html',
+  'games/alphabet-game.html',
+  'games/numbers-game.html',
+  'games/colors-game.html',
+  'games/shapes-game.html',
+  'games/animals-game.html',
+  'games/birds.html',
+  'games/hindi-alphabets.html',
+  'games/flashcards-game.html',
   'manifest.json'
 ];
 

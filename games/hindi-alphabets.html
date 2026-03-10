@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animals Learning Game</title>
+  <title>हिंदी वर्णमाला - Hindi Alphabets</title>
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -13,8 +13,8 @@
       touch-action: manipulation;
     }
     body {
-      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      font-family: 'Noto Sans Devanagari', 'Mangal', 'Kruti Dev', Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
       text-align: center;
       margin: 0;
       padding: 100px 0 0 0;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       transition: all 0.3s ease;
     }
-    body.dark-mode { background: linear-gradient(135deg, #0a3d62 0%, #1e272e 100%); }
+    body.dark-mode { background: linear-gradient(135deg, #1a0f00 0%, #0d1f0f 100%); }
     body.font-small { font-size: 14px; }
     body.font-medium { font-size: 16px; }
     body.font-large { font-size: 18px; }
@@ -37,10 +37,6 @@
       z-index: 0;
       opacity: 0.6;
     }
-    .switch input:checked + span { background-color: #4caf50; }
-    .switch input:checked + span:before { transform: translateX(26px); }
-    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
-    /* Phase 5: Smooth Transition Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -61,6 +57,32 @@
       0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
       50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
     }
+    .flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .switch input:checked + span { background-color: #4caf50; }
+    .switch input:checked + span:before { transform: translateX(26px); }
+    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
+    
     body::before {
       content: '';
       position: absolute;
@@ -70,12 +92,14 @@
       bottom: 0;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
       pointer-events: none;
-      animation: sparkle 17s linear infinite;
+      animation: sparkle 20s linear infinite;
     }
+    
     @keyframes sparkle {
       0% { transform: translateY(0px) rotate(0deg); }
       100% { transform: translateY(-100px) rotate(360deg); }
     }
+    
     h1 {
       color: #fff;
       font-size: 3.5em;
@@ -83,21 +107,21 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       position: relative;
       z-index: 1;
-      animation: animalGlow 3s ease-in-out infinite alternate;
+      animation: glow 2s ease-in-out infinite alternate;
+      padding: 10px;
     }
-    @keyframes animalGlow {
-      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
-      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
-      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(67,206,162,0.6); }
-      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+    
+    @keyframes glow {
+      from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,153,51,0.3); }
+      to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,153,51,0.6); }
     }
-    .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
+    .confetti { position: fixed; width: 10px; height: 10px; background-color: #f00; animation: confetti-fall 3s linear forwards; z-index: 9999; }
     @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
-    .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
+    .celebration-burst { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; animation: burst 0.6s ease-out forwards; z-index: 10000; pointer-events: none; }
     @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
-    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .animal-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .animal-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .animal-item { font-size: 2.5em !important; padding: 15px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
-    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .animal-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .animal-item { font-size: 2em !important; padding: 12px !important; } }
+    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .hindi-letter { font-size: 6em !important; width: 180px !important; height: 180px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .letter-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)) !important; gap: 10px !important; padding: 10px !important; } .letter-item { font-size: 2em !important; padding: 12px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .hindi-letter { font-size: 5em !important; width: 140px !important; height: 140px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .letter-item { font-size: 1.7em !important; padding: 10px !important; } }
+    
     .control-panel {
       display: flex;
       justify-content: center;
@@ -117,22 +141,22 @@
     }
     .control-btn {
       background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #43cea2;
+      border: 3px solid #ff9933;
       border-radius: 15px;
       padding: 12px 24px;
       font-size: 1.2em;
       font-weight: bold;
-      color: #185a9d;
+      color: #138808;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       min-width: 130px;
     }
     .control-btn:hover:not(:disabled) {
-      background: linear-gradient(145deg, #43cea2, #37b88d);
+      background: linear-gradient(145deg, #ff9933, #ff7700);
       color: white;
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(67, 206, 162, 0.4);
+      box-shadow: 0 6px 15px rgba(255, 153, 51, 0.4);
     }
     .control-btn:active:not(:disabled) {
       transform: translateY(0);
@@ -144,237 +168,16 @@
     }
     .progress-counter {
       background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #43cea2;
+      border: 2px solid #ff9933;
       border-radius: 12px;
       padding: 10px 20px;
       font-size: 1.3em;
       font-weight: bold;
-      color: #185a9d;
+      color: #138808;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
       min-width: 150px;
     }
-    .main-container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 40px;
-      margin-top: 40px;
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-      height: 80vh;
-      position: relative;
-      z-index: 1;
-    }
-    .left-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .animals-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      width: 100%;
-      max-width: 500px;
-      margin-top: 20px;
-    }
-    .animal-btn {
-      background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #43cea2;
-      border-radius: 15px;
-      font-size: 1.3em;
-      font-weight: bold;
-      padding: 15px 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin: 0;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      color: #185a9d;
-      position: relative;
-      overflow: hidden;
-      min-height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-    /* Phase 5: 3D Flip Animation */
-    .animal-btn.flipping {
-      animation: flip3d 0.6s ease-in-out;
-    }
-    @keyframes flip3d {
-      0% { transform: rotateY(0deg); }
-      50% { transform: rotateY(90deg); }
-      100% { transform: rotateY(0deg); }
-    }
-    /* Phase 5: Ripple Effect */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      transform: scale(0);
-      animation: ripple-animation 0.6s ease-out;
-      pointer-events: none;
-    }
-    @keyframes ripple-animation {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-    .animal-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(67,206,162,0.3), transparent);
-      transition: left 0.5s;
-    }
-    .animal-btn:hover::before {
-      left: 100%;
-    }
-    .animal-btn:hover {
-      background: linear-gradient(145deg, #b2f5ea, #81e6d9);
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(67, 206, 162, 0.4);
-      border-color: #2c7a7b;
-    }
-    .animal-btn:active {
-      transform: translateY(0) scale(0.95);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    .right-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 350px;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    .right-pane::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: rotate 26s linear infinite;
-      pointer-events: none;
-    }
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .animal-name {
-      font-size: 3.5em;
-      font-weight: bold;
-      color: #fff;
-      min-height: 80px;
-      text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-      position: relative;
-      z-index: 1;
-      animation: bounce 0.6s ease-in-out;
-    }
-    @keyframes bounce {
-      0%, 20%, 60%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      80% { transform: translateY(-10px); }
-    }
-    .animal-display-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-    .animal-image {
-      width: 250px;
-      height: 250px;
-      object-fit: contain;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-      background: rgba(255, 255, 255, 0.95);
-      border: 4px solid rgba(255, 255, 255, 0.9);
-      transition: all 0.6s ease;
-      animation: fadeInScale 0.8s ease-out;
-      cursor: pointer;
-      padding: 20px;
-    }
-    .animal-image:hover {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 20px 50px rgba(67, 206, 162, 0.5);
-    }
-    .animal-info {
-      margin-top: 25px;
-      font-size: 1.4em;
-      color: #fff;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-      max-width: 350px;
-      line-height: 1.6;
-      position: relative;
-      z-index: 1;
-      animation: fadeIn 1s ease-out;
-      text-align: center;
-    }
-    .animal-sound {
-      margin-top: 15px;
-      font-size: 2em;
-      color: #fff;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-      font-weight: bold;
-      animation: pulse 2s ease-in-out infinite;
-      position: relative;
-      z-index: 1;
-    }
-    @keyframes fadeInScale {
-      0% { 
-        opacity: 0; 
-        transform: scale(0.5) rotate(-10deg); 
-      }
-      100% { 
-        opacity: 1; 
-        transform: scale(1) rotate(0deg); 
-      }
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
+    
     .navigation {
       position: fixed;
       top: 0;
@@ -391,8 +194,9 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+    
     .nav-btn {
-      background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+      background: linear-gradient(135deg, #ff9933 0%, #138808 100%);
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
@@ -403,27 +207,268 @@
       transition: all 0.3s ease;
       text-decoration: none;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      display: inline-block;
     }
+    
     .nav-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
+    
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 20px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .left-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 153, 51, 0.3);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .section-title {
+      font-size: 2em;
+      color: #ff9933;
+      margin: 20px 0 10px 0;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    
+    .hindi-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #ff9933;
+      border-radius: 15px;
+      font-size: 2.8em;
+      font-weight: bold;
+      padding: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin: 0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      color: #138808;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .hindi-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,153,51,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .hindi-btn:hover::before {
+      left: 100%;
+    }
+    
+    .hindi-btn:hover {
+      background: linear-gradient(145deg, #ffe5cc, #ffd9b3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(255, 153, 51, 0.3);
+      border-color: #ff6600;
+    }
+    
+    .hindi-btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .right-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 400px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(19, 136, 8, 0.3);
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+    }
+    
+    .right-pane::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,153,51,0.05) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .letter-display {
+      font-size: 8em;
+      font-weight: bold;
+      color: #ff9933;
+      min-height: 150px;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      animation: bounce 0.6s ease-in-out;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 60%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      80% { transform: translateY(-10px); }
+    }
+    
+    .word-display {
+      font-size: 3em;
+      font-weight: bold;
+      color: #138808;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Sans Devanagari', 'Mangal', sans-serif;
+    }
+    
+    .pronunciation {
+      font-size: 2em;
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .image-display {
+      height: 250px;
+      max-width: 350px;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      border: 3px solid rgba(255, 153, 51, 0.5);
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.5s ease;
+      position: relative;
+      z-index: 1;
+      animation: fadeInScale 0.8s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(-10deg); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg); 
+      }
+    }
+    
+    .image-display:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-text {
+      font-size: 1.2em;
+      color: #555;
+      text-align: center;
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(255, 153, 51, 0.1);
+      border-radius: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Scrollbar styling */
+    .left-pane::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .left-pane::-webkit-scrollbar-track {
+      background: rgba(255, 153, 51, 0.1);
+      border-radius: 10px;
+    }
+    
+    .left-pane::-webkit-scrollbar-thumb {
+      background: #ff9933;
+      border-radius: 10px;
+    }
+    
+    .left-pane::-webkit-scrollbar-thumb:hover {
+      background: #ff6600;
+    }
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
-      .animals-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
-      .animal-btn { font-size: 1em !important; padding: 10px 4px !important; min-height: unset !important; }
+      .letter-grid { grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important; gap: 6px !important; }
+      .alphabet-grid { grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important; gap: 6px !important; }
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
-      .animal-name { font-size: 1.6em !important; min-height: auto !important; margin-bottom: 8px !important; }
-      .animal-image { width: 150px !important; height: 150px !important; padding: 10px !important; }
-      .animal-info { font-size: 0.95em !important; max-width: 100% !important; }
-      .animal-sound { font-size: 1.3em !important; }
+      .letter-display { font-size: 4em !important; min-height: auto !important; margin-bottom: 10px !important; }
+      .word-display { font-size: 1.6em !important; margin-bottom: 8px !important; }
+      .pronunciation { font-size: 1.2em !important; margin-bottom: 10px !important; }
+      .image-display { height: 140px !important; max-width: 100% !important; }
+      .control-panel { flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; padding: 8px !important; margin: 6px auto !important; }
+      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.88em !important; }
+      #statsBtn { padding: 8px 12px !important; font-size: 0.88em !important; margin: 0 !important; border-radius: 12px !important; }
+      .progress-counter { min-width: unset !important; padding: 6px 10px !important; font-size: 0.9em !important; }
+      h1 { margin: 2px 0 4px !important; font-size: 1.4em !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
-      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
     }
     @media (max-width: 768px) {
       #particleCanvas { display: none !important; }
@@ -434,19 +479,19 @@
 <body>
   <canvas id="particleCanvas"></canvas>
   <div class="navigation">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
+    <a href="../index.html" class="nav-btn">Home</a>
+    <a href="alphabet-game.html" class="nav-btn">English</a>
     <a href="numbers-game.html" class="nav-btn">Numbers</a>
     <a href="colors-game.html" class="nav-btn">Colors</a>
     <a href="shapes-game.html" class="nav-btn">Shapes</a>
-    <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
+    <a href="animals-game.html" class="nav-btn">Animals</a>
     <a href="birds.html" class="nav-btn">Birds</a>
   </div>
   
-  <h1>🐾 Learn Animals 🐾</h1>
+  <h1>🇮🇳 हिंदी वर्णमाला | Hindi Alphabets 🇮🇳</h1>
   
   <div class="control-panel">
-    <button id="randomBtn" class="control-btn" aria-label="Show random animal" tabindex="0">
+    <button id="randomBtn" class="control-btn" aria-label="Show random letter" tabindex="0">
       🎲 Random
     </button>
     <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
@@ -455,7 +500,7 @@
     <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
       ⚙️ Settings
     </button>
-    <button id="speakBtn" class="control-btn" aria-label="Speak current animal" tabindex="0" disabled>
+    <button id="speakBtn" class="control-btn" aria-label="Speak current letter" tabindex="0" disabled>
       🔊 Speak
     </button>
     <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
@@ -463,21 +508,21 @@
     </button>
     <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
     <div class="progress-counter" id="progressCounter" aria-live="polite">
-      0 / 37 learned
+      0 / 48 learned
     </div>
   </div>
   
   <!-- Quiz Modal -->
   <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(145deg, #43cea2, #185a9d); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
+    <div style="background: linear-gradient(135deg, #ff9933 0%, #138808 100%); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
       <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
-      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Animals Quiz</h2>
+      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 हिंदी Quiz</h2>
       
       <div style="margin: 20px 0;">
-        <img id="quizAnimalImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
+        <img id="quizImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
       </div>
       
-      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What animal is this?</p>
+      <p style="color: white; font-size: 1.5em; margin: 20px 0;">What Hindi letter does this word start with?</p>
       
       <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
       
@@ -485,7 +530,7 @@
       
       <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
       
-      <button id="nextQuizBtn" style="display: none; background: linear-gradient(145deg, #43cea2, #185a9d); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
+      <button id="nextQuizBtn" style="display: none; background: linear-gradient(135deg, #ff9933, #138808); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
         Next →
       </button>
     </div>
@@ -506,7 +551,7 @@
   
   <!-- Settings Modal -->
   <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+    <div style="background: linear-gradient(135deg, #ff9933 0%, #138808 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
       <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
       <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
       <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
@@ -521,7 +566,7 @@
           <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
           <div style="display: flex; gap: 10px; justify-content: center;">
             <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #43cea2; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #ff9933; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
             <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
           </div>
         </div>
@@ -546,15 +591,21 @@
   
   <div class="main-container">
     <div class="left-pane">
-      <div class="animals-grid" id="animalsGrid"></div>
+      <!-- Vowels -->
+      <div class="section-title">स्वर (Vowels)</div>
+      <div class="alphabet-grid" id="vowelsGrid"></div>
+      
+      <!-- Consonants -->
+      <div class="section-title">व्यंजन (Consonants)</div>
+      <div class="alphabet-grid" id="consonantsGrid"></div>
     </div>
+    
     <div class="right-pane">
-      <div class="animal-name" id="animalName"></div>
-      <div class="animal-display-container" id="animalDisplayContainer" style="display:none;">
-        <img class="animal-image" id="animalImage" src="" alt="">
-        <div class="animal-sound" id="animalSound"></div>
-        <div class="animal-info" id="animalInfo"></div>
-      </div>
+      <div class="letter-display" id="letterDisplay"></div>
+      <div class="word-display" id="wordDisplay"></div>
+      <div class="pronunciation" id="pronunciation"></div>
+      <img class="image-display" id="imageDisplay" src="" alt="" style="display:none;" />
+      <div class="info-text" id="infoText" style="display:none;"></div>
     </div>
   </div>
   
@@ -640,207 +691,80 @@
       
       setTimeout(() => ripple.remove(), 600);
     }
-
-    const animals = {
-      'Alligator': {
-        img: 'https://api.iconify.design/noto/crocodile.svg?width=96&height=96',
-        sound: '🐊 Snap!',
-        info: 'Alligators are big reptiles with strong jaws!'
+    const hindiLetters = {
+      // Vowels (स्वर)
+      vowels: {
+        'अ': { word: 'अनार', english: 'Anar', meaning: 'Pomegranate', pronunciation: 'a', img: 'https://img.icons8.com/color/96/pomegranate.png' },
+        'आ': { word: 'आम', english: 'Aam', meaning: 'Mango', pronunciation: 'aa', img: 'https://img.icons8.com/color/96/mango.png' },
+        'इ': { word: 'इमली', english: 'Imli', meaning: 'Tamarind', pronunciation: 'i', img: 'https://img.icons8.com/color/96/tamarind.png' },
+        'ई': { word: 'ईख', english: 'Eekh', meaning: 'Sugarcane', pronunciation: 'ee', img: 'https://img.icons8.com/color/96/sugar-cane.png' },
+        'उ': { word: 'उल्लू', english: 'Ullu', meaning: 'Owl', pronunciation: 'u', img: 'https://img.icons8.com/color/96/owl.png' },
+        'ऊ': { word: 'ऊन', english: 'Oon', meaning: 'Wool', pronunciation: 'oo', img: 'https://img.icons8.com/color/96/wool.png' },
+        'ए': { word: 'एक', english: 'Ek', meaning: 'One', pronunciation: 'e', img: 'https://img.icons8.com/color/96/1-key.png' },
+        'ऐ': { word: 'ऐनक', english: 'Ainak', meaning: 'Glasses', pronunciation: 'ai', img: 'https://img.icons8.com/color/96/glasses.png' },
+        'ओ': { word: 'ओखली', english: 'Okhli', meaning: 'Mortar', pronunciation: 'o', img: 'https://img.icons8.com/color/96/mortar-and-pestle.png' },
+        'औ': { word: 'औरत', english: 'Aurat', meaning: 'Woman', pronunciation: 'au', img: 'https://img.icons8.com/color/96/user-female.png' },
+        'अं': { word: 'अंगूर', english: 'Angoor', meaning: 'Grapes', pronunciation: 'an', img: 'https://img.icons8.com/color/96/grape.png' },
+        'अः': { word: 'अः', english: 'Ah', meaning: 'Visarga', pronunciation: 'ah', img: 'https://img.icons8.com/color/96/om.png' }
       },
-      'Ant': {
-        img: 'https://api.iconify.design/noto/ant.svg?width=96&height=96',
-        sound: '🐜 Busy!',
-        info: 'Ants are tiny but very strong!'
-      },
-      'Bear': {
-        img: 'https://api.iconify.design/noto/bear.svg?width=96&height=96',
-        sound: '🐻 Growl!',
-        info: 'Bears are big and love honey!'
-      },
-      'Butterfly': {
-        img: 'https://api.iconify.design/noto/butterfly.svg?width=96&height=96',
-        sound: '🦋 Flutter!',
-        info: 'Butterflies have colorful wings!'
-      },
-      'Cat': {
-        img: 'https://api.iconify.design/noto/cat-face.svg?width=96&height=96',
-        sound: '🐱 Meow!',
-        info: 'Cats are cute and furry pets!'
-      },
-      'Chicken': {
-        img: 'https://api.iconify.design/noto/chicken.svg?width=96&height=96',
-        sound: '🐔 Cluck Cluck!',
-        info: 'Chickens lay eggs for us!'
-      },
-      'Cow': {
-        img: 'https://api.iconify.design/noto/cow-face.svg?width=96&height=96',
-        sound: '🐮 Moo!',
-        info: 'Cows give us milk!'
-      },
-      'Dog': {
-        img: 'https://api.iconify.design/noto/dog-face.svg?width=96&height=96',
-        sound: '🐶 Woof Woof!',
-        info: 'Dogs are loyal and friendly friends!'
-      },
-      'Duck': {
-        img: 'https://api.iconify.design/noto/duck.svg?width=96&height=96',
-        sound: '🦆 Quack Quack!',
-        info: 'Ducks swim in ponds and lakes!'
-      },
-      'Elephant': {
-        img: 'https://api.iconify.design/noto/elephant.svg?width=96&height=96',
-        sound: '🐘 Trumpet!',
-        info: 'Elephants are the largest land animals!'
-      },
-      'Fish': {
-        img: 'https://api.iconify.design/noto/tropical-fish.svg?width=96&height=96',
-        sound: '🐠 Blub Blub!',
-        info: 'Fish swim underwater with fins!'
-      },
-      'Fox': {
-        img: 'https://api.iconify.design/noto/fox.svg?width=96&height=96',
-        sound: '🦊 Yip!',
-        info: 'Foxes are clever and have bushy tails!'
-      },
-      'Giraffe': {
-        img: 'https://api.iconify.design/noto/giraffe.svg?width=96&height=96',
-        sound: '🦒 Hum!',
-        info: 'Giraffes have the longest necks!'
-      },
-      'Horse': {
-        img: 'https://api.iconify.design/noto/horse-face.svg?width=96&height=96',
-        sound: '🐴 Neigh!',
-        info: 'Horses love to run and gallop!'
-      },
-      'Iguana': {
-        img: 'https://api.iconify.design/noto/iguana.svg?width=96&height=96',
-        sound: '🦎 Hiss!',
-        info: 'Iguanas are colorful lizards!'
-      },
-      'Jellyfish': {
-        img: 'https://api.iconify.design/noto/jellyfish.svg?width=96&height=96',
-        sound: '🪼 Float!',
-        info: 'Jellyfish swim gracefully in the ocean!'
-      },
-      'Koala': {
-        img: 'https://api.iconify.design/noto/koala.svg?width=96&height=96',
-        sound: '🐨 Grunt!',
-        info: 'Koalas sleep most of the day!'
-      },
-      'Lion': {
-        img: 'https://api.iconify.design/noto/lion.svg?width=96&height=96',
-        sound: '🦁 Roar!',
-        info: 'The Lion is the king of the jungle!'
-      },
-      'Monkey': {
-        img: 'https://api.iconify.design/noto/monkey-face.svg?width=96&height=96',
-        sound: '🐵 Ooh Ooh Ah Ah!',
-        info: 'Monkeys love to swing from trees!'
-      },
-      'Nightingale': {
-        img: 'https://api.iconify.design/noto/nightingale.svg?width=96&height=96',
-        sound: '🐦 Sing!',
-        info: 'Nightingales have beautiful songs!'
-      },
-      'Octopus': {
-        img: 'https://api.iconify.design/noto/octopus.svg?width=96&height=96',
-        sound: '🐙 Squirt!',
-        info: 'Octopuses have eight arms!'
-      },
-      'Owl': {
-        img: 'https://api.iconify.design/noto/owl.svg?width=96&height=96',
-        sound: '🦉 Hoot Hoot!',
-        info: 'Owls are wise night birds!'
-      },
-      'Panda': {
-        img: 'https://api.iconify.design/noto/panda.svg?width=96&height=96',
-        sound: '🐼 Chirp!',
-        info: 'Pandas love to eat bamboo!'
-      },
-      'Penguin': {
-        img: 'https://api.iconify.design/noto/penguin.svg?width=96&height=96',
-        sound: '🐧 Honk!',
-        info: 'Penguins waddle on ice and swim!'
-      },
-      'Pig': {
-        img: 'https://api.iconify.design/noto/pig-face.svg?width=96&height=96',
-        sound: '🐷 Oink Oink!',
-        info: 'Pigs love to roll in mud!'
-      },
-      'Quail': {
-        img: 'https://api.iconify.design/noto/quail.svg?width=96&height=96',
-        sound: '🦆 Bob-white!',
-        info: 'Quails are small ground birds!'
-      },
-      'Rabbit': {
-        img: 'https://api.iconify.design/noto/rabbit-face.svg?width=96&height=96',
-        sound: '🐰 Squeak!',
-        info: 'Rabbits hop and have long ears!'
-      },
-      'Sheep': {
-        img: 'https://api.iconify.design/noto/ewe.svg?width=96&height=96',
-        sound: '🐑 Baa!',
-        info: 'Sheep have soft woolly coats!'
-      },
-      'Snake': {
-        img: 'https://api.iconify.design/noto/snake.svg?width=96&height=96',
-        sound: '🐍 Hiss!',
-        info: 'Snakes slither on the ground!'
-      },
-      'Tiger': {
-        img: 'https://api.iconify.design/noto/tiger.svg?width=96&height=96',
-        sound: '🐯 Growl!',
-        info: 'Tigers have beautiful orange and black stripes!'
-      },
-      'Turtle': {
-        img: 'https://api.iconify.design/noto/turtle.svg?width=96&height=96',
-        sound: '🐢 Snap!',
-        info: 'Turtles carry their house on their back!'
-      },
-      'Unicorn': {
-        img: 'https://api.iconify.design/noto/unicorn.svg?width=96&height=96',
-        sound: '🦄 Whinny!',
-        info: 'Unicorns are magical horses with a horn!'
-      },
-      'Vulture': {
-        img: 'https://api.iconify.design/noto/vulture.svg?width=96&height=96',
-        sound: '🦅 Screech!',
-        info: 'Vultures soar high in the sky!'
-      },
-      'Whale': {
-        img: 'https://api.iconify.design/noto/whale.svg?width=96&height=96',
-        sound: '🐋 Whooosh!',
-        info: 'Whales are the biggest animals in the ocean!'
-      },
-      'Wolf': {
-        img: 'https://api.iconify.design/noto/wolf.svg?width=96&height=96',
-        sound: '🐺 Howl!',
-        info: 'Wolves howl at the moon!'
-      },
-      'Yak': {
-        img: 'https://api.iconify.design/noto/yak.svg?width=96&height=96',
-        sound: '🦬 Grunt!',
-        info: 'Yaks have thick fur and live in mountains!'
-      },
-      'Zebra': {
-        img: 'https://api.iconify.design/noto/zebra.svg?width=96&height=96',
-        sound: '🦓 Bray!',
-        info: 'Zebras have black and white stripes!'
+      
+      // Consonants (व्यंजन)
+      consonants: {
+        'क': { word: 'कबूतर', english: 'Kabootar', meaning: 'Pigeon', pronunciation: 'ka', img: 'https://img.icons8.com/color/96/dove.png' },
+        'ख': { word: 'खरगोश', english: 'Khargosh', meaning: 'Rabbit', pronunciation: 'kha', img: 'https://img.icons8.com/color/96/rabbit.png' },
+        'ग': { word: 'गाय', english: 'Gaay', meaning: 'Cow', pronunciation: 'ga', img: 'https://img.icons8.com/color/96/cow.png' },
+        'घ': { word: 'घर', english: 'Ghar', meaning: 'House', pronunciation: 'gha', img: 'https://img.icons8.com/color/96/home.png' },
+        'ङ': { word: 'ङ', english: 'Nga', meaning: 'Nasal sound', pronunciation: 'nga', img: 'https://img.icons8.com/color/96/musical-notes.png' },
+        'च': { word: 'चम्मच', english: 'Chammach', meaning: 'Spoon', pronunciation: 'cha', img: 'https://img.icons8.com/color/96/spoon.png' },
+        'छ': { word: 'छतरी', english: 'Chhatri', meaning: 'Umbrella', pronunciation: 'chha', img: 'https://img.icons8.com/color/96/umbrella.png' },
+        'ज': { word: 'जहाज', english: 'Jahaaz', meaning: 'Ship', pronunciation: 'ja', img: 'https://img.icons8.com/color/96/ship.png' },
+        'झ': { word: 'झंडा', english: 'Jhanda', meaning: 'Flag', pronunciation: 'jha', img: 'https://img.icons8.com/color/96/flag.png' },
+        'ञ': { word: 'ञ', english: 'Nya', meaning: 'Nasal sound', pronunciation: 'nya', img: 'https://img.icons8.com/color/96/musical-notes.png' },
+        'ट': { word: 'टमाटर', english: 'Tamatar', meaning: 'Tomato', pronunciation: 'ta', img: 'https://img.icons8.com/color/96/tomato.png' },
+        'ठ': { word: 'ठठेरा', english: 'Thathera', meaning: 'Craftsman', pronunciation: 'tha', img: 'https://img.icons8.com/color/96/worker-male.png' },
+        'ड': { word: 'डमरू', english: 'Damru', meaning: 'Drum', pronunciation: 'da', img: 'https://img.icons8.com/color/96/drum.png' },
+        'ढ': { word: 'ढोल', english: 'Dhol', meaning: 'Dhol Drum', pronunciation: 'dha', img: 'https://img.icons8.com/color/96/drums.png' },
+        'ण': { word: 'गणित', english: 'Ganit', meaning: 'Mathematics', pronunciation: 'na', img: 'https://img.icons8.com/color/96/calculator.png' },
+        'त': { word: 'तरबूज', english: 'Tarbooj', meaning: 'Watermelon', pronunciation: 'ta', img: 'https://img.icons8.com/color/96/watermelon.png' },
+        'थ': { word: 'थैला', english: 'Thaila', meaning: 'Bag', pronunciation: 'tha', img: 'https://img.icons8.com/color/96/shopping-bag.png' },
+        'द': { word: 'दरवाजा', english: 'Darwaza', meaning: 'Door', pronunciation: 'da', img: 'https://img.icons8.com/color/96/door.png' },
+        'ध': { word: 'धनुष', english: 'Dhanush', meaning: 'Bow', pronunciation: 'dha', img: 'https://img.icons8.com/color/96/bow-and-arrow.png' },
+        'न': { word: 'नल', english: 'Nal', meaning: 'Tap', pronunciation: 'na', img: 'https://img.icons8.com/color/96/water-tap.png' },
+        'प': { word: 'पतंग', english: 'Patang', meaning: 'Kite', pronunciation: 'pa', img: 'https://img.icons8.com/color/96/kite.png' },
+        'फ': { word: 'फल', english: 'Phal', meaning: 'Fruit', pronunciation: 'pha', img: 'https://img.icons8.com/color/96/fruit.png' },
+        'ब': { word: 'बकरी', english: 'Bakri', meaning: 'Goat', pronunciation: 'ba', img: 'https://img.icons8.com/color/96/goat.png' },
+        'भ': { word: 'भालू', english: 'Bhaalu', meaning: 'Bear', pronunciation: 'bha', img: 'https://img.icons8.com/color/96/bear.png' },
+        'म': { word: 'मछली', english: 'Machhli', meaning: 'Fish', pronunciation: 'ma', img: 'https://img.icons8.com/color/96/fish.png' },
+        'य': { word: 'यज्ञ', english: 'Yagya', meaning: 'Ritual', pronunciation: 'ya', img: 'https://img.icons8.com/color/96/fire-element.png' },
+        'र': { word: 'रथ', english: 'Rath', meaning: 'Chariot', pronunciation: 'ra', img: 'https://img.icons8.com/color/96/chariot.png' },
+        'ल': { word: 'लड्डू', english: 'Laddu', meaning: 'Sweet', pronunciation: 'la', img: 'https://img.icons8.com/color/96/laddu.png' },
+        'व': { word: 'वानर', english: 'Vanar', meaning: 'Monkey', pronunciation: 'va', img: 'https://img.icons8.com/emoji/96/monkey-face.png' },
+        'श': { word: 'शेर', english: 'Sher', meaning: 'Lion', pronunciation: 'sha', img: 'https://img.icons8.com/color/96/lion.png' },
+        'ष': { word: 'षट्कोण', english: 'Shatkone', meaning: 'Hexagon', pronunciation: 'sha', img: 'https://img.icons8.com/color/96/hexagon.png' },
+        'स': { word: 'सेब', english: 'Seb', meaning: 'Apple', pronunciation: 'sa', img: 'https://img.icons8.com/color/96/apple.png' },
+        'ह': { word: 'हाथी', english: 'Haathi', meaning: 'Elephant', pronunciation: 'ha', img: 'https://img.icons8.com/color/96/elephant.png' },
+        'क्ष': { word: 'क्षत्रिय', english: 'Kshatriya', meaning: 'Warrior', pronunciation: 'ksha', img: 'https://img.icons8.com/color/96/warrior.png' },
+        'त्र': { word: 'त्रिशूल', english: 'Trishul', meaning: 'Trident', pronunciation: 'tra', img: 'https://img.icons8.com/color/96/trident.png' },
+        'ज्ञ': { word: 'ज्ञान', english: 'Gyaan', meaning: 'Knowledge', pronunciation: 'gya', img: 'https://img.icons8.com/color/96/brain.png' }
       }
     };
     
+    // Combine all letters for navigation
+    const allLetters = { ...hindiLetters.vowels, ...hindiLetters.consonants };
+    const letterKeys = Object.keys(allLetters);
+    
     // State management
-    let currentAnimal = '';
-    let learnedAnimals = new Set(JSON.parse(localStorage.getItem('animals_learned') || '[]'));
-    const animalNames = Object.keys(animals);
+    let currentLetter = '';
+    let learnedLetters = new Set(JSON.parse(localStorage.getItem('hindi_learned') || '[]'));
     
     // DOM elements
-    const animalsGrid = document.getElementById('animalsGrid');
-    const animalName = document.getElementById('animalName');
-    const animalImage = document.getElementById('animalImage');
-    const animalDisplayContainer = document.getElementById('animalDisplayContainer');
-    const animalSound = document.getElementById('animalSound');
-    const animalInfo = document.getElementById('animalInfo');
+    const vowelsGrid = document.getElementById('vowelsGrid');
+    const consonantsGrid = document.getElementById('consonantsGrid');
+    const letterDisplay = document.getElementById('letterDisplay');
+    const wordDisplay = document.getElementById('wordDisplay');
+    const pronunciation = document.getElementById('pronunciation');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const infoText = document.getElementById('infoText');
     const randomBtn = document.getElementById('randomBtn');
     const speakBtn = document.getElementById('speakBtn');
     const resetBtn = document.getElementById('resetBtn');
@@ -854,54 +778,51 @@
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.8;
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.7;
         utterance.pitch = 1.2;
         utterance.volume = 1;
         window.speechSynthesis.speak(utterance);
       }
     }
     
-    // Display animal function
-    function displayAnimal(animal) {
-      currentAnimal = animal;
-      const animalData = animals[animal];
+    // Display letter function
+    function displayLetter(letter) {
+      currentLetter = letter;
+      const data = allLetters[letter];
       
-      // Update animal name
-      animalName.textContent = animal;
-      animalName.style.animation = 'none';
-      animalName.offsetHeight;
-      animalName.style.animation = 'bounce 0.6s ease-in-out';
+      // Update letter display
+      letterDisplay.textContent = letter;
+      letterDisplay.style.animation = 'none';
+      letterDisplay.offsetHeight;
+      letterDisplay.style.animation = 'bounce 0.6s ease-in-out';
       
-      // Show display container
-      animalDisplayContainer.style.display = 'flex';
+      // Update word display
+      wordDisplay.textContent = data.word;
       
-      // Update animal image with fallback
-      animalImage.src = animalData.img;
-      animalImage.alt = animal;
-      animalImage.style.animation = 'none';
-      animalImage.offsetHeight;
-      animalImage.style.animation = 'fadeInScale 0.8s ease-out';
+      // Update pronunciation
+      pronunciation.textContent = `(${data.pronunciation})`;
       
-      animalImage.onerror = () => {
-        animalImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="48">🐾</text></svg>';
+      // Update image with fallback
+      imageDisplay.src = data.img;
+      imageDisplay.alt = data.word;
+      imageDisplay.style.display = 'block';
+      imageDisplay.style.animation = 'none';
+      imageDisplay.offsetHeight;
+      imageDisplay.style.animation = 'fadeInScale 0.8s ease-out';
+      
+      imageDisplay.onerror = () => {
+        imageDisplay.src = 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"96\" height=\"96\"><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" font-size=\"48\">' + letter + '</text></svg>';
       };
       
-      // Update animal sound
-      animalSound.textContent = animalData.sound;
-      animalSound.style.animation = 'none';
-      animalSound.offsetHeight;
-      animalSound.style.animation = 'pulse 2s ease-in-out infinite';
-      
-      // Update animal info
-      animalInfo.textContent = animalData.info;
-      animalInfo.style.animation = 'none';
-      animalInfo.offsetHeight;
-      animalInfo.style.animation = 'fadeIn 1s ease-out';
+      // Update info text
+      infoText.textContent = `${data.english} - ${data.meaning}`;
+      infoText.style.display = 'block';
       
       // Mark as learned
-      if (!learnedAnimals.has(animal)) {
-        learnedAnimals.add(animal);
-        localStorage.setItem('animals_learned', JSON.stringify([...learnedAnimals]));
+      if (!learnedLetters.has(letter)) {
+        learnedLetters.add(letter);
+        localStorage.setItem('hindi_learned', JSON.stringify([...learnedLetters]));
         updateProgress();
         
         // Check achievements
@@ -909,107 +830,107 @@
       }
       
       // Update button styling
-      document.querySelectorAll('.animal-btn').forEach(btn => {
-        if (btn.textContent === animal) {
-          btn.style.backgroundColor = '#43cea2';
+      document.querySelectorAll('.hindi-btn').forEach(btn => {
+        if (btn.textContent === letter) {
+          btn.style.backgroundColor = '#ff9933';
           btn.style.color = 'white';
+          btn.style.transform = 'scale(1.1)';
         }
       });
       
       // Enable speak button
       speakBtn.disabled = false;
       
-      // Add click interaction to image
-      animalImage.onclick = () => {
-        animalImage.style.transform = 'scale(1.3) rotate(360deg)';
-        animalSound.style.transform = 'scale(1.5)';
-        animalSound.style.color = '#43cea2';
-        setTimeout(() => {
-          animalImage.style.transform = 'scale(1) rotate(0deg)';
-          animalSound.style.transform = 'scale(1)';
-          animalSound.style.color = '#fff';
-        }, 600);
-        speak(animal + '. ' + animalData.sound);
-      };
-      
       // Auto-speak
-      speak(animal + '. ' + animalData.sound);
+      speak(letter + '. ' + data.word);
     }
     
     // Update progress counter
     function updateProgress() {
-      progressCounter.textContent = `${learnedAnimals.size} / 37 learned`;
+      progressCounter.textContent = `${learnedLetters.size} / 48 learned`;
     }
     
-    // Show random animal
+    // Show random letter
     function showRandom() {
-      const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
-      displayAnimal(randomAnimal);
+      const randomLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+      displayLetter(randomLetter);
     }
     
     // Reset progress
     function reset() {
-      learnedAnimals.clear();
-      localStorage.removeItem('animals_learned');
-      currentAnimal = '';
-      animalName.textContent = 'Click an animal to learn!';
-      animalDisplayContainer.style.display = 'none';
+      learnedLetters.clear();
+      localStorage.removeItem('hindi_learned');
+      currentLetter = '';
+      letterDisplay.textContent = 'वर्ण चुनें';
+      wordDisplay.textContent = '';
+      pronunciation.textContent = '';
+      imageDisplay.style.display = 'none';
+      infoText.style.display = 'none';
       speakBtn.disabled = true;
+      updateProgress();
+      
+      // Reset all button styles
+      document.querySelectorAll('.hindi-btn').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+        btn.style.transform = '';
+      });
       
       // Reset achievements
       Object.keys(achievements).forEach(key => {
         achievements[key].unlocked = false;
       });
-      localStorage.removeItem('animals_achievements');
+      localStorage.removeItem('hindi_achievements');
       
       // Reset statistics
       stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
-      localStorage.removeItem('animals_stats');
-      
-      updateProgress();
-      
-      // Reset all button colors
-      document.querySelectorAll('.animal-btn').forEach(btn => {
-        btn.style.backgroundColor = '';
-        btn.style.color = '';
-      });
+      localStorage.removeItem('hindi_stats');
       
       // Show confirmation
       speak('Progress reset complete');
     }
     
-    // Create animal buttons
-    animalNames.forEach(animal => {
+    // Create button function
+    function createButton(letter, data, gridElement) {
       const btn = document.createElement('button');
-      btn.className = 'animal-btn';
-      btn.textContent = animal;
-      btn.setAttribute('aria-label', `Learn about ${animal}`);
+      btn.className = 'hindi-btn';
+      btn.textContent = letter;
+      btn.setAttribute('aria-label', `Learn ${letter} for ${data.word}`);
       btn.tabIndex = 0;
       
-      // Mark learned animals
-      if (learnedAnimals.has(animal)) {
-        btn.style.backgroundColor = '#43cea2';
+      // Mark learned letters
+      if (learnedLetters.has(letter)) {
+        btn.style.backgroundColor = '#ff9933';
         btn.style.color = 'white';
+        btn.style.transform = 'scale(1.1)';
       }
       
-      // Phase 5: Add flip and ripple effects
       btn.onclick = (e) => {
         btn.classList.add('flipping');
         setTimeout(() => btn.classList.remove('flipping'), 600);
         createRipple(e);
-        displayAnimal(animal);
+        displayLetter(letter);
       };
-      
-      animalsGrid.appendChild(btn);
+      gridElement.appendChild(btn);
+    }
+    
+    // Create vowel buttons
+    Object.entries(hindiLetters.vowels).forEach(([letter, data]) => {
+      createButton(letter, data, vowelsGrid);
+    });
+    
+    // Create consonant buttons
+    Object.entries(hindiLetters.consonants).forEach(([letter, data]) => {
+      createButton(letter, data, consonantsGrid);
     });
     
     // Control button event listeners
     randomBtn.onclick = () => { playSound('click'); showRandom(); };
     speakBtn.onclick = () => {
-      if (currentAnimal) {
+      if (currentLetter) {
         playSound('click');
-        const animalData = animals[currentAnimal];
-        speak(currentAnimal + '. ' + animalData.sound);
+        const data = allLetters[currentLetter];
+        speak(currentLetter + '. ' + data.word);
       }
     };
     resetBtn.onclick = () => { playSound('click'); reset(); };
@@ -1022,11 +943,11 @@
         showRandom();
       }
       
-      // Space key to speak current animal
-      if (e.key === ' ' && currentAnimal && !e.ctrlKey && !e.altKey) {
+      // Space key to speak current letter
+      if (e.key === ' ' && currentLetter && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
-        const animalData = animals[currentAnimal];
-        speak(currentAnimal + '. ' + animalData.sound);
+        const data = allLetters[currentLetter];
+        speak(currentLetter + '. ' + data.word);
       }
       
       // Escape key to reset
@@ -1036,27 +957,18 @@
       }
       
       // Arrow keys to navigate
-      if (currentAnimal && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      if (currentLetter && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
         e.preventDefault();
-        const currentIndex = animalNames.indexOf(currentAnimal);
+        const currentIndex = letterKeys.indexOf(currentLetter);
         let nextIndex;
         
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          nextIndex = (currentIndex + 1) % animalNames.length;
+          nextIndex = (currentIndex + 1) % letterKeys.length;
         } else {
-          nextIndex = (currentIndex - 1 + animalNames.length) % animalNames.length;
+          nextIndex = (currentIndex - 1 + letterKeys.length) % letterKeys.length;
         }
         
-        displayAnimal(animalNames[nextIndex]);
-      }
-      
-      // Type animal name to jump to it
-      if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
-        const typedLetter = e.key.toUpperCase();
-        const matchingAnimal = animalNames.find(animal => animal.startsWith(typedLetter));
-        if (matchingAnimal) {
-          displayAnimal(matchingAnimal);
-        }
+        displayLetter(letterKeys[nextIndex]);
       }
     });
     
@@ -1064,7 +976,7 @@
     const quizBtn = document.getElementById('quizBtn');
     const quizModal = document.getElementById('quizModal');
     const closeQuiz = document.getElementById('closeQuiz');
-    const quizAnimalImage = document.getElementById('quizAnimalImage');
+    const quizImage = document.getElementById('quizImage');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
     const quizScore = document.getElementById('quizScore');
@@ -1074,7 +986,7 @@
       currentQuestion: 0,
       correctAnswers: 0,
       totalQuestions: 10,
-      currentCorrectAnimal: '',
+      currentCorrectLetter: '',
       answered: false
     };
     
@@ -1083,7 +995,7 @@
         currentQuestion: 0,
         correctAnswers: 0,
         totalQuestions: 10,
-        currentCorrectAnimal: '',
+        currentCorrectLetter: '',
         answered: false
       };
       quizModal.style.display = 'flex';
@@ -1101,20 +1013,20 @@
       quizFeedback.textContent = '';
       nextQuizBtn.style.display = 'none';
       
-      // Pick random animal
-      const correctAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
-      quizState.currentCorrectAnimal = correctAnimal;
+      // Pick random letter
+      const correctLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+      quizState.currentCorrectLetter = correctLetter;
       
-      // Show animal image
-      quizAnimalImage.src = animals[correctAnimal].img;
-      quizAnimalImage.alt = correctAnimal;
+      // Show word image
+      quizImage.src = allLetters[correctLetter].img;
+      quizImage.alt = allLetters[correctLetter].word;
       
       // Generate 4 options (1 correct + 3 wrong)
-      const options = [correctAnimal];
+      const options = [correctLetter];
       while (options.length < 4) {
-        const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
-        if (!options.includes(randomAnimal)) {
-          options.push(randomAnimal);
+        const randomLetter = letterKeys[Math.floor(Math.random() * letterKeys.length)];
+        if (!options.includes(randomLetter)) {
+          options.push(randomLetter);
         }
       }
       
@@ -1123,12 +1035,12 @@
       
       // Create option buttons
       quizOptions.innerHTML = '';
-      options.forEach(animal => {
+      options.forEach(letter => {
         const btn = document.createElement('button');
-        btn.textContent = animal;
-        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #43cea2; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #185a9d;';
+        btn.textContent = letter;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #ff9933; border-radius: 15px; font-size: 2em; font-weight: bold; padding: 20px; cursor: pointer; transition: all 0.3s; color: #138808;';
         
-        btn.onclick = () => checkAnswer(animal, btn);
+        btn.onclick = () => checkAnswer(letter, btn);
         
         btn.onmouseenter = () => {
           if (!quizState.answered) {
@@ -1149,21 +1061,21 @@
       updateQuizScore();
     }
     
-    function checkAnswer(selectedAnimal, btn) {
+    function checkAnswer(selectedLetter, btn) {
       if (quizState.answered) return;
       
       quizState.answered = true;
-      const correct = selectedAnimal === quizState.currentCorrectAnimal;
+      const correct = selectedLetter === quizState.currentCorrectLetter;
       
       if (correct) {
         quizState.correctAnswers++;
         btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
         btn.style.color = 'white';
         btn.style.borderColor = '#2e7d32';
-        quizFeedback.innerHTML = `✅ Correct! It's a ${selectedAnimal}`;
+        quizFeedback.innerHTML = `✅ सही! Correct! ${selectedLetter} - ${allLetters[selectedLetter].word}`;
         quizFeedback.style.color = '#4caf50';
         playSound('correct');
-        speak(`Correct! It's a ${selectedAnimal}. ${animals[selectedAnimal].sound}`);
+        speak(`Correct! ${selectedLetter}. ${allLetters[selectedLetter].word}`);
       } else {
         btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
         btn.style.color = 'white';
@@ -1173,16 +1085,16 @@
         // Highlight correct answer
         const buttons = quizOptions.querySelectorAll('button');
         buttons.forEach(b => {
-          if (b.textContent === quizState.currentCorrectAnimal) {
+          if (b.textContent === quizState.currentCorrectLetter) {
             b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
             b.style.color = 'white';
             b.style.borderColor = '#2e7d32';
           }
         });
         
-        quizFeedback.innerHTML = `❌ Wrong! It's a ${quizState.currentCorrectAnimal}`;
+        quizFeedback.innerHTML = `❌ गलत! Wrong! Correct: ${quizState.currentCorrectLetter} - ${allLetters[quizState.currentCorrectLetter].word}`;
         quizFeedback.style.color = '#f44336';
-        speak(`Wrong! It's a ${quizState.currentCorrectAnimal}. ${animals[quizState.currentCorrectAnimal].sound}`);
+        speak(`Wrong! It's ${quizState.currentCorrectLetter}. ${allLetters[quizState.currentCorrectLetter].word}`);
       }
       
       updateQuizScore();
@@ -1203,18 +1115,18 @@
       let emoji = '';
       
       if (percentage === 100) {
-        message = 'Perfect! You know all the animals! 🌟';
+        message = 'Perfect! बहुत अच्छा! You know all the letters! 🌟';
         emoji = '🏆';
         createConfetti();
       } else if (percentage >= 80) {
-        message = 'Excellent! You\'re an animal expert! 👏';
+        message = 'Excellent! शाबाश! You\'re doing great! 👏';
         emoji = '⭐';
         createConfetti();
       } else if (percentage >= 60) {
-        message = 'Good job! Keep learning about animals! 💪';
+        message = 'Good job! अच्छा! Keep learning! 💪';
         emoji = '👍';
       } else {
-        message = 'Keep practicing! You\'ll learn them all! 📚';
+        message = 'Keep practicing! अभ्यास करते रहो! 📚';
         emoji = '💡';
       }
       
@@ -1228,13 +1140,13 @@
           <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             🔄 Try Again
           </button>
-          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #43cea2, #185a9d); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(135deg, #ff9933, #138808); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             ✓ Done
           </button>
         </div>
       `;
       quizFeedback.textContent = '';
-      quizAnimalImage.style.display = 'none';
+      quizImage.style.display = 'none';
       nextQuizBtn.style.display = 'none';
       
       speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
@@ -1351,7 +1263,6 @@
           confetti.style.top = '-10px';
           confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
           
-          // Random shapes
           const shape = shapes[Math.floor(Math.random() * shapes.length)];
           if (shape === 'circle') {
             confetti.style.borderRadius = '50%';
@@ -1381,7 +1292,6 @@
         }, i * 20);
       }
       
-      // Add celebration burst
       const burst = document.createElement('div');
       burst.className = 'celebration-burst';
       burst.innerHTML = '🎉';
@@ -1393,7 +1303,7 @@
     // Sound Effects
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
-      const settings = JSON.parse(localStorage.getItem('animals_settings') || '{"soundEnabled": true}');
+      const settings = JSON.parse(localStorage.getItem('hindi_settings') || '{"soundEnabled": true}');
       if (!settings.soundEnabled) return;
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -1420,28 +1330,28 @@
       }
     }
     
-    // Stats Modal
-    // Achievement System - Define early
+    // Achievement System
     const achievements = {
-      first_animal: { name: '🎯 First Animal', desc: 'Learn your first animal', unlocked: false },
-      zoo_keeper: { name: '⭐ Zoo Keeper', desc: 'Learn 20 animals', unlocked: false },
-      all_learned: { name: '🏆 Animal Expert', desc: 'Learn all 37 animals', unlocked: false },
+      first_letter: { name: '🎯 First Letter', desc: 'Learn your first Hindi letter', unlocked: false },
+      vowel_master: { name: '⭐ Vowel Master', desc: 'Learn all 12 vowels', unlocked: false },
+      half_way: { name: '🔥 Half Way', desc: 'Learn 24 letters', unlocked: false },
+      all_learned: { name: '🏆 Hindi Master', desc: 'Learn all 48 letters', unlocked: false },
       perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
       quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
     };
-    const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
+    const savedAchievements = JSON.parse(localStorage.getItem('hindi_achievements') || '{}');
     Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
-    let stats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
-    
+    let stats = JSON.parse(localStorage.getItem('hindi_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
     function checkAchievements() {
       let newUnlock = false;
-      if (!achievements.first_animal.unlocked && learnedAnimals.size >= 1) { achievements.first_animal.unlocked = true; showAchievement(achievements.first_animal); newUnlock = true; }
-      if (!achievements.zoo_keeper.unlocked && learnedAnimals.size >= 20) { achievements.zoo_keeper.unlocked = true; showAchievement(achievements.zoo_keeper); newUnlock = true; }
-      if (!achievements.all_learned.unlocked && learnedAnimals.size >= 37) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (!achievements.first_letter.unlocked && learnedLetters.size >= 1) { achievements.first_letter.unlocked = true; showAchievement(achievements.first_letter); newUnlock = true; }
+      if (!achievements.vowel_master.unlocked && learnedLetters.size >= 12) { achievements.vowel_master.unlocked = true; showAchievement(achievements.vowel_master); newUnlock = true; }
+      if (!achievements.half_way.unlocked && learnedLetters.size >= 24) { achievements.half_way.unlocked = true; showAchievement(achievements.half_way); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedLetters.size >= 48) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
       if (newUnlock) saveAchievements();
     }
-    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('animals_achievements', JSON.stringify(toSave)); }
-    function saveStats() { localStorage.setItem('animals_stats', JSON.stringify(stats)); }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('hindi_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('hindi_stats', JSON.stringify(stats)); }
     function showAchievement(achievement) {
       const badge = document.createElement('div');
       badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
@@ -1452,35 +1362,36 @@
       setTimeout(() => { badge.style.transition = 'all 0.5s'; badge.style.transform = 'translateX(400px)'; badge.style.opacity = '0'; setTimeout(() => badge.remove(), 500); }, 3000);
     }
     
-    // Stats Modal (statsBtn, statsModal, closeStats declared at top)
+    // Stats Modal
     if (statsBtn && statsModal && closeStats) {
-      function showStats() {
-        const currentStats = JSON.parse(localStorage.getItem('animals_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
-        const savedAchievements = JSON.parse(localStorage.getItem('animals_achievements') || '{}');
-        
-        // Update achievements with saved state
+    
+    function showStats() {
+      const currentStats = JSON.parse(localStorage.getItem('hindi_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+      const savedAchievements = JSON.parse(localStorage.getItem('hindi_achievements') || 'null');
+      if (savedAchievements) {
         Object.keys(savedAchievements).forEach(key => {
           if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
         });
+      }
       
-        const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
-        
-        document.getElementById('statsContent').innerHTML = `
-          <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-              <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
-              <div style="opacity: 0.9;">Total Quizzes</div>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-              <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
-              <div style="opacity: 0.9;">Questions Answered</div>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-              <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
-              <div style="opacity: 0.9;">Overall Accuracy</div>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
-              <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
+      const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
+      
+      document.getElementById('statsContent').innerHTML = `
+        <div style="display: grid; gap: 15px; color: white; font-size: 18px;">
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">📝 ${currentStats.totalQuizzes}</div>
+            <div style="opacity: 0.9;">Total Quizzes</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">❓ ${currentStats.totalQuestions}</div>
+            <div style="opacity: 0.9;">Questions Answered</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">✅ ${accuracy}%</div>
+            <div style="opacity: 0.9;">Overall Accuracy</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
             <div style="opacity: 0.9;">High Score</div>
           </div>
         </div>
@@ -1510,34 +1421,36 @@
         achievementsList.appendChild(badgeDiv);
       });
       
-        statsModal.style.display = 'flex';
-        if (typeof playSound === 'function') playSound('click');
-      }
-      
-      statsBtn.addEventListener('click', showStats);
-      closeStats.addEventListener('click', () => {
-        statsModal.style.display = 'none';
-        if (typeof playSound === 'function') playSound('click');
-      });
-      
-      // Close modal when clicking outside (on backdrop)
-      statsModal.addEventListener('click', (e) => {
-        if (e.target === statsModal) {
-          statsModal.style.display = 'none';
-          if (typeof playSound === 'function') playSound('click');
-        }
-      });
-      
-      statsBtn.onmouseover = () => {
-        statsBtn.style.transform = 'translateY(-2px)';
-        statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
-      };
-      statsBtn.onmouseleave = () => {
-        statsBtn.style.transform = 'translateY(0)';
-        statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
-      };
+      statsModal.style.display = 'flex';
+      if (typeof playSound === 'function') playSound('click');
     }
     
+    statsBtn.addEventListener('click', showStats);
+    closeStats.addEventListener('click', () => {
+      statsModal.style.display = 'none';
+      if (typeof playSound === 'function') playSound('click');
+    });
+    
+    // Close modal when clicking outside (on backdrop)
+    statsModal.addEventListener('click', (e) => {
+      if (e.target === statsModal) {
+        statsModal.style.display = 'none';
+        if (typeof playSound === 'function') playSound('click');
+      }
+    });
+    
+    statsBtn.onmouseover = () => {
+      statsBtn.style.transform = 'translateY(-2px)';
+      statsBtn.style.boxShadow = '0 6px 20px rgba(33, 150, 243, 0.5)';
+    };
+    statsBtn.onmouseleave = () => {
+      statsBtn.style.transform = 'translateY(0)';
+      statsBtn.style.boxShadow = '0 4px 15px rgba(33, 150, 243, 0.4)';
+    };
+    
+    } // End of statsBtn && statsModal && closeStats check
+    
+    // Achievement system is already defined above before stats modal
     const originalShowQuizResults = showQuizResults;
     showQuizResults = function() {
       stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
@@ -1553,6 +1466,8 @@
     checkAchievements();
   </script>
 
-  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>

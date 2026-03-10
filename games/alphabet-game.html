@@ -403,7 +403,7 @@
   <canvas id="particleCanvas"></canvas>
   
   <div class="navigation">
-    <a href="index.html" class="nav-btn">Home</a>
+    <a href="../index.html" class="nav-btn">Home</a>
     <a href="numbers-game.html" class="nav-btn">Numbers</a>
     <a href="colors-game.html" class="nav-btn">Colors</a>
     <a href="shapes-game.html" class="nav-btn">Shapes</a>
@@ -1500,6 +1500,8 @@
     checkAchievements();
   </script>
 
-  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>
