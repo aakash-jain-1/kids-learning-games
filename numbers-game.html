@@ -137,7 +137,7 @@
         opacity: 0;
       }
     }
-    @media (max-width: 768px) { body { padding: 10px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .number-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .objects-grid { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)) !important; gap: 8px !important; } .object-item { font-size: 2em !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .number-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .objects-grid { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)) !important; gap: 8px !important; } .object-item { font-size: 2em !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: 120px; touch-action: manipulation; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
     @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .number-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } }
     .main-container {
       display: flex;
@@ -373,6 +373,14 @@
     @keyframes pulse {
       0% { transform: scale(1); }
       100% { transform: scale(1.1); }
+    }
+    @media (max-width: 768px) {
+      .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
+      .numbers-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    }
+    @media (max-width: 600px) {
+      .navigation { padding: 8px 10px; gap: 6px; }
+      .nav-btn { padding: 7px 10px; font-size: 0.78em; }
     }
   </style>
 </head>
