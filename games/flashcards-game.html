@@ -9,11 +9,11 @@
     *{-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation;}
     body{
       font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;
-      height:100vh; overflow:hidden;
+      height:100dvh; overflow:hidden;
     }
 
     /* ══ LAYOUT ══ */
-    .layout{display:flex;height:100vh;}
+    .layout{display:flex;height:100dvh;}
 
     /* ══════════════════════════════
        LEFT PANE — card stack
@@ -55,7 +55,11 @@
 
     /* ghost stacked cards */
     .ghost{
-      position:absolute;width:400px;height:550px;border-radius:26px;
+      position:absolute;
+      width:min(400px, 42vw, calc(62dvh * 0.727));
+      aspect-ratio:400/550;
+      height:auto;
+      border-radius:26px;
       background:linear-gradient(150deg,#1a2a4a 0%,#0d1b2a 100%);
       border:2px solid rgba(255,255,255,0.08);
       box-shadow:0 8px 24px rgba(0,0,0,0.5);
@@ -68,7 +72,10 @@
     /* top face-up card */
     .top-card{
       position:relative;z-index:10;
-      width:400px;height:550px;border-radius:26px;
+      width:min(400px, 42vw, calc(62dvh * 0.727));
+      aspect-ratio:400/550;
+      height:auto;
+      border-radius:26px;
       background:linear-gradient(145deg,#ffffff 0%,#f0f4ff 100%);
       border:3px solid rgba(255,255,255,0.9);
       box-shadow:0 24px 60px rgba(0,0,0,0.55),0 4px 16px rgba(0,0,0,0.3);
@@ -83,7 +90,7 @@
     .card-cat-badge{position:absolute;bottom:12px;font-size:0.68em;color:rgba(80,100,160,0.55);}
 
     .card-emoji-big{
-      font-size:9.5em;line-height:1;
+      font-size:clamp(4em, 9vmin, 9.5em);line-height:1;
       filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));
     }
     .card-emoji-big.pop{animation:emojiPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
@@ -294,8 +301,6 @@
     @media(max-height:900px) and (min-width:701px){
       .left-pane{gap:6px;padding:10px 14px 12px;overflow-y:auto;}
       .deck-area{min-height:0;}
-      .top-card{width:200px;height:276px;}
-      .ghost    {width:200px;height:276px;}
       .card-emoji-big{font-size:4.2em;}
       .card-name-big{font-size:1.6em;}
       /* right pane: anchor machine to top so press-btn is never clipped */
@@ -315,12 +320,12 @@
     /* ── RESPONSIVE: mobile ── */
     @media(max-width:700px){
       body{overflow-y:auto;}
-      .layout{flex-direction:column;height:auto;min-height:100vh;}
+      .layout{flex-direction:column;height:auto;min-height:100dvh;}
       .left-pane{width:100%;padding:14px 14px 18px;}
       .right-pane{padding:18px 14px 30px;}
       .machine{max-width:100%;}
-      .top-card{width:260px;height:360px;}
-      .ghost    {width:260px;height:360px;}
+      .top-card{width:260px;}
+      .ghost    {width:260px;}
       .card-emoji-big{font-size:6.5em;}
       .scrn-emoji{font-size:4.2em;}
     }

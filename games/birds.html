@@ -296,7 +296,8 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
       position: relative;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     .right-pane::before {
       content: '';
@@ -314,10 +315,10 @@
       100% { transform: rotate(360deg); }
     }
     .bird-display {
-      font-size: 3em;
+      font-size: clamp(1.6em, 4vmin, 3em);
       font-weight: bold;
       color: #fff;
-      min-height: 80px;
+      min-height: 0;
       text-align: center;
       margin-bottom: 20px;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
@@ -331,7 +332,7 @@
       80% { transform: translateY(-10px); }
     }
     .image-display {
-      max-height: 300px;
+      max-height: min(300px, 28vh);
       max-width: 400px;
       object-fit: contain;
       border-radius: 20px;
@@ -386,12 +387,6 @@
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
       .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
-    }
-    @media (max-height: 900px) and (min-width: 701px) {
-      .main-container { margin-top: 10px; height: calc(100vh - 70px); }
-      .right-pane { overflow-y: auto; overflow-x: hidden; }
-      .bird-name { min-height: unset !important; margin-bottom: 8px !important; font-size: 2.2em !important; }
-      .bird-image { width: 160px !important; height: 160px !important; }
     }
     /* Performance: background animations disabled */
     body::before { display: none; }

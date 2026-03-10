@@ -273,7 +273,8 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
       position: relative;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     .right-pane::before {
       content: '';
@@ -291,10 +292,10 @@
       100% { transform: rotate(360deg); }
     }
     .animal-name {
-      font-size: 3.5em;
+      font-size: clamp(1.8em, 4.5vmin, 3.5em);
       font-weight: bold;
       color: #fff;
-      min-height: 80px;
+      min-height: 0;
       text-align: center;
       margin-bottom: 20px;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
@@ -319,8 +320,8 @@
       z-index: 1;
     }
     .animal-image {
-      width: 250px;
-      height: 250px;
+      width: min(250px, 28vh);
+      height: min(250px, 28vh);
       object-fit: contain;
       border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
@@ -424,12 +425,6 @@
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
       .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
-    }
-    @media (max-height: 900px) and (min-width: 701px) {
-      .main-container { margin-top: 10px; height: calc(100vh - 70px); }
-      .right-pane { overflow-y: auto; overflow-x: hidden; }
-      .animal-name { min-height: unset !important; margin-bottom: 8px !important; font-size: 2.2em !important; }
-      .animal-image { width: 160px !important; height: 160px !important; padding: 8px !important; }
     }
     /* Performance: background animations disabled */
     body::before { display: none; }

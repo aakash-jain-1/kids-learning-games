@@ -323,8 +323,9 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       border: 1px solid rgba(19, 136, 8, 0.3);
       position: relative;
-      overflow: hidden;
-      min-height: 500px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
     }
     
     .right-pane::before {
@@ -345,10 +346,10 @@
     }
     
     .letter-display {
-      font-size: 8em;
+      font-size: clamp(4em, 10vmin, 8em);
       font-weight: bold;
       color: #ff9933;
-      min-height: 150px;
+      min-height: 0;
       text-align: center;
       margin-bottom: 30px;
       text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
@@ -387,7 +388,7 @@
     }
     
     .image-display {
-      height: 250px;
+      height: min(250px, 26vh);
       max-width: 350px;
       object-fit: contain;
       border-radius: 20px;
@@ -469,12 +470,6 @@
       body { padding-top: 52px !important; }
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
-    }
-    @media (max-height: 900px) and (min-width: 701px) {
-      .main-container { margin-top: 10px; height: calc(100vh - 70px); }
-      .right-pane { overflow-y: auto; overflow-x: hidden; }
-      .hindi-letter { font-size: 5em !important; width: 160px !important; height: 160px !important; }
-      .hindi-word { min-height: unset !important; margin-bottom: 8px !important; font-size: 2.2em !important; }
     }
     /* Performance: background animations disabled */
     body::before { display: none; }
