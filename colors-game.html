@@ -500,8 +500,14 @@
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
     }
     @media (max-width: 600px) {
-      .navigation { padding: 8px 10px; gap: 6px; }
-      .nav-btn { padding: 7px 10px; font-size: 0.78em; }
+      body { padding-top: 52px !important; }
+      .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
+      .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
+      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
+    }
+    @media (max-width: 768px) {
+      #particleCanvas { display: none !important; }
+      body::before { animation: none !important; }
     }
   </style>
 </head>
@@ -707,8 +713,7 @@
         requestAnimationFrame(animate);
       }
       
-      init();
-      animate();
+      if (window.innerWidth > 768) { init(); animate(); }
     })();
 
     // Phase 5: Ripple Effect Function
@@ -1494,5 +1499,7 @@
     updateProgress();
     checkAchievements();
   </script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
 </html>
