@@ -451,13 +451,19 @@
     }
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
-      .letter-grid { grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)) !important; }
+      .letter-grid { grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important; gap: 6px !important; }
+      .alphabet-grid { grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important; gap: 6px !important; }
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
       .letter-display { font-size: 4em !important; min-height: auto !important; margin-bottom: 10px !important; }
       .word-display { font-size: 1.6em !important; margin-bottom: 8px !important; }
       .pronunciation { font-size: 1.2em !important; margin-bottom: 10px !important; }
       .image-display { height: 140px !important; max-width: 100% !important; }
+      .control-panel { flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; padding: 8px !important; margin: 6px auto !important; }
+      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.88em !important; }
+      #statsBtn { padding: 8px 12px !important; font-size: 0.88em !important; margin: 0 !important; border-radius: 12px !important; }
+      .progress-counter { min-width: unset !important; padding: 6px 10px !important; font-size: 0.9em !important; }
+      h1 { margin: 2px 0 4px !important; font-size: 1.4em !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
@@ -1461,5 +1467,6 @@
   </script>
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
   <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
 </body>
 </html>

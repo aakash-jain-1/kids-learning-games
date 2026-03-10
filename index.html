@@ -330,12 +330,16 @@
   </div>
   
   <script>
-    // Register Service Worker
+    // Register Service Worker + auto-reload on update
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
           .then(reg => console.log('Service Worker registered!'))
           .catch(err => console.log('Service Worker registration failed:', err));
+      });
+      let swRefreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!swRefreshing) { swRefreshing = true; location.reload(); }
       });
     }
     

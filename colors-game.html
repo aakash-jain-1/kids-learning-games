@@ -504,6 +504,13 @@
       .shape { width: 70px !important; height: 70px !important; }
       .triangle { border-left-width: 35px !important; border-right-width: 35px !important; border-bottom-width: 60px !important; }
       .shapes-container { gap: 12px !important; max-width: 100% !important; }
+      .control-panel { flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; padding: 8px !important; margin: 6px auto !important; }
+      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.88em !important; }
+      #statsBtn { padding: 8px 12px !important; font-size: 0.88em !important; margin: 0 !important; border-radius: 12px !important; }
+      .progress-counter { min-width: unset !important; padding: 6px 10px !important; font-size: 0.9em !important; }
+      .colors-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+      .color-btn { font-size: 1.2em !important; padding: 10px 0 !important; }
+      h1 { margin: 2px 0 4px !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
@@ -1507,5 +1514,6 @@
   </script>
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
   <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
 </body>
 </html>
