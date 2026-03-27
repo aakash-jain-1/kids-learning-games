@@ -9,7 +9,7 @@ A Progressive Web App featuring 8 educational games for children to learn Alphab
 - **Installable PWA** — Can be installed on mobile, tablet, and desktop
 - **Offline Support** — Works without internet after first load
 - **Fluid Responsive Design** — Uses `clamp()`, `min()`, `dvh`, and `aspect-ratio` to scale naturally on any screen size or orientation — no per-device breakpoints
-- **8 Educational Games** — Comprehensive learning platform
+- **9 Educational Games** — Comprehensive learning platform
 - **Quiz Mode** — 10-question quizzes with scoring for each game
 - **Settings Panel** — Dark mode, font size adjustment, sound toggle, auto-speak
 - **Achievement System** — 35+ unlockable badges across all games
@@ -40,6 +40,7 @@ A Progressive Web App featuring 8 educational games for children to learn Alphab
 ├── manifest.json           # PWA manifest
 ├── service-worker.js       # Offline caching (auto-updates on version bump)
 ├── README.md
+├── push.bat                # Git commit & push helper script
 ├── games/
 │   ├── alphabet-game.html
 │   ├── numbers-game.html
@@ -51,8 +52,10 @@ A Progressive Web App featuring 8 educational games for children to learn Alphab
 │   ├── flashcards-game.html
 │   └── woodcutter-story.html
 └── dev/
-    ├── SETUP.html          # Dev/setup utilities
-    └── ACTION_ITEMS.md
+    ├── SETUP.html              # Dev/setup utilities
+    ├── generate-icons.html     # PWA icon generator
+    ├── _gen_flashcards.py      # Flashcard data generation script
+    └── ACTION_ITEMS.md         # Known issues & fix tracker
 ```
 
 ### Technologies Used
