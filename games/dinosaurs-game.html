@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solar System Learning Game</title>
+  <title>Dinosaurs Learning Game</title>
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -14,7 +14,7 @@
     }
     body {
       font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      background: linear-gradient(135deg, #1a3a1a 0%, #2d5a1b 50%, #4a7c3f 100%);
       text-align: center;
       margin: 0;
       padding: 100px 0 0 0;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       transition: all 0.3s ease;
     }
-    body.dark-mode { background: linear-gradient(135deg, #000000 0%, #050314 100%); }
+    body.dark-mode { background: linear-gradient(135deg, #0a0f0a 0%, #111a0d 100%); }
     body.font-small  { font-size: 14px; }
     body.font-medium { font-size: 16px; }
     body.font-large  { font-size: 18px; }
@@ -37,7 +37,6 @@
     }
 
     @keyframes fadeIn     { from{opacity:0} to{opacity:1} }
-    @keyframes fadeInUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
     @keyframes bounce {
       0%,20%,50%,80%,100% { transform:translateY(0); }
       40% { transform:translateY(-10px); }
@@ -52,87 +51,80 @@
       from { opacity:0; transform:scale(.5); }
       to   { opacity:1; transform:scale(1); }
     }
-    @keyframes twinkle {
-      0%,100% { opacity: 0.4; }
-      50%     { opacity: 1; }
-    }
-    @keyframes spaceGlow {
-      0%   { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 20px rgba(247,201,72,.5); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 50px rgba(247,201,72,.9); }
+    @keyframes dinoGlow {
+      0%   { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 20px rgba(124,205,66,.5); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 50px rgba(124,205,66,.9); }
     }
     @keyframes pulse-glow {
-      0%,100%{ box-shadow:0 0 20px rgba(247,201,72,.6),0 0 40px rgba(247,201,72,.4); }
-      50%    { box-shadow:0 0 30px rgba(247,201,72,.8),0 0 60px rgba(247,201,72,.6); }
+      0%,100%{ box-shadow:0 0 20px rgba(124,205,66,.6),0 0 40px rgba(124,205,66,.4); }
+      50%    { box-shadow:0 0 30px rgba(124,205,66,.8),0 0 60px rgba(124,205,66,.6); }
     }
-    @keyframes confetti-fall {
-      0%   { transform:translateY(0) rotateZ(0deg); opacity:1; }
-      100% { transform:translateY(100vh) rotateZ(720deg); opacity:0; }
+    @keyframes roar {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.12) rotate(-3deg); }
+      60%  { transform: scale(1.08) rotate(3deg); }
+      100% { transform: scale(1); }
     }
     .ripple {
       position:absolute; border-radius:50%;
-      background:rgba(247,201,72,.4); transform:scale(0);
-      animation:ripple-animation .6s ease-out; pointer-events:none;
+      background:rgba(124,205,66,.4); transform:scale(0);
+      animation:ripple-anim .6s ease-out; pointer-events:none;
     }
-    @keyframes ripple-animation { to{ transform:scale(4); opacity:0; } }
+    @keyframes ripple-anim { to{ transform:scale(4); opacity:0; } }
 
     /* Navigation */
     .navigation {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(0,0,0,.65); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.6); backdrop-filter: blur(10px);
       padding: 10px 15px;
       display: flex; justify-content: center; align-items: center;
       gap: 10px; flex-wrap: wrap;
     }
     .nav-btn {
-      background: linear-gradient(135deg, #f7c948 0%, #e8a000 100%);
+      background: linear-gradient(135deg, #7ccd42 0%, #4a7c1f 100%);
       border: none; border-radius: 8px; padding: 10px 20px;
-      cursor: pointer; font-size: 1em; font-weight: 600; color: #0f0c29;
+      cursor: pointer; font-size: 1em; font-weight: 600; color: #fff;
       transition: all .3s ease; text-decoration: none;
       box-shadow: 0 2px 5px rgba(0,0,0,.4);
     }
-    .nav-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(247,201,72,.5); }
-    .nav-btn.active {
-      background: linear-gradient(135deg, #fff 0%, #f7c948 100%);
-      box-shadow: 0 4px 12px rgba(247,201,72,.8);
-    }
+    .nav-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(124,205,66,.5); }
+    .nav-btn.active { background: linear-gradient(135deg, #a8e063 0%, #7ccd42 100%); box-shadow:0 4px 14px rgba(124,205,66,.7); }
 
     h1 {
-      color: #f7c948;
-      font-size: 3em;
-      margin-top: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 30px rgba(247,201,72,.6);
+      color: #a8e063;
+      font-size: 3em; margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 30px rgba(124,205,66,.5);
       position: relative; z-index: 1;
-      animation: spaceGlow 3s ease-in-out infinite alternate;
+      animation: dinoGlow 3s ease-in-out infinite alternate;
     }
 
     /* Control panel */
     .control-panel {
       display: flex; justify-content: center; align-items: center;
       gap: 15px; margin: 25px auto; padding: 15px;
-      background: rgba(255,255,255,.05); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.3); backdrop-filter: blur(10px);
       border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(247,201,72,.3);
-      max-width: 800px; position: relative; z-index: 10; flex-wrap: wrap;
+      border: 1px solid rgba(124,205,66,.3);
+      max-width: 820px; position: relative; z-index: 10; flex-wrap: wrap;
     }
     .control-btn {
-      background: linear-gradient(145deg, #1a1640, #0f0c29);
-      border: 2px solid #f7c948; border-radius: 15px;
+      background: linear-gradient(145deg, #1a3a1a, #0f200f);
+      border: 2px solid #7ccd42; border-radius: 15px;
       padding: 12px 22px; font-size: 1.1em; font-weight: bold;
-      color: #f7c948; cursor: pointer; transition: all .3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,.4); min-width: 110px;
-      font-family: inherit;
+      color: #a8e063; cursor: pointer; transition: all .3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4); min-width: 110px; font-family: inherit;
     }
     .control-btn:hover:not(:disabled) {
-      background: linear-gradient(145deg, #f7c948, #e8a000);
-      color: #0f0c29; transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(247,201,72,.5);
+      background: linear-gradient(145deg, #7ccd42, #4a7c1f);
+      color: #fff; transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124,205,66,.5);
     }
     .control-btn:active:not(:disabled) { transform:translateY(0); }
     .control-btn:disabled { opacity:.4; cursor:not-allowed; }
     .progress-counter {
-      background:rgba(255,255,255,.08); border:2px solid #f7c948;
+      background:rgba(0,0,0,.4); border:2px solid #7ccd42;
       border-radius:12px; padding:10px 20px; font-size:1.2em;
-      font-weight:bold; color:#f7c948;
+      font-weight:bold; color:#a8e063;
       box-shadow:0 4px 10px rgba(0,0,0,.3); min-width:150px;
     }
 
@@ -144,19 +136,19 @@
     }
     .left-pane {
       flex: 1; display: flex; flex-direction: column; align-items: center;
-      background: rgba(255,255,255,.04); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.25); backdrop-filter: blur(10px);
       border-radius: 20px; padding: 20px;
       box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(247,201,72,.2);
+      border: 1px solid rgba(124,205,66,.2);
       max-height: 76vh; overflow-y: auto;
     }
     .right-pane {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center; min-width: 340px;
-      background: rgba(255,255,255,.06); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.2); backdrop-filter: blur(10px);
       border-radius: 20px; padding: 30px;
       box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(247,201,72,.2);
+      border: 1px solid rgba(124,205,66,.2);
       position: relative; overflow-y: auto;
     }
 
@@ -166,64 +158,65 @@
       gap: 12px; width: 100%; margin-top: 15px;
     }
     .item-btn {
-      background: linear-gradient(145deg, #1a1640, #0f0c29);
-      border: 2px solid #f7c948; border-radius: 15px;
+      background: linear-gradient(145deg, #1a3a1a, #0f200f);
+      border: 2px solid #7ccd42; border-radius: 15px;
       font-size: 1em; font-weight: bold; padding: 14px 6px;
       cursor: pointer; transition: all .3s ease; width: 100%;
-      box-shadow: 0 4px 12px rgba(0,0,0,.4); color: #f7c948;
-      position: relative; overflow: hidden; min-height: 68px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4); color: #a8e063;
+      position: relative; overflow: hidden; min-height: 72px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 5px; font-family: inherit;
     }
-    .item-btn .btn-emoji { font-size: 1.9em; line-height: 1; }
-    .item-btn .btn-name  { font-size: 0.82em; color: rgba(255,255,255,.9); }
+    .item-btn .btn-emoji { font-size: 2em; line-height: 1; }
+    .item-btn .btn-name  { font-size: 0.78em; color: rgba(255,255,255,.9); }
     .item-btn.flipping { animation: flip3d .6s ease-in-out; }
     .item-btn:hover {
-      background: linear-gradient(145deg, #f7c948, #e8a000);
-      color: #0f0c29; transform: translateY(-4px) scale(1.04);
-      box-shadow: 0 10px 28px rgba(247,201,72,.5);
+      background: linear-gradient(145deg, #7ccd42, #4a7c1f);
+      color: #fff; transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 10px 28px rgba(124,205,66,.5);
     }
-    .item-btn:hover .btn-name { color: #0f0c29; }
+    .item-btn:hover .btn-name { color: #fff; }
     .item-btn:active { transform:translateY(0) scale(.96); }
-    .item-btn.learned {
-      background: linear-gradient(145deg, #1b3a2a, #0d2518);
-      border-color: #4caf50;
-    }
-    .item-btn.learned .btn-emoji::after {
-      content: ' ✓'; font-size: .45em; vertical-align: super; color:#4caf50;
-    }
+    .item-btn.learned { background: linear-gradient(145deg, #0d2b0d, #1a4a1a); border-color: #4caf50; }
 
     /* Right pane display */
     .item-name {
-      font-size: clamp(2em, 5vmin, 3.5em); font-weight: bold;
-      color: #f7c948; text-align: center; margin-bottom: 12px;
-      text-shadow: 0 0 20px rgba(247,201,72,.6);
+      font-size: clamp(1.8em, 4.5vmin, 3.2em); font-weight: bold;
+      color: #a8e063; text-align: center; margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(124,205,66,.5);
     }
     .item-image {
-      width: 200px; height: 200px; border-radius: 20px;
+      width: 190px; height: 190px; border-radius: 20px;
       padding: 10px; object-fit: contain;
       animation: fadeInScale .8s ease-out;
-      filter: drop-shadow(0 0 18px rgba(247,201,72,.5));
+      filter: drop-shadow(0 0 18px rgba(124,205,66,.5));
     }
+    .item-image.roaring { animation: roar .6s ease-in-out; }
     .item-badge {
       display: inline-block;
-      background: rgba(247,201,72,.15); border: 1px solid #f7c948;
+      background: rgba(124,205,66,.15); border: 1px solid #7ccd42;
       border-radius: 20px; padding: 6px 18px;
-      color: #f7c948; font-size: 1em; font-weight: bold; margin: 12px 0;
+      color: #a8e063; font-size: 1em; font-weight: bold; margin: 10px 0;
     }
     .item-fact {
-      font-size: 1.15em; color: rgba(255,255,255,.92);
-      margin-top: 10px; line-height: 1.65; max-width: 360px; text-align: center;
+      font-size: 1.1em; color: rgba(255,255,255,.92);
+      margin-top: 8px; line-height: 1.65; max-width: 360px; text-align: center;
     }
+    .item-diet {
+      font-size: 1em; margin-top: 8px;
+      padding: 5px 16px; border-radius: 20px; font-weight: bold;
+    }
+    .item-diet.carnivore { background: rgba(244,67,54,.2); color: #ff6b6b; border: 1px solid #f44336; }
+    .item-diet.herbivore { background: rgba(76,175,80,.2); color: #a8e063; border: 1px solid #4caf50; }
+    .item-diet.omnivore  { background: rgba(255,152,0,.2); color: #ffb74d; border: 1px solid #ff9800; }
     .prompt-text {
-      color: rgba(255,255,255,.45); font-size: 1.4em;
-      animation: twinkle 2s ease-in-out infinite;
+      color: rgba(255,255,255,.4); font-size: 1.4em;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; }
-      .items-grid     { grid-template-columns: repeat(3,1fr) !important; gap: 8px !important; }
+      .items-grid     { grid-template-columns: repeat(3,1fr) !important; }
       .right-pane     { min-width: unset !important; width: 100% !important; }
       .left-pane      { max-height: none !important; overflow-y: visible !important; }
       h1 { font-size: 2em !important; }
@@ -235,14 +228,11 @@
       .control-btn { min-width:unset !important; padding:8px 12px !important; font-size:.88em !important; }
       .items-grid  { grid-template-columns: repeat(2,1fr) !important; }
     }
-
-    /* Disable heavy bg animations for performance */
     body::before { display: none; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
   <div class="navigation">
     <a href="../index.html"              class="nav-btn">🏠 Home</a>
     <a href="alphabet-game.html"         class="nav-btn">Alphabets</a>
@@ -252,73 +242,72 @@
     <a href="animals-game.html"          class="nav-btn">Animals</a>
     <a href="hindi-alphabets.html"       class="nav-btn">Hindi</a>
     <a href="birds.html"                 class="nav-btn">Birds</a>
-    <a href="solar-system-game.html"     class="nav-btn active">🪐 Solar System</a>
-    <a href="dinosaurs-game.html"         class="nav-btn">🦕 Dinosaurs</a>
-    <a href="weather-game.html"           class="nav-btn">🌦️ Weather</a>
+    <a href="solar-system-game.html"     class="nav-btn">🪐 Solar System</a>
+    <a href="dinosaurs-game.html"        class="nav-btn active">🦕 Dinosaurs</a>
+    <a href="weather-game.html"          class="nav-btn">🌦️ Weather</a>
   </div>
 
-  <h1>🪐 Learn Solar System 🌟</h1>
+  <h1>🦕 Learn Dinosaurs 🦖</h1>
 
-  <!-- Control panel -->
   <div class="control-panel">
     <button id="randomBtn"   class="control-btn">🎲 Random</button>
-    <button id="quizBtn"     class="control-btn" style="background:linear-gradient(145deg,#1a1640,#0f0c29);border:2px solid #ff9800;color:#ff9800;">🎯 Quiz</button>
-    <button id="settingsBtn" class="control-btn" style="background:linear-gradient(145deg,#1a1640,#0f0c29);border:2px solid #9c27b0;color:#9c27b0;">⚙️ Settings</button>
+    <button id="quizBtn"     class="control-btn" style="background:linear-gradient(145deg,#1a3a1a,#0f200f);border:2px solid #ff9800;color:#ffb74d;">🎯 Quiz</button>
+    <button id="settingsBtn" class="control-btn" style="background:linear-gradient(145deg,#1a3a1a,#0f200f);border:2px solid #9c27b0;color:#ce93d8;">⚙️ Settings</button>
     <button id="speakBtn"    class="control-btn" disabled>🔊 Speak</button>
     <button id="resetBtn"    class="control-btn">🔄 Reset</button>
-    <button id="statsBtn"    style="background:linear-gradient(135deg,#2196f3,#1976d2);border:none;padding:12px 28px;border-radius:25px;font-size:1.1em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(33,150,243,.4);color:white;transition:all .3s;font-family:inherit;">📊 Stats</button>
-    <div class="progress-counter" id="progressCounter" aria-live="polite">0 / 11 explored</div>
+    <button id="statsBtn"    style="background:linear-gradient(135deg,#2196f3,#1565c0);border:none;padding:12px 28px;border-radius:25px;font-size:1.1em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(33,150,243,.4);color:white;transition:all .3s;font-family:inherit;">📊 Stats</button>
+    <div class="progress-counter" id="progressCounter" aria-live="polite">0 / 15 discovered</div>
   </div>
 
   <!-- Quiz Modal -->
-  <div id="quizModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
-    <div style="background:linear-gradient(145deg,#0f0c29,#302b63);border:2px solid #f7c948;padding:30px;border-radius:25px;max-width:600px;width:90%;box-shadow:0 10px 50px rgba(247,201,72,.25);position:relative;">
-      <button id="closeQuiz" style="position:absolute;top:15px;right:15px;background:rgba(247,201,72,.2);border:none;font-size:2em;cursor:pointer;border-radius:50%;width:45px;height:45px;line-height:45px;padding:0;color:#f7c948;font-family:inherit;">×</button>
-      <h2 style="color:#f7c948;font-size:2em;margin-bottom:20px;">🎯 Solar System Quiz</h2>
+  <div id="quizModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:linear-gradient(145deg,#1a3a1a,#2d5a1b);border:2px solid #7ccd42;padding:30px;border-radius:25px;max-width:600px;width:90%;box-shadow:0 10px 50px rgba(124,205,66,.2);position:relative;">
+      <button id="closeQuiz" style="position:absolute;top:15px;right:15px;background:rgba(124,205,66,.2);border:none;font-size:2em;cursor:pointer;border-radius:50%;width:45px;height:45px;line-height:45px;padding:0;color:#a8e063;font-family:inherit;">×</button>
+      <h2 style="color:#a8e063;font-size:2em;margin-bottom:20px;">🎯 Dino Quiz</h2>
       <div style="margin:15px 0;">
-        <img id="quizItemImage" src="" alt="" style="width:150px;height:150px;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,.5);padding:12px;filter:drop-shadow(0 0 15px rgba(247,201,72,.4));">
+        <img id="quizItemImage" src="" alt="" style="width:140px;height:140px;border-radius:20px;padding:10px;filter:drop-shadow(0 0 12px rgba(124,205,66,.4));">
       </div>
-      <p id="quizQuestion" style="color:white;font-size:1.4em;margin:12px 0;">What is this?</p>
+      <p id="quizQuestion" style="color:white;font-size:1.35em;margin:12px 0;">Which dinosaur is this?</p>
       <div id="quizOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;"></div>
       <p id="quizFeedback" style="font-size:1.2em;font-weight:bold;margin:10px 0;min-height:28px;"></p>
-      <div id="quizScore" style="color:#f7c948;font-size:1.1em;margin:10px 0;font-weight:bold;"></div>
-      <button id="nextQuizBtn" style="display:none;background:linear-gradient(145deg,#f7c948,#e8a000);border:none;padding:13px 35px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#0f0c29;cursor:pointer;margin-top:10px;font-family:inherit;">Next →</button>
+      <div id="quizScore" style="color:#a8e063;font-size:1.1em;margin:10px 0;font-weight:bold;"></div>
+      <button id="nextQuizBtn" style="display:none;background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;padding:13px 35px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:10px;font-family:inherit;">Next →</button>
     </div>
   </div>
 
   <!-- Stats Modal -->
-  <div id="statsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;overflow-y:auto;">
-    <div style="background:linear-gradient(135deg,#1a1640,#302b63);border:2px solid #2196f3;padding:30px;border-radius:20px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;margin:20px auto;">
+  <div id="statsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#1a3a1a,#2d5a1b);border:2px solid #2196f3;padding:30px;border-radius:20px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;margin:20px auto;">
       <h2 style="color:white;margin-bottom:20px;text-align:center;">📊 Your Statistics</h2>
       <div id="statsContent"></div>
       <h3 style="color:white;margin:28px 0 14px;text-align:center;">🏆 Achievements</h3>
       <div id="achievementsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px;"></div>
-      <button id="closeStats" style="width:100%;padding:15px;background:white;color:#1976d2;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:18px;font-family:inherit;">Close</button>
+      <button id="closeStats" style="width:100%;padding:15px;background:white;color:#1565c0;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:18px;font-family:inherit;">Close</button>
     </div>
   </div>
 
   <!-- Settings Modal -->
-  <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
-    <div style="background:linear-gradient(135deg,#0f0c29,#302b63);border:2px solid #f7c948;border-radius:30px;padding:40px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative;">
-      <button id="closeSettings" style="position:absolute;top:15px;right:15px;background:rgba(247,201,72,.2);border:none;color:#f7c948;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit;">✕</button>
-      <h2 style="color:#f7c948;margin-bottom:30px;text-align:center;">⚙️ Settings</h2>
-      <div style="background:rgba(255,255,255,.05);padding:25px;border-radius:20px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(247,201,72,.3);">
+  <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:linear-gradient(135deg,#1a3a1a,#2d5a1b);border:2px solid #7ccd42;border-radius:30px;padding:40px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative;">
+      <button id="closeSettings" style="position:absolute;top:15px;right:15px;background:rgba(124,205,66,.2);border:none;color:#a8e063;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit;">✕</button>
+      <h2 style="color:#a8e063;margin-bottom:30px;text-align:center;">⚙️ Settings</h2>
+      <div style="background:rgba(0,0,0,.2);padding:25px;border-radius:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
           <label style="color:white;font-size:1.2em;font-weight:bold;">🌙 Dark Mode</label>
           <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
             <input type="checkbox" id="darkModeToggle" style="opacity:0;width:0;height:0;">
             <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.4s;border-radius:34px;"></span>
           </label>
         </div>
-        <div style="margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(247,201,72,.3);">
+        <div style="margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
           <label style="color:white;font-size:1.2em;font-weight:bold;display:block;margin-bottom:15px;">📏 Font Size</label>
           <div style="display:flex;gap:10px;justify-content:center;">
-            <button class="fontSizeBtn" data-size="small"  style="background:rgba(247,201,72,.15);border:2px solid #f7c948;color:#f7c948;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:.9em;font-family:inherit;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background:#f7c948;border:2px solid #f7c948;color:#0f0c29;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1em;font-weight:bold;font-family:inherit;">Medium</button>
-            <button class="fontSizeBtn" data-size="large"  style="background:rgba(247,201,72,.15);border:2px solid #f7c948;color:#f7c948;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1.1em;font-family:inherit;">Large</button>
+            <button class="fontSizeBtn" data-size="small"  style="background:rgba(124,205,66,.15);border:2px solid #7ccd42;color:#a8e063;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:.9em;font-family:inherit;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background:#7ccd42;border:2px solid #7ccd42;color:#fff;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1em;font-weight:bold;font-family:inherit;">Medium</button>
+            <button class="fontSizeBtn" data-size="large"  style="background:rgba(124,205,66,.15);border:2px solid #7ccd42;color:#a8e063;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1.1em;font-family:inherit;">Large</button>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(247,201,72,.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
           <label style="color:white;font-size:1.2em;font-weight:bold;">🔊 Sound Effects</label>
           <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
             <input type="checkbox" id="soundToggle" checked style="opacity:0;width:0;height:0;">
@@ -333,20 +322,21 @@
           </label>
         </div>
       </div>
-      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:linear-gradient(145deg,#f7c948,#e8a000);border:none;padding:15px 40px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#0f0c29;cursor:pointer;margin-top:25px;width:100%;font-family:inherit;">✓ Save Settings</button>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;padding:15px 40px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:25px;width:100%;font-family:inherit;">✓ Save Settings</button>
     </div>
   </div>
 
-  <!-- Main two-pane layout -->
+  <!-- Main layout -->
   <div class="main-container">
     <div class="left-pane">
       <div class="items-grid" id="itemsGrid"></div>
     </div>
     <div class="right-pane">
-      <div class="prompt-text" id="promptText">☝️ Pick an object to explore!</div>
+      <div class="prompt-text" id="promptText">🦴 Pick a dinosaur to discover!</div>
       <div id="itemDisplayContainer" style="display:none;flex-direction:column;align-items:center;">
         <div class="item-name"  id="itemName"></div>
         <img class="item-image" id="itemImage" src="" alt="">
+        <div class="item-diet"  id="itemDiet"></div>
         <div class="item-badge" id="itemBadge"></div>
         <div class="item-fact"  id="itemFact"></div>
       </div>
@@ -354,76 +344,114 @@
   </div>
 
   <script>
-    // ── DATA ─────────────────────────────────────────────
-    const GAME_KEY    = 'solar_system';
-    const TOTAL_ITEMS = 11;
+    const GAME_KEY    = 'dinosaurs';
+    const TOTAL_ITEMS = 15;
 
     const items = {
-      'Sun': {
-        img:   'https://api.iconify.design/noto/sun.svg?width=120&height=120',
-        emoji: '☀️',
-        badge: '⭐ Star · Center of Solar System',
-        fact:  'The Sun is a giant star! It gives light and warmth to all planets. About one million Earths could fit inside the Sun!'
+      'T-Rex': {
+        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
+        emoji: '🦖',
+        diet:  'carnivore',
+        badge: '👑 Tyrannosaurus Rex · 68–66 million years ago',
+        fact:  'T-Rex was one of the most feared hunters ever! It had tiny arms but the most powerful bite of any land animal — able to crush bone!'
       },
-      'Mercury': {
-        img:   'https://api.iconify.design/noto/new-moon.svg?width=120&height=120',
-        emoji: '⚫',
-        badge: '🪨 1st Planet from the Sun',
-        fact:  'Mercury is the smallest planet and the fastest mover — it zooms around the Sun in just 88 days!'
+      'Triceratops': {
+        img:   'https://api.iconify.design/noto/triceratops.svg?width=120&height=120',
+        emoji: '🦕',
+        diet:  'herbivore',
+        badge: '🛡️ Three-horned Face · Late Cretaceous',
+        fact:  'Triceratops had three sharp horns and a huge bony frill on its head. It used them to defend against T-Rex and fight rival Triceratops!'
       },
-      'Venus': {
-        img:   'https://api.iconify.design/noto/yellow-circle.svg?width=120&height=120',
-        emoji: '🟡',
-        badge: '🔥 2nd Planet · Hottest Planet',
-        fact:  'Venus is the hottest planet — even hotter than Mercury! It is covered in thick poisonous clouds.'
+      'Brachiosaurus': {
+        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
+        emoji: '🦕',
+        diet:  'herbivore',
+        badge: '🌿 Arm Lizard · Jurassic Period',
+        fact:  'Brachiosaurus was one of the tallest dinosaurs — as tall as a 5-storey building! It stretched its long neck to eat treetop leaves.'
       },
-      'Earth': {
-        img:   'https://api.iconify.design/noto/globe-showing-americas.svg?width=120&height=120',
-        emoji: '🌍',
-        badge: '🌊 3rd Planet · Our Home',
-        fact:  'Earth is our home — the only planet known to have liquid water, air to breathe, and living things!'
+      'Stegosaurus': {
+        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
+        emoji: '🦴',
+        diet:  'herbivore',
+        badge: '🔰 Roof Lizard · Late Jurassic',
+        fact:  'Stegosaurus had large bony plates along its back and sharp spikes on its tail for defense. Its brain was only the size of a walnut!'
       },
-      'Mars': {
-        img:   'https://api.iconify.design/noto/red-circle.svg?width=120&height=120',
-        emoji: '🔴',
-        badge: '🏜️ 4th Planet · The Red Planet',
-        fact:  'Mars is called the Red Planet! It has the tallest volcano in the Solar System — Olympus Mons!'
+      'Velociraptor': {
+        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
+        emoji: '🦖',
+        diet:  'carnivore',
+        badge: '⚡ Swift Thief · Late Cretaceous',
+        fact:  'Velociraptors were fast and smart hunters. They hunted in packs and had a deadly curved claw on each foot. They were actually feathered!'
       },
-      'Jupiter': {
-        img:   'https://api.iconify.design/noto/brown-circle.svg?width=120&height=120',
-        emoji: '🟤',
-        badge: '👑 5th Planet · Largest Planet',
-        fact:  'Jupiter is the biggest planet — over 1,300 Earths fit inside! It has a storm bigger than Earth called the Great Red Spot!'
+      'Pterodactyl': {
+        img:   'https://api.iconify.design/noto/eagle.svg?width=120&height=120',
+        emoji: '🦅',
+        diet:  'carnivore',
+        badge: '🪶 Flying Reptile · Jurassic Period',
+        fact:  "Pterodactyl was a flying reptile, not a dinosaur! It soared on wide leathery wings and swooped to catch fish from lakes and seas."
       },
-      'Saturn': {
-        img:   'https://api.iconify.design/noto/ringed-planet.svg?width=120&height=120',
-        emoji: '🪐',
-        badge: '💍 6th Planet · Ring Planet',
-        fact:  "Saturn has beautiful rings made of ice and rock! It is so light it could float on water — if there were an ocean big enough!"
+      'Diplodocus': {
+        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
+        emoji: '🦕',
+        diet:  'herbivore',
+        badge: '📏 Double Beam · Late Jurassic',
+        fact:  "Diplodocus was one of the longest dinosaurs at up to 27 metres! It used its whip-like tail to make sonic boom sounds to scare predators!"
       },
-      'Uranus': {
-        img:   'https://api.iconify.design/noto/blue-circle.svg?width=120&height=120',
-        emoji: '🔵',
-        badge: '❄️ 7th Planet · Ice Giant',
-        fact:  "Uranus is a blue ice giant that spins on its side like a rolling ball! It has 13 rings and 27 moons."
+      'Ankylosaurus': {
+        img:   'https://api.iconify.design/noto/turtle.svg?width=120&height=120',
+        emoji: '🐢',
+        diet:  'herbivore',
+        badge: '🛡️ Fused Lizard · Late Cretaceous',
+        fact:  'Ankylosaurus was like a living tank! Its whole body was covered in thick bony armour, and its tail had a huge club that could break bones!'
       },
-      'Neptune': {
-        img:   'https://api.iconify.design/noto/blue-circle.svg?width=120&height=120',
-        emoji: '🌀',
-        badge: '🌬️ 8th Planet · Farthest Planet',
-        fact:  'Neptune is the farthest planet from the Sun. It has the strongest winds in the Solar System — up to 2,100 km per hour!'
+      'Spinosaurus': {
+        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
+        emoji: '🦖',
+        diet:  'carnivore',
+        badge: '⛵ Spine Lizard · Cretaceous',
+        fact:  'Spinosaurus was even bigger than T-Rex — the largest meat-eating dinosaur! It had a huge sail on its back and loved to catch fish.'
       },
-      'Moon': {
-        img:   'https://api.iconify.design/noto/full-moon.svg?width=120&height=120',
-        emoji: '🌕',
-        badge: "🌍 Earth's Natural Satellite",
-        fact:  "The Moon is Earth's only natural satellite. In 1969, astronauts first walked on it — a giant leap for humankind!"
+      'Iguanodon': {
+        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
+        emoji: '🦎',
+        diet:  'herbivore',
+        badge: '👍 Iguana Tooth · Early Cretaceous',
+        fact:  'Iguanodon was one of the first dinosaurs ever discovered! It had a spike-like thumb claw it used to pull down branches to eat.'
       },
-      'Pluto': {
-        img:   'https://api.iconify.design/noto/last-quarter-moon.svg?width=120&height=120',
-        emoji: '🌗',
-        badge: '🧊 Dwarf Planet · Kuiper Belt',
-        fact:  "Pluto was once the 9th planet, but in 2006 it was reclassified as a dwarf planet. It is smaller than Earth's Moon!"
+      'Parasaurolophus': {
+        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
+        emoji: '🎺',
+        diet:  'herbivore',
+        badge: '🎵 Crested Lizard · Late Cretaceous',
+        fact:  'Parasaurolophus had a long hollow tube crest on its head it used like a musical instrument to make loud booming calls to its herd!'
+      },
+      'Allosaurus': {
+        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
+        emoji: '🦖',
+        diet:  'carnivore',
+        badge: '⚔️ Different Lizard · Late Jurassic',
+        fact:  'Allosaurus was the top predator of the Jurassic period. It could open its upper jaw wide like a hatchet to slice into large prey!'
+      },
+      'Pachycephalosaurus': {
+        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
+        emoji: '🪨',
+        diet:  'omnivore',
+        badge: '🪨 Thick-headed Lizard · Late Cretaceous',
+        fact:  'Pachycephalosaurus had a super-thick dome-shaped skull up to 25 cm thick! Males would head-butt each other to compete for the herd!'
+      },
+      'Compsognathus': {
+        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
+        emoji: '🐦',
+        diet:  'carnivore',
+        badge: '🐦 Pretty Jaw · Late Jurassic',
+        fact:  "Compsognathus was one of the tiniest dinosaurs — about the size of a chicken! But it was a speedy little hunter that chased lizards and insects."
+      },
+      'Mammoth': {
+        img:   'https://api.iconify.design/noto/mammoth.svg?width=120&height=120',
+        emoji: '🦣',
+        diet:  'herbivore',
+        badge: '❄️ Woolly Mammoth · Ice Age',
+        fact:  "The Woolly Mammoth lived during the Ice Age! It had long curved tusks and a thick furry coat to stay warm. Early humans painted pictures of them!"
       }
     };
 
@@ -433,20 +461,19 @@
     let soundEnabled  = true;
     let autoSpeak     = false;
 
-    // DOM refs
     const itemsGrid            = document.getElementById('itemsGrid');
     const itemName             = document.getElementById('itemName');
     const itemImage            = document.getElementById('itemImage');
     const itemDisplayContainer = document.getElementById('itemDisplayContainer');
     const itemFact             = document.getElementById('itemFact');
     const itemBadge            = document.getElementById('itemBadge');
+    const itemDiet             = document.getElementById('itemDiet');
     const promptText           = document.getElementById('promptText');
     const progressCounter      = document.getElementById('progressCounter');
     const speakBtn             = document.getElementById('speakBtn');
     const randomBtn            = document.getElementById('randomBtn');
     const resetBtn             = document.getElementById('resetBtn');
 
-    // ── SPEECH ───────────────────────────────────────────
     function speak(text) {
       if (!soundEnabled) return;
       if ('speechSynthesis' in window) {
@@ -457,7 +484,6 @@
       }
     }
 
-    // ── DISPLAY ITEM ─────────────────────────────────────
     function displayItem(name) {
       currentItem = name;
       const data  = items[name];
@@ -473,8 +499,14 @@
       itemBadge.textContent = data.badge;
       itemFact.textContent  = data.fact;
 
+      itemDiet.textContent  = data.diet === 'carnivore' ? '🥩 Carnivore (meat eater)'
+                            : data.diet === 'herbivore' ? '🌿 Herbivore (plant eater)'
+                            : '🍽️ Omnivore (eats both)';
+      itemDiet.className = 'item-diet ' + data.diet;
+
       itemImage.src = data.img;
       itemImage.alt = name;
+      itemImage.className = 'item-image';
       itemImage.style.animation = 'none';
       void itemImage.offsetHeight;
       itemImage.style.animation = 'fadeInScale .8s ease-out';
@@ -492,16 +524,15 @@
     }
 
     function updateProgress() {
-      progressCounter.textContent = learnedItems.size + ' / ' + TOTAL_ITEMS + ' explored';
+      progressCounter.textContent = learnedItems.size + ' / ' + TOTAL_ITEMS + ' discovered';
     }
 
-    // ── RENDER GRID ──────────────────────────────────────
     function renderGrid() {
       itemsGrid.innerHTML = '';
       itemNames.forEach(name => {
         const btn = document.createElement('button');
         btn.className = 'item-btn' + (learnedItems.has(name) ? ' learned' : '');
-        btn.setAttribute('aria-label', 'Explore ' + name);
+        btn.setAttribute('aria-label', 'Learn about ' + name);
         btn.innerHTML = `<span class="btn-emoji">${items[name].emoji}</span><span class="btn-name">${name}</span>`;
         btn.addEventListener('click', (e) => {
           createRipple(e);
@@ -513,7 +544,6 @@
       });
     }
 
-    // ── RIPPLE ───────────────────────────────────────────
     function createRipple(e) {
       const btn  = e.currentTarget;
       const rect = btn.getBoundingClientRect();
@@ -525,29 +555,23 @@
       setTimeout(() => rip.remove(), 600);
     }
 
-    // ── CONTROLS ─────────────────────────────────────────
     randomBtn.addEventListener('click', () => {
       displayItem(itemNames[Math.floor(Math.random() * TOTAL_ITEMS)]);
     });
-
     speakBtn.addEventListener('click', () => { if (currentItem) speak(currentItem); });
-
     resetBtn.addEventListener('click', () => {
-      if (confirm('Reset all Solar System progress?')) {
+      if (confirm('Reset all Dinosaurs progress?')) {
         learnedItems.clear();
-        localStorage.removeItem(GAME_KEY + '_learned');
-        localStorage.removeItem(GAME_KEY + '_stats');
-        localStorage.removeItem(GAME_KEY + '_achievements');
+        ['_learned','_stats','_achievements'].forEach(k => localStorage.removeItem(GAME_KEY + k));
         currentItem = '';
         itemDisplayContainer.style.display = 'none';
         promptText.style.display = 'block';
         speakBtn.disabled = true;
-        updateProgress();
-        renderGrid();
+        updateProgress(); renderGrid();
       }
     });
 
-    // ── QUIZ ─────────────────────────────────────────────
+    // QUIZ
     const quizModal    = document.getElementById('quizModal');
     const closeQuiz    = document.getElementById('closeQuiz');
     const quizOptions  = document.getElementById('quizOptions');
@@ -585,10 +609,8 @@
       choices.forEach(choice => {
         const opt = document.createElement('button');
         opt.textContent = choice;
-        opt.style.cssText = 'padding:13px;font-size:1.1em;border-radius:15px;border:2px solid #f7c948;background:rgba(247,201,72,.1);color:#f7c948;cursor:pointer;transition:all .3s;font-weight:bold;font-family:inherit;';
+        opt.style.cssText = 'padding:12px;font-size:1.05em;border-radius:15px;border:2px solid #7ccd42;background:rgba(124,205,66,.1);color:#a8e063;cursor:pointer;transition:all .3s;font-weight:bold;font-family:inherit;';
         opt.addEventListener('click', () => checkAnswer(choice, opt));
-        opt.addEventListener('mouseover', () => { if (!quizState.answered) opt.style.background = 'rgba(247,201,72,.3)'; });
-        opt.addEventListener('mouseout',  () => { if (!quizState.answered && !opt.dataset.selected) opt.style.background = 'rgba(247,201,72,.1)'; });
         quizOptions.appendChild(opt);
       });
     }
@@ -596,11 +618,10 @@
     function checkAnswer(choice, btn) {
       if (quizState.answered) return;
       quizState.answered = true;
-      btn.dataset.selected = '1';
       const correct = choice === quizState.current;
       if (correct) {
         quizState.correct++;
-        quizFeedback.innerHTML = '✅ <span style="color:#4caf50">Correct! Well done!</span>';
+        quizFeedback.innerHTML = '✅ <span style="color:#4caf50">Correct! Roar! 🦖</span>';
         btn.style.cssText += 'background:#4caf50;border-color:#4caf50;color:white;';
       } else {
         quizFeedback.innerHTML = `❌ <span style="color:#f44336">It's ${quizState.current}!</span>`;
@@ -610,40 +631,36 @@
         });
       }
       quizState.idx++;
-      if (quizState.idx < quizState.totalQs) {
-        nextQuizBtn.style.display = 'inline-block';
-      } else {
-        setTimeout(showQuizResults, 900);
-      }
+      if (quizState.idx < quizState.totalQs) nextQuizBtn.style.display = 'inline-block';
+      else setTimeout(showQuizResults, 900);
     }
 
     function showQuizResults() {
       const pct  = Math.round((quizState.correct / quizState.totalQs) * 100);
-      const star = pct === 100 ? '🌟' : pct >= 70 ? '⭐' : '🚀';
+      const star = pct === 100 ? '🦖' : pct >= 70 ? '🦕' : '🦴';
       quizOptions.innerHTML = '';
       quizImgEl.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${star}</text></svg>`;
       quizFeedback.textContent = '';
       nextQuizBtn.style.display = 'none';
-      const msg = pct === 100 ? 'Perfect! You are a Space Explorer! 🚀'
-                : pct >= 70  ? 'Great job! Keep exploring the cosmos!'
-                :               'Keep learning — the universe awaits!';
-      quizScore.innerHTML = `
-        <div style="font-size:1.7em;color:#f7c948;margin-bottom:8px;">${star} Quiz Complete!</div>
+      const msg = pct === 100 ? 'Perfect! You are a Dino Expert! 🦖'
+                : pct >= 70  ? 'Great job, Palaeontologist!'
+                :               'Keep exploring — more dinos await!';
+      quizScore.innerHTML = `<div style="font-size:1.7em;color:#a8e063;margin-bottom:8px;">${star} Quiz Complete!</div>
         <div style="font-size:1.3em;color:white;">Score: ${quizState.correct} / ${quizState.totalQs} (${pct}%)</div>
         <div style="font-size:.95em;color:rgba(255,255,255,.7);margin-top:8px;">${msg}</div>`;
       const rb = document.createElement('button');
       rb.textContent = '🔄 Play Again';
-      rb.style.cssText = 'margin-top:14px;padding:12px 30px;font-size:1.1em;font-weight:bold;background:linear-gradient(145deg,#f7c948,#e8a000);border:none;border-radius:20px;cursor:pointer;color:#0f0c29;font-family:inherit;display:block;margin-left:auto;margin-right:auto;';
+      rb.style.cssText = 'margin-top:14px;padding:12px 30px;font-size:1.1em;font-weight:bold;background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;border-radius:20px;cursor:pointer;color:#fff;font-family:inherit;display:block;margin-left:auto;margin-right:auto;';
       rb.addEventListener('click', startQuiz);
       quizScore.appendChild(rb);
     }
 
     quizBtn.addEventListener('click', startQuiz);
     closeQuiz.addEventListener('click', () => { quizModal.style.display = 'none'; });
-    quizModal.addEventListener('click',  (e) => { if (e.target === quizModal) quizModal.style.display = 'none'; });
+    quizModal.addEventListener('click', (e) => { if (e.target === quizModal) quizModal.style.display = 'none'; });
     nextQuizBtn.addEventListener('click', loadQuizQuestion);
 
-    // ── SETTINGS ─────────────────────────────────────────
+    // SETTINGS
     document.getElementById('settingsBtn').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'flex'; });
     document.getElementById('closeSettings').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'none'; });
     document.getElementById('darkModeToggle').addEventListener('change', (e) => { document.body.classList.toggle('dark-mode', e.target.checked); });
@@ -651,22 +668,20 @@
     document.getElementById('autoSpeakToggle').addEventListener('change', (e) => { autoSpeak = e.target.checked; });
     document.querySelectorAll('.fontSizeBtn').forEach(b => {
       b.addEventListener('click', () => {
-        document.querySelectorAll('.fontSizeBtn').forEach(x => {
-          x.style.background = 'rgba(247,201,72,.15)'; x.style.color = '#f7c948'; x.style.fontWeight = 'normal';
-        });
-        b.style.background = '#f7c948'; b.style.color = '#0f0c29'; b.style.fontWeight = 'bold';
+        document.querySelectorAll('.fontSizeBtn').forEach(x => { x.style.background='rgba(124,205,66,.15)'; x.style.color='#a8e063'; x.style.fontWeight='normal'; });
+        b.style.background = '#7ccd42'; b.style.color = '#fff'; b.style.fontWeight = 'bold';
         document.body.className = document.body.className.replace(/font-\w+/g, '');
         document.body.classList.add('font-' + b.dataset.size);
       });
     });
 
-    // ── ACHIEVEMENTS & STATS ─────────────────────────────
+    // ACHIEVEMENTS & STATS
     const achievements = {
-      first_explore: { name: '🚀 First Launch',    desc: 'Explore your first object',   unlocked: false },
-      halfway:       { name: '🌗 Deep Space',       desc: 'Explore 6 or more objects',   unlocked: false },
-      all_explored:  { name: '🌌 Universe Master',  desc: 'Explore all 11 objects',      unlocked: false },
-      perfect_quiz:  { name: '💯 Perfect Score',    desc: 'Score 100% in a quiz',        unlocked: false },
-      quiz_master:   { name: '🎓 Quiz Master',      desc: 'Complete 10 quizzes',         unlocked: false }
+      first_dino:   { name: '🦴 First Fossil',    desc: 'Discover your first dino',    unlocked: false },
+      halfway:      { name: '🦕 Dino Fan',         desc: 'Discover 8 dinosaurs',        unlocked: false },
+      all_found:    { name: '🦖 Palaeontologist',  desc: 'Discover all 15',             unlocked: false },
+      perfect_quiz: { name: '💯 Perfect Score',    desc: 'Score 100% in a quiz',        unlocked: false },
+      quiz_master:  { name: '🎓 Quiz Master',      desc: 'Complete 10 quizzes',         unlocked: false }
     };
     const savedAch = JSON.parse(localStorage.getItem(GAME_KEY + '_achievements') || '{}');
     Object.keys(savedAch).forEach(k => { if (achievements[k]) achievements[k].unlocked = savedAch[k]; });
@@ -695,19 +710,18 @@
 
     function checkAchievements() {
       let changed = false;
-      if (!achievements.first_explore.unlocked && learnedItems.size >= 1)               { achievements.first_explore.unlocked = true; showAchievementBadge(achievements.first_explore); changed = true; }
-      if (!achievements.halfway.unlocked       && learnedItems.size >= 6)               { achievements.halfway.unlocked = true;       showAchievementBadge(achievements.halfway);       changed = true; }
-      if (!achievements.all_explored.unlocked  && learnedItems.size >= TOTAL_ITEMS)     { achievements.all_explored.unlocked = true;  showAchievementBadge(achievements.all_explored);  changed = true; }
+      if (!achievements.first_dino.unlocked  && learnedItems.size >= 1)           { achievements.first_dino.unlocked = true;  showAchievementBadge(achievements.first_dino);  changed = true; }
+      if (!achievements.halfway.unlocked      && learnedItems.size >= 8)           { achievements.halfway.unlocked = true;      showAchievementBadge(achievements.halfway);      changed = true; }
+      if (!achievements.all_found.unlocked    && learnedItems.size >= TOTAL_ITEMS) { achievements.all_found.unlocked = true;    showAchievementBadge(achievements.all_found);    changed = true; }
       if (changed) saveAchievements();
     }
 
-    // Stats modal
     document.getElementById('statsBtn').addEventListener('click', () => {
       const s2  = JSON.parse(localStorage.getItem(GAME_KEY + '_stats') || '{"totalQuizzes":0,"totalCorrect":0,"totalQuestions":0,"highScore":0}');
       const acc = s2.totalQuestions > 0 ? ((s2.totalCorrect / s2.totalQuestions) * 100).toFixed(1) : 0;
       document.getElementById('statsContent').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;color:white;font-size:16px;">
-          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🌍 ${learnedItems.size}/${TOTAL_ITEMS}</div><div>Objects Explored</div></div>
+          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🦕 ${learnedItems.size}/${TOTAL_ITEMS}</div><div>Dinos Discovered</div></div>
           <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">📝 ${s2.totalQuizzes}</div><div>Quizzes Taken</div></div>
           <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">✅ ${acc}%</div><div>Accuracy</div></div>
           <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🏆 ${s2.highScore}%</div><div>High Score</div></div>
@@ -717,7 +731,7 @@
       Object.values(achievements).forEach(a => {
         const d = document.createElement('div');
         d.style.cssText = `background:${a.unlocked ? 'linear-gradient(135deg,#ffd700,#ffed4e)' : 'rgba(255,255,255,.08)'};padding:18px;border-radius:15px;text-align:center;opacity:${a.unlocked ? 1 : .5};`;
-        d.innerHTML = `<div style="font-size:40px;margin-bottom:7px;">${a.name.split(' ')[0]}</div><div style="font-weight:bold;font-size:14px;color:${a.unlocked ? '#000' : '#fff'};">${a.name.substring(a.name.indexOf(' ') + 1)}</div><div style="font-size:12px;color:${a.unlocked ? '#333' : '#aaa'};margin-top:4px;">${a.desc}</div>${a.unlocked ? '<div style="margin-top:7px;color:#000;font-weight:bold;font-size:12px;">✓ UNLOCKED</div>' : '<div style="margin-top:7px;color:#666;font-size:12px;">🔒 Locked</div>'}`;
+        d.innerHTML = `<div style="font-size:40px;margin-bottom:7px;">${a.name.split(' ')[0]}</div><div style="font-weight:bold;font-size:14px;color:${a.unlocked ? '#000' : '#fff'};">${a.name.substring(a.name.indexOf(' ')+1)}</div><div style="font-size:12px;color:${a.unlocked ? '#333' : '#aaa'};margin-top:4px;">${a.desc}</div>${a.unlocked ? '<div style="margin-top:7px;color:#000;font-weight:bold;font-size:12px;">✓ UNLOCKED</div>' : '<div style="margin-top:7px;color:#666;font-size:12px;">🔒 Locked</div>'}`;
         achList.appendChild(d);
       });
       document.getElementById('statsModal').style.display = 'flex';
@@ -725,7 +739,6 @@
     document.getElementById('closeStats').addEventListener('click', () => { document.getElementById('statsModal').style.display = 'none'; });
     document.getElementById('statsModal').addEventListener('click', (e) => { if (e.target === document.getElementById('statsModal')) document.getElementById('statsModal').style.display = 'none'; });
 
-    // Hook quiz results into stats
     const _origShowResults = showQuizResults;
     showQuizResults = function() {
       stats.totalQuizzes++;
@@ -733,21 +746,11 @@
       stats.totalQuestions += quizState.totalQs;
       const pct = (quizState.correct / quizState.totalQs) * 100;
       if (pct > stats.highScore) stats.highScore = Math.round(pct);
-      if (pct === 100 && !achievements.perfect_quiz.unlocked) {
-        achievements.perfect_quiz.unlocked = true;
-        setTimeout(() => showAchievementBadge(achievements.perfect_quiz), 1000);
-        saveAchievements();
-      }
-      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) {
-        achievements.quiz_master.unlocked = true;
-        setTimeout(() => showAchievementBadge(achievements.quiz_master), 1500);
-        saveAchievements();
-      }
-      saveStats();
-      _origShowResults();
+      if (pct === 100 && !achievements.perfect_quiz.unlocked) { achievements.perfect_quiz.unlocked = true; setTimeout(() => showAchievementBadge(achievements.perfect_quiz), 1000); saveAchievements(); }
+      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) { achievements.quiz_master.unlocked = true; setTimeout(() => showAchievementBadge(achievements.quiz_master), 1500); saveAchievements(); }
+      saveStats(); _origShowResults();
     };
 
-    // ── INIT ─────────────────────────────────────────────
     renderGrid();
     updateProgress();
     checkAchievements();
@@ -760,12 +763,11 @@
       navigator.serviceWorker.addEventListener('controllerchange', () => { if (!r) { r = true; location.reload(); } });
     }
   </script>
-
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:.7em;color:rgba(255,255,255,.25);"></div>
   <script>
     fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main')
       .then(r => r.json())
-      .then(d => { document.getElementById('build-info').textContent = 'Build: ' + d.sha.slice(0, 7) + ' · ' + d.commit.committer.date.slice(0, 10); })
+      .then(d => { document.getElementById('build-info').textContent = 'Build: ' + d.sha.slice(0,7) + ' · ' + d.commit.committer.date.slice(0,10); })
       .catch(() => {});
   </script>
 </body>

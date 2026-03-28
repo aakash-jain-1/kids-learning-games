@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather &amp; Seasons Learning Game</title>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #3b6fd4 100%);
+      text-align: center;
+      margin: 0;
+      padding: 100px 0 0 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+    }
+    body.dark-mode { background: linear-gradient(135deg, #050f1e 0%, #0a1628 100%); }
+    body.font-small  { font-size: 14px; }
+    body.font-medium { font-size: 16px; }
+    body.font-large  { font-size: 18px; }
+
+    .switch input:checked + span              { background-color: #4caf50; }
+    .switch input:checked + span:before      { transform: translateX(26px); }
+    .switch span:before {
+      position: absolute; content: "";
+      height: 26px; width: 26px; left: 4px; bottom: 4px;
+      background-color: white; transition: 0.4s; border-radius: 50%;
+    }
+
+    @keyframes bounce {
+      0%,20%,50%,80%,100% { transform:translateY(0); }
+      40% { transform:translateY(-10px); }
+      60% { transform:translateY(-5px); }
+    }
+    @keyframes flip3d {
+      0%  { transform:rotateY(0deg); }
+      50% { transform:rotateY(90deg); }
+      100%{ transform:rotateY(0deg); }
+    }
+    @keyframes fadeInScale {
+      from { opacity:0; transform:scale(.5); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes weatherGlow {
+      0%   { text-shadow: 2px 2px 4px rgba(0,0,0,.6), 0 0 20px rgba(100,181,246,.5); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,.6), 0 0 50px rgba(100,181,246,.9); }
+    }
+    @keyframes floatCloud {
+      0%,100% { transform: translateX(0px); }
+      50%     { transform: translateX(12px); }
+    }
+    @keyframes rainDrop {
+      0%   { opacity: 0; transform: translateY(-10px); }
+      50%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(10px); }
+    }
+    .ripple {
+      position:absolute; border-radius:50%;
+      background:rgba(100,181,246,.4); transform:scale(0);
+      animation:ripple-anim .6s ease-out; pointer-events:none;
+    }
+    @keyframes ripple-anim { to{ transform:scale(4); opacity:0; } }
+
+    /* Season badge colours */
+    .season-spring { background:rgba(102,187,106,.2); border:1px solid #66bb6a; color:#a5d6a7; }
+    .season-summer { background:rgba(255,167,38,.2);  border:1px solid #ffa726; color:#ffcc80; }
+    .season-autumn { background:rgba(239,108,0,.2);   border:1px solid #ef6c00; color:#ffab40; }
+    .season-winter { background:rgba(100,181,246,.2); border:1px solid #64b5f6; color:#bbdefb; }
+    .season-any    { background:rgba(206,147,216,.2); border:1px solid #ce93d8; color:#e1bee7; }
+
+    /* Navigation */
+    .navigation {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(0,0,0,.55); backdrop-filter: blur(10px);
+      padding: 10px 15px;
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: linear-gradient(135deg, #64b5f6 0%, #1565c0 100%);
+      border: none; border-radius: 8px; padding: 10px 20px;
+      cursor: pointer; font-size: 1em; font-weight: 600; color: #fff;
+      transition: all .3s ease; text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,.4);
+    }
+    .nav-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(100,181,246,.5); }
+    .nav-btn.active { background: linear-gradient(135deg, #90caf9 0%, #42a5f5 100%); box-shadow:0 4px 14px rgba(100,181,246,.7); }
+
+    h1 {
+      color: #90caf9;
+      font-size: 3em; margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.6), 0 0 30px rgba(100,181,246,.5);
+      position: relative; z-index: 1;
+      animation: weatherGlow 3s ease-in-out infinite alternate;
+    }
+
+    /* Control panel */
+    .control-panel {
+      display: flex; justify-content: center; align-items: center;
+      gap: 15px; margin: 25px auto; padding: 15px;
+      background: rgba(0,0,0,.25); backdrop-filter: blur(10px);
+      border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      border: 1px solid rgba(100,181,246,.3);
+      max-width: 820px; position: relative; z-index: 10; flex-wrap: wrap;
+    }
+    .control-btn {
+      background: linear-gradient(145deg, #0d2452, #1e3c72);
+      border: 2px solid #64b5f6; border-radius: 15px;
+      padding: 12px 22px; font-size: 1.1em; font-weight: bold;
+      color: #90caf9; cursor: pointer; transition: all .3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,.4); min-width: 110px; font-family: inherit;
+    }
+    .control-btn:hover:not(:disabled) {
+      background: linear-gradient(145deg, #64b5f6, #1565c0);
+      color: #fff; transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(100,181,246,.5);
+    }
+    .control-btn:active:not(:disabled) { transform:translateY(0); }
+    .control-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .progress-counter {
+      background:rgba(0,0,0,.35); border:2px solid #64b5f6;
+      border-radius:12px; padding:10px 20px; font-size:1.2em;
+      font-weight:bold; color:#90caf9;
+      box-shadow:0 4px 10px rgba(0,0,0,.3); min-width:150px;
+    }
+
+    /* Season filter tabs */
+    .season-tabs {
+      display: flex; justify-content: center; gap: 10px;
+      flex-wrap: wrap; margin: 0 auto 10px; max-width: 800px;
+      position: relative; z-index: 5;
+    }
+    .season-tab {
+      background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.3);
+      border-radius: 20px; padding: 8px 18px; cursor: pointer;
+      color: rgba(255,255,255,.8); font-weight: bold; font-size: .95em;
+      transition: all .3s; font-family: inherit;
+    }
+    .season-tab:hover, .season-tab.active {
+      background: rgba(100,181,246,.3); border-color: #64b5f6; color: #fff;
+      box-shadow: 0 4px 12px rgba(100,181,246,.3);
+    }
+
+    /* Two-pane layout */
+    .main-container {
+      display: flex; justify-content: center; align-items: flex-start;
+      gap: 40px; margin: 20px auto; padding: 0 20px;
+      max-width: 1100px; height: 72vh; position: relative; z-index: 1;
+    }
+    .left-pane {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      background: rgba(0,0,0,.2); backdrop-filter: blur(10px);
+      border-radius: 20px; padding: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      border: 1px solid rgba(100,181,246,.2);
+      max-height: 72vh; overflow-y: auto;
+    }
+    .right-pane {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; min-width: 340px;
+      background: rgba(0,0,0,.2); backdrop-filter: blur(10px);
+      border-radius: 20px; padding: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      border: 1px solid rgba(100,181,246,.2);
+      position: relative; overflow-y: auto;
+    }
+
+    /* Item grid */
+    .items-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 12px; width: 100%; margin-top: 15px;
+    }
+    .item-btn {
+      background: linear-gradient(145deg, #0d2452, #1e3c72);
+      border: 2px solid #64b5f6; border-radius: 15px;
+      font-size: 1em; font-weight: bold; padding: 14px 6px;
+      cursor: pointer; transition: all .3s ease; width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4); color: #90caf9;
+      position: relative; overflow: hidden; min-height: 72px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; font-family: inherit;
+    }
+    .item-btn .btn-emoji { font-size: 2.1em; line-height: 1; }
+    .item-btn .btn-name  { font-size: 0.78em; color: rgba(255,255,255,.9); }
+    .item-btn.flipping { animation: flip3d .6s ease-in-out; }
+    .item-btn:hover {
+      background: linear-gradient(145deg, #64b5f6, #1565c0);
+      color: #fff; transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 10px 28px rgba(100,181,246,.5);
+    }
+    .item-btn:hover .btn-name { color: #fff; }
+    .item-btn:active { transform:translateY(0) scale(.96); }
+    .item-btn.learned { background: linear-gradient(145deg, #0d2b40, #0a3354); border-color: #4caf50; }
+    .item-btn.hidden  { display: none; }
+
+    /* Right pane */
+    .item-name {
+      font-size: clamp(1.8em, 4.5vmin, 3.2em); font-weight: bold;
+      color: #90caf9; text-align: center; margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(100,181,246,.5);
+    }
+    .item-image {
+      width: 180px; height: 180px; border-radius: 20px;
+      padding: 10px; object-fit: contain;
+      animation: fadeInScale .8s ease-out;
+      filter: drop-shadow(0 0 20px rgba(100,181,246,.5));
+    }
+    .item-badge {
+      display: inline-block; border-radius: 20px;
+      padding: 6px 18px; font-size: 1em; font-weight: bold; margin: 10px 0;
+    }
+    .item-fact {
+      font-size: 1.1em; color: rgba(255,255,255,.92);
+      margin-top: 8px; line-height: 1.65; max-width: 360px; text-align: center;
+    }
+    .prompt-text { color: rgba(255,255,255,.4); font-size: 1.4em; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; }
+      .items-grid     { grid-template-columns: repeat(3,1fr) !important; }
+      .right-pane     { min-width: unset !important; width: 100% !important; }
+      .left-pane      { max-height: none !important; overflow-y: visible !important; }
+      h1 { font-size: 2em !important; }
+    }
+    @media (max-width: 600px) {
+      body { padding-top: 52px !important; }
+      .navigation { padding:6px 8px; flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; -webkit-overflow-scrolling:touch; }
+      .nav-btn    { padding:6px 10px; font-size:.76em; white-space:nowrap; flex-shrink:0; }
+      .control-btn { min-width:unset !important; padding:8px 12px !important; font-size:.88em !important; }
+      .items-grid  { grid-template-columns: repeat(2,1fr) !important; }
+    }
+    body::before { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="navigation">
+    <a href="../index.html"              class="nav-btn">🏠 Home</a>
+    <a href="alphabet-game.html"         class="nav-btn">Alphabets</a>
+    <a href="numbers-game.html"          class="nav-btn">Numbers</a>
+    <a href="colors-game.html"           class="nav-btn">Colors</a>
+    <a href="shapes-game.html"           class="nav-btn">Shapes</a>
+    <a href="animals-game.html"          class="nav-btn">Animals</a>
+    <a href="hindi-alphabets.html"       class="nav-btn">Hindi</a>
+    <a href="birds.html"                 class="nav-btn">Birds</a>
+    <a href="solar-system-game.html"     class="nav-btn">🪐 Solar System</a>
+    <a href="dinosaurs-game.html"        class="nav-btn">🦕 Dinosaurs</a>
+    <a href="weather-game.html"          class="nav-btn active">🌦️ Weather</a>
+  </div>
+
+  <h1>🌦️ Weather &amp; Seasons 🌈</h1>
+
+  <div class="control-panel">
+    <button id="randomBtn"   class="control-btn">🎲 Random</button>
+    <button id="quizBtn"     class="control-btn" style="background:linear-gradient(145deg,#0d2452,#1e3c72);border:2px solid #ff9800;color:#ffb74d;">🎯 Quiz</button>
+    <button id="settingsBtn" class="control-btn" style="background:linear-gradient(145deg,#0d2452,#1e3c72);border:2px solid #9c27b0;color:#ce93d8;">⚙️ Settings</button>
+    <button id="speakBtn"    class="control-btn" disabled>🔊 Speak</button>
+    <button id="resetBtn"    class="control-btn">🔄 Reset</button>
+    <button id="statsBtn"    style="background:linear-gradient(135deg,#2196f3,#1565c0);border:none;padding:12px 28px;border-radius:25px;font-size:1.1em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(33,150,243,.4);color:white;transition:all .3s;font-family:inherit;">📊 Stats</button>
+    <div class="progress-counter" id="progressCounter" aria-live="polite">0 / 20 learned</div>
+  </div>
+
+  <!-- Season filter tabs -->
+  <div class="season-tabs" id="seasonTabs">
+    <button class="season-tab active" data-season="all">🌍 All</button>
+    <button class="season-tab" data-season="spring">🌸 Spring</button>
+    <button class="season-tab" data-season="summer">☀️ Summer</button>
+    <button class="season-tab" data-season="autumn">🍂 Autumn</button>
+    <button class="season-tab" data-season="winter">❄️ Winter</button>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="quizModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:linear-gradient(145deg,#0d2452,#1e3c72);border:2px solid #64b5f6;padding:30px;border-radius:25px;max-width:600px;width:90%;box-shadow:0 10px 50px rgba(100,181,246,.2);position:relative;">
+      <button id="closeQuiz" style="position:absolute;top:15px;right:15px;background:rgba(100,181,246,.2);border:none;font-size:2em;cursor:pointer;border-radius:50%;width:45px;height:45px;line-height:45px;padding:0;color:#90caf9;font-family:inherit;">×</button>
+      <h2 style="color:#90caf9;font-size:2em;margin-bottom:20px;">🎯 Weather Quiz</h2>
+      <div style="margin:15px 0;">
+        <img id="quizItemImage" src="" alt="" style="width:130px;height:130px;border-radius:20px;padding:10px;filter:drop-shadow(0 0 14px rgba(100,181,246,.4));">
+      </div>
+      <p id="quizQuestion" style="color:white;font-size:1.35em;margin:12px 0;">What is this weather?</p>
+      <div id="quizOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;"></div>
+      <p id="quizFeedback" style="font-size:1.2em;font-weight:bold;margin:10px 0;min-height:28px;"></p>
+      <div id="quizScore" style="color:#90caf9;font-size:1.1em;margin:10px 0;font-weight:bold;"></div>
+      <button id="nextQuizBtn" style="display:none;background:linear-gradient(145deg,#64b5f6,#1565c0);border:none;padding:13px 35px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:10px;font-family:inherit;">Next →</button>
+    </div>
+  </div>
+
+  <!-- Stats Modal -->
+  <div id="statsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#0d2452,#1e3c72);border:2px solid #2196f3;padding:30px;border-radius:20px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;margin:20px auto;">
+      <h2 style="color:white;margin-bottom:20px;text-align:center;">📊 Your Statistics</h2>
+      <div id="statsContent"></div>
+      <h3 style="color:white;margin:28px 0 14px;text-align:center;">🏆 Achievements</h3>
+      <div id="achievementsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px;"></div>
+      <button id="closeStats" style="width:100%;padding:15px;background:white;color:#1565c0;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:18px;font-family:inherit;">Close</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:linear-gradient(135deg,#0d2452,#1e3c72);border:2px solid #64b5f6;border-radius:30px;padding:40px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative;">
+      <button id="closeSettings" style="position:absolute;top:15px;right:15px;background:rgba(100,181,246,.2);border:none;color:#90caf9;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit;">✕</button>
+      <h2 style="color:#90caf9;margin-bottom:30px;text-align:center;">⚙️ Settings</h2>
+      <div style="background:rgba(0,0,0,.2);padding:25px;border-radius:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(100,181,246,.3);">
+          <label style="color:white;font-size:1.2em;font-weight:bold;">🌙 Dark Mode</label>
+          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
+            <input type="checkbox" id="darkModeToggle" style="opacity:0;width:0;height:0;">
+            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.4s;border-radius:34px;"></span>
+          </label>
+        </div>
+        <div style="margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(100,181,246,.3);">
+          <label style="color:white;font-size:1.2em;font-weight:bold;display:block;margin-bottom:15px;">📏 Font Size</label>
+          <div style="display:flex;gap:10px;justify-content:center;">
+            <button class="fontSizeBtn" data-size="small"  style="background:rgba(100,181,246,.15);border:2px solid #64b5f6;color:#90caf9;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:.9em;font-family:inherit;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background:#64b5f6;border:2px solid #64b5f6;color:#fff;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1em;font-weight:bold;font-family:inherit;">Medium</button>
+            <button class="fontSizeBtn" data-size="large"  style="background:rgba(100,181,246,.15);border:2px solid #64b5f6;color:#90caf9;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1.1em;font-family:inherit;">Large</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(100,181,246,.3);">
+          <label style="color:white;font-size:1.2em;font-weight:bold;">🔊 Sound Effects</label>
+          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
+            <input type="checkbox" id="soundToggle" checked style="opacity:0;width:0;height:0;">
+            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#4caf50;transition:.4s;border-radius:34px;"></span>
+          </label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <label style="color:white;font-size:1.2em;font-weight:bold;">🗣️ Auto-Speak</label>
+          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
+            <input type="checkbox" id="autoSpeakToggle" style="opacity:0;width:0;height:0;">
+            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.4s;border-radius:34px;"></span>
+          </label>
+        </div>
+      </div>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:linear-gradient(145deg,#64b5f6,#1565c0);border:none;padding:15px 40px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:25px;width:100%;font-family:inherit;">✓ Save Settings</button>
+    </div>
+  </div>
+
+  <!-- Main layout -->
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="items-grid" id="itemsGrid"></div>
+    </div>
+    <div class="right-pane">
+      <div class="prompt-text" id="promptText">☁️ Pick a weather to explore!</div>
+      <div id="itemDisplayContainer" style="display:none;flex-direction:column;align-items:center;">
+        <div class="item-name"  id="itemName"></div>
+        <img class="item-image" id="itemImage" src="" alt="">
+        <div class="item-badge" id="itemBadge"></div>
+        <div class="item-fact"  id="itemFact"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAME_KEY    = 'weather';
+    const TOTAL_ITEMS = 20;
+
+    // season: spring | summer | autumn | winter | any
+    const items = {
+      'Sunny': {
+        img:    'https://api.iconify.design/noto/sun.svg?width=120&height=120',
+        emoji:  '☀️', season: 'summer',
+        badge:  '☀️ Summer · Bright & Warm',
+        badgeClass: 'season-summer',
+        fact:   'On a sunny day the sky is clear and blue. The Sun shines brightly, keeping us warm. Great day for playing outside!'
+      },
+      'Cloudy': {
+        img:    'https://api.iconify.design/noto/cloud.svg?width=120&height=120',
+        emoji:  '☁️', season: 'any',
+        badge:  '☁️ Any Season · Overcast',
+        badgeClass: 'season-any',
+        fact:   'Clouds are made of millions of tiny water droplets floating in the sky. They come in many shapes — fluffy, flat, wispy and more!'
+      },
+      'Rainy': {
+        img:    'https://api.iconify.design/noto/cloud-with-rain.svg?width=120&height=120',
+        emoji:  '🌧️', season: 'any',
+        badge:  '🌧️ Any Season · Wet Weather',
+        badgeClass: 'season-any',
+        fact:   'Rain falls when water droplets in clouds become too heavy. Rain fills our rivers and lakes and helps plants and flowers grow!'
+      },
+      'Thunderstorm': {
+        img:    'https://api.iconify.design/noto/cloud-with-lightning-and-rain.svg?width=120&height=120',
+        emoji:  '⛈️', season: 'summer',
+        badge:  '⛈️ Summer · Lightning & Thunder',
+        badgeClass: 'season-summer',
+        fact:   'During a thunderstorm lightning flashes and thunder booms! Lightning is a giant spark of electricity. Always stay indoors when there is lightning!'
+      },
+      'Snowy': {
+        img:    'https://api.iconify.design/noto/cloud-with-snow.svg?width=120&height=120',
+        emoji:  '❄️', season: 'winter',
+        badge:  '❄️ Winter · Frozen Flakes',
+        badgeClass: 'season-winter',
+        fact:   'Snowflakes form when water freezes high in the clouds. Every single snowflake has a unique six-sided shape — no two are ever exactly alike!'
+      },
+      'Windy': {
+        img:    'https://api.iconify.design/noto/wind-face.svg?width=120&height=120',
+        emoji:  '💨', season: 'any',
+        badge:  '💨 Any Season · Moving Air',
+        badgeClass: 'season-any',
+        fact:   'Wind is moving air! Warm air rises and cool air rushes in to take its place — that is what makes wind. It can be a gentle breeze or a powerful storm!'
+      },
+      'Rainbow': {
+        img:    'https://api.iconify.design/noto/rainbow.svg?width=120&height=120',
+        emoji:  '🌈', season: 'spring',
+        badge:  '🌈 Spring/Summer · After Rain',
+        badgeClass: 'season-spring',
+        fact:   'A rainbow appears when sunlight shines through raindrops in the air. It always has the same 7 colours: Red, Orange, Yellow, Green, Blue, Indigo, Violet!'
+      },
+      'Foggy': {
+        img:    'https://api.iconify.design/noto/fog.svg?width=120&height=120',
+        emoji:  '🌫️', season: 'autumn',
+        badge:  '🌫️ Autumn · Low Cloud',
+        badgeClass: 'season-autumn',
+        fact:   'Fog is like a cloud that sits right on the ground! It makes it hard to see far away. Fog usually disappears after the Sun warms the air in the morning.'
+      },
+      'Hailstorm': {
+        img:    'https://api.iconify.design/noto/cloud-with-snow.svg?width=120&height=120',
+        emoji:  '🌨️', season: 'spring',
+        badge:  '🌨️ Spring · Ice Balls',
+        badgeClass: 'season-spring',
+        fact:   'Hail is balls of ice that fall from thunderclouds! They form when raindrops get carried high up in the cold part of a storm cloud and freeze into ice.'
+      },
+      'Hot': {
+        img:    'https://api.iconify.design/noto/thermometer.svg?width=120&height=120',
+        emoji:  '🌡️', season: 'summer',
+        badge:  '🌡️ Summer · High Temperature',
+        badgeClass: 'season-summer',
+        fact:   'Very hot weather happens in summer — the hottest season. The temperature rises and people cool off by drinking water, swimming and eating ice cream!'
+      },
+      'Cold': {
+        img:    'https://api.iconify.design/noto/cold-face.svg?width=120&height=120',
+        emoji:  '🥶', season: 'winter',
+        badge:  '❄️ Winter · Low Temperature',
+        badgeClass: 'season-winter',
+        fact:   'Cold weather comes in winter. We wear coats, scarves and gloves to stay warm. Water turns to ice and puddles can freeze solid overnight!'
+      },
+      'Spring': {
+        img:    'https://api.iconify.design/noto/cherry-blossom.svg?width=120&height=120',
+        emoji:  '🌸', season: 'spring',
+        badge:  '🌸 Spring Season · March–May',
+        badgeClass: 'season-spring',
+        fact:   'Spring is warm and fresh! Flowers bloom, trees grow new leaves and baby animals are born. After cold winter, spring feels wonderful!'
+      },
+      'Summer': {
+        img:    'https://api.iconify.design/noto/sun-with-face.svg?width=120&height=120',
+        emoji:  '🌞', season: 'summer',
+        badge:  '🌞 Summer Season · June–August',
+        badgeClass: 'season-summer',
+        fact:   'Summer is the hottest season with the longest days. The Sun stays up late! Perfect for beaches, ice cream and outdoor adventures!'
+      },
+      'Autumn': {
+        img:    'https://api.iconify.design/noto/fallen-leaf.svg?width=120&height=120',
+        emoji:  '🍂', season: 'autumn',
+        badge:  '🍂 Autumn Season · September–November',
+        badgeClass: 'season-autumn',
+        fact:   'In autumn leaves turn beautiful shades of red, orange and yellow before falling from the trees. Animals like squirrels collect food for winter!'
+      },
+      'Winter': {
+        img:    'https://api.iconify.design/noto/snowflake.svg?width=120&height=120',
+        emoji:  '⛄', season: 'winter',
+        badge:  '⛄ Winter Season · December–February',
+        badgeClass: 'season-winter',
+        fact:   'Winter is the coldest season with the shortest days. It can snow, making the world look white and magical. Time for hot chocolate and cosy blankets!'
+      },
+      'Hurricane': {
+        img:    'https://api.iconify.design/noto/cyclone.svg?width=120&height=120',
+        emoji:  '🌀', season: 'summer',
+        badge:  '🌀 Tropical Storm · Cyclone',
+        badgeClass: 'season-summer',
+        fact:   'A hurricane is a massive spinning storm with very strong winds over warm ocean water. It can bring heavy rain and flooding. Always stay safe during storms!'
+      },
+      'Drought': {
+        img:    'https://api.iconify.design/noto/sun.svg?width=120&height=120',
+        emoji:  '🏜️', season: 'summer',
+        badge:  '🏜️ Dry · No Rain for a Long Time',
+        badgeClass: 'season-summer',
+        fact:   'A drought happens when a place gets very little or no rain for a long time. The ground dries up, rivers shrink and plants can wilt. Water becomes precious!'
+      },
+      'Tornado': {
+        img:    'https://api.iconify.design/noto/tornado.svg?width=120&height=120',
+        emoji:  '🌪️', season: 'spring',
+        badge:  '🌪️ Spinning Wind Funnel',
+        badgeClass: 'season-spring',
+        fact:   'A tornado is a fast-spinning funnel of wind that touches the ground. It can pick up cars and trees! "Tornado Alley" in the USA sees hundreds every year!'
+      },
+      'Partly Cloudy': {
+        img:    'https://api.iconify.design/noto/sun-behind-cloud.svg?width=120&height=120',
+        emoji:  '⛅', season: 'any',
+        badge:  '⛅ Any Season · Mix of Sun & Cloud',
+        badgeClass: 'season-any',
+        fact:   'Partly cloudy means some clouds in the sky but also some sunshine! It is one of the most common types of weather — not too hot, not too gloomy!'
+      },
+      'Blizzard': {
+        img:    'https://api.iconify.design/noto/cloud-with-snow.svg?width=120&height=120',
+        emoji:  '🌨️', season: 'winter',
+        badge:  '🌨️ Winter · Heavy Snow & Wind',
+        badgeClass: 'season-winter',
+        fact:   'A blizzard is a very heavy snowstorm with strong winds that blow snow everywhere. It can be hard to see even a few steps ahead — called a whiteout!'
+      }
+    };
+
+    const itemNames  = Object.keys(items);
+    let currentItem  = '';
+    let currentSeason = 'all';
+    let learnedItems = new Set(JSON.parse(localStorage.getItem(GAME_KEY + '_learned') || '[]'));
+    let soundEnabled = true;
+    let autoSpeak    = false;
+
+    const itemsGrid            = document.getElementById('itemsGrid');
+    const itemName             = document.getElementById('itemName');
+    const itemImage            = document.getElementById('itemImage');
+    const itemDisplayContainer = document.getElementById('itemDisplayContainer');
+    const itemFact             = document.getElementById('itemFact');
+    const itemBadge            = document.getElementById('itemBadge');
+    const promptText           = document.getElementById('promptText');
+    const progressCounter      = document.getElementById('progressCounter');
+    const speakBtn             = document.getElementById('speakBtn');
+    const randomBtn            = document.getElementById('randomBtn');
+    const resetBtn             = document.getElementById('resetBtn');
+
+    function speak(text) {
+      if (!soundEnabled) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.rate = 0.85; utt.pitch = 1.1; utt.volume = 1;
+        window.speechSynthesis.speak(utt);
+      }
+    }
+
+    function displayItem(name) {
+      currentItem = name;
+      const data  = items[name];
+
+      promptText.style.display = 'none';
+      itemDisplayContainer.style.display = 'flex';
+
+      itemName.textContent = `${data.emoji} ${name}`;
+      itemName.style.animation = 'none';
+      void itemName.offsetHeight;
+      itemName.style.animation = 'bounce .6s ease-in-out';
+
+      itemBadge.textContent = data.badge;
+      itemBadge.className   = 'item-badge ' + data.badgeClass;
+      itemFact.textContent  = data.fact;
+
+      itemImage.src = data.img;
+      itemImage.alt = name;
+      itemImage.style.animation = 'none';
+      void itemImage.offsetHeight;
+      itemImage.style.animation = 'fadeInScale .8s ease-out';
+      itemImage.onerror = () => {
+        itemImage.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${data.emoji}</text></svg>`;
+      };
+
+      speakBtn.disabled = false;
+      learnedItems.add(name);
+      localStorage.setItem(GAME_KEY + '_learned', JSON.stringify([...learnedItems]));
+      updateProgress();
+      checkAchievements();
+      renderGrid();
+      if (autoSpeak) speak(name);
+    }
+
+    function updateProgress() {
+      progressCounter.textContent = learnedItems.size + ' / ' + TOTAL_ITEMS + ' learned';
+    }
+
+    function getVisibleNames() {
+      if (currentSeason === 'all') return itemNames;
+      return itemNames.filter(n => items[n].season === currentSeason || items[n].season === 'any');
+    }
+
+    function renderGrid() {
+      itemsGrid.innerHTML = '';
+      const visible = new Set(getVisibleNames());
+      itemNames.forEach(name => {
+        const btn = document.createElement('button');
+        btn.className = 'item-btn' + (learnedItems.has(name) ? ' learned' : '') + (visible.has(name) ? '' : ' hidden');
+        btn.setAttribute('aria-label', 'Learn about ' + name);
+        btn.innerHTML = `<span class="btn-emoji">${items[name].emoji}</span><span class="btn-name">${name}</span>`;
+        btn.addEventListener('click', (e) => {
+          createRipple(e);
+          btn.classList.add('flipping');
+          setTimeout(() => btn.classList.remove('flipping'), 600);
+          displayItem(name);
+        });
+        itemsGrid.appendChild(btn);
+      });
+    }
+
+    function createRipple(e) {
+      const btn  = e.currentTarget;
+      const rect = btn.getBoundingClientRect();
+      const rip  = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      rip.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
+      rip.classList.add('ripple');
+      btn.appendChild(rip);
+      setTimeout(() => rip.remove(), 600);
+    }
+
+    // Season tabs
+    document.getElementById('seasonTabs').addEventListener('click', (e) => {
+      const tab = e.target.closest('.season-tab');
+      if (!tab) return;
+      currentSeason = tab.dataset.season;
+      document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderGrid();
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const visible = getVisibleNames();
+      displayItem(visible[Math.floor(Math.random() * visible.length)]);
+    });
+    speakBtn.addEventListener('click', () => { if (currentItem) speak(currentItem); });
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Reset all Weather & Seasons progress?')) {
+        learnedItems.clear();
+        ['_learned','_stats','_achievements'].forEach(k => localStorage.removeItem(GAME_KEY + k));
+        currentItem = '';
+        itemDisplayContainer.style.display = 'none';
+        promptText.style.display = 'block';
+        speakBtn.disabled = true;
+        updateProgress(); renderGrid();
+      }
+    });
+
+    // QUIZ
+    const quizModal    = document.getElementById('quizModal');
+    const closeQuiz    = document.getElementById('closeQuiz');
+    const quizOptions  = document.getElementById('quizOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    const quizScore    = document.getElementById('quizScore');
+    const nextQuizBtn  = document.getElementById('nextQuizBtn');
+    const quizImgEl    = document.getElementById('quizItemImage');
+    const quizBtn      = document.getElementById('quizBtn');
+
+    let quizState = { current: null, correct: 0, totalQs: 0, idx: 0, answered: false };
+
+    function startQuiz() {
+      quizState = { current: null, correct: 0, totalQs: Math.min(10, TOTAL_ITEMS), idx: 0, answered: false };
+      quizModal.style.display = 'flex';
+      loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+      quizState.answered = false;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      quizScore.textContent = `Question ${quizState.idx + 1} / ${quizState.totalQs}  ·  Score: ${quizState.correct}`;
+
+      const shuffled = [...itemNames].sort(() => Math.random() - .5);
+      const answer   = shuffled[0];
+      const choices  = shuffled.slice(0, 4).sort(() => Math.random() - .5);
+      quizState.current = answer;
+
+      quizImgEl.src = items[answer].img;
+      quizImgEl.onerror = () => {
+        quizImgEl.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${items[answer].emoji}</text></svg>`;
+      };
+
+      quizOptions.innerHTML = '';
+      choices.forEach(choice => {
+        const opt = document.createElement('button');
+        opt.textContent = `${items[choice].emoji} ${choice}`;
+        opt.style.cssText = 'padding:12px;font-size:1em;border-radius:15px;border:2px solid #64b5f6;background:rgba(100,181,246,.1);color:#90caf9;cursor:pointer;transition:all .3s;font-weight:bold;font-family:inherit;';
+        opt.addEventListener('click', () => checkAnswer(choice, opt));
+        quizOptions.appendChild(opt);
+      });
+    }
+
+    function checkAnswer(choice, btn) {
+      if (quizState.answered) return;
+      quizState.answered = true;
+      const correct = choice === quizState.current;
+      if (correct) {
+        quizState.correct++;
+        quizFeedback.innerHTML = `✅ <span style="color:#4caf50">Correct! ${items[choice].emoji}</span>`;
+        btn.style.cssText += 'background:#4caf50;border-color:#4caf50;color:white;';
+      } else {
+        quizFeedback.innerHTML = `❌ <span style="color:#f44336">It's ${quizState.current}!</span>`;
+        btn.style.cssText += 'background:#f44336;border-color:#f44336;color:white;';
+        quizOptions.querySelectorAll('button').forEach(b => {
+          if (b.textContent.includes(quizState.current)) b.style.cssText += 'background:#4caf50;border-color:#4caf50;color:white;';
+        });
+      }
+      quizState.idx++;
+      if (quizState.idx < quizState.totalQs) nextQuizBtn.style.display = 'inline-block';
+      else setTimeout(showQuizResults, 900);
+    }
+
+    function showQuizResults() {
+      const pct  = Math.round((quizState.correct / quizState.totalQs) * 100);
+      const icon = pct === 100 ? '🌈' : pct >= 70 ? '⛅' : '🌧️';
+      quizOptions.innerHTML = '';
+      quizImgEl.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${icon}</text></svg>`;
+      quizFeedback.textContent = '';
+      nextQuizBtn.style.display = 'none';
+      const msg = pct === 100 ? 'Perfect! You are a Weather Expert! 🌈'
+                : pct >= 70  ? 'Great job, young Meteorologist!'
+                :               'Keep exploring — more weather awaits!';
+      quizScore.innerHTML = `<div style="font-size:1.7em;color:#90caf9;margin-bottom:8px;">${icon} Quiz Complete!</div>
+        <div style="font-size:1.3em;color:white;">Score: ${quizState.correct} / ${quizState.totalQs} (${pct}%)</div>
+        <div style="font-size:.95em;color:rgba(255,255,255,.7);margin-top:8px;">${msg}</div>`;
+      const rb = document.createElement('button');
+      rb.textContent = '🔄 Play Again';
+      rb.style.cssText = 'margin-top:14px;padding:12px 30px;font-size:1.1em;font-weight:bold;background:linear-gradient(145deg,#64b5f6,#1565c0);border:none;border-radius:20px;cursor:pointer;color:#fff;font-family:inherit;display:block;margin-left:auto;margin-right:auto;';
+      rb.addEventListener('click', startQuiz);
+      quizScore.appendChild(rb);
+    }
+
+    quizBtn.addEventListener('click', startQuiz);
+    closeQuiz.addEventListener('click', () => { quizModal.style.display = 'none'; });
+    quizModal.addEventListener('click',  (e) => { if (e.target === quizModal) quizModal.style.display = 'none'; });
+    nextQuizBtn.addEventListener('click', loadQuizQuestion);
+
+    // SETTINGS
+    document.getElementById('settingsBtn').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'flex'; });
+    document.getElementById('closeSettings').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'none'; });
+    document.getElementById('darkModeToggle').addEventListener('change', (e) => { document.body.classList.toggle('dark-mode', e.target.checked); });
+    document.getElementById('soundToggle').addEventListener('change', (e) => { soundEnabled = e.target.checked; });
+    document.getElementById('autoSpeakToggle').addEventListener('change', (e) => { autoSpeak = e.target.checked; });
+    document.querySelectorAll('.fontSizeBtn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.fontSizeBtn').forEach(x => { x.style.background='rgba(100,181,246,.15)'; x.style.color='#90caf9'; x.style.fontWeight='normal'; });
+        b.style.background = '#64b5f6'; b.style.color = '#fff'; b.style.fontWeight = 'bold';
+        document.body.className = document.body.className.replace(/font-\w+/g, '');
+        document.body.classList.add('font-' + b.dataset.size);
+      });
+    });
+
+    // ACHIEVEMENTS & STATS
+    const achievements = {
+      first_weather: { name: '🌤️ First Forecast',    desc: 'Learn your first weather',   unlocked: false },
+      halfway:       { name: '⛅ Weather Watcher',    desc: 'Learn 10 weather types',     unlocked: false },
+      all_seasons:   { name: '🌈 Meteorologist',      desc: 'Learn all 20 types',         unlocked: false },
+      perfect_quiz:  { name: '💯 Perfect Score',      desc: 'Score 100% in a quiz',       unlocked: false },
+      quiz_master:   { name: '🎓 Quiz Master',        desc: 'Complete 10 quizzes',        unlocked: false }
+    };
+    const savedAch = JSON.parse(localStorage.getItem(GAME_KEY + '_achievements') || '{}');
+    Object.keys(savedAch).forEach(k => { if (achievements[k]) achievements[k].unlocked = savedAch[k]; });
+    let stats = JSON.parse(localStorage.getItem(GAME_KEY + '_stats') || '{"totalQuizzes":0,"totalCorrect":0,"totalQuestions":0,"highScore":0}');
+
+    function saveAchievements() {
+      const out = {}; Object.keys(achievements).forEach(k => { out[k] = achievements[k].unlocked; });
+      localStorage.setItem(GAME_KEY + '_achievements', JSON.stringify(out));
+    }
+    function saveStats() { localStorage.setItem(GAME_KEY + '_stats', JSON.stringify(stats)); }
+
+    function showAchievementBadge(ach) {
+      const el = document.createElement('div');
+      el.style.cssText = 'position:fixed;top:20px;right:20px;background:linear-gradient(135deg,#ffd700,#ffed4e);color:#333;padding:20px 30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:10001;font-weight:bold;border:3px solid #ff8800;';
+      el.innerHTML = `<div style="font-size:1.5em;margin-bottom:5px;">${ach.name}</div><div style="font-size:.9em;opacity:.8;">${ach.desc}</div>`;
+      document.body.appendChild(el);
+      if (!document.getElementById('achAnimStyle')) {
+        const s = document.createElement('style'); s.id = 'achAnimStyle';
+        s.textContent = '@keyframes slideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}';
+        document.head.appendChild(s);
+      }
+      el.style.animation = 'slideIn .5s ease-out';
+      speak('Achievement unlocked: ' + ach.name.replace(/[^\w\s]/g, ''));
+      setTimeout(() => { el.style.transition='all .5s'; el.style.transform='translateX(400px)'; el.style.opacity='0'; setTimeout(() => el.remove(), 500); }, 3000);
+    }
+
+    function checkAchievements() {
+      let changed = false;
+      if (!achievements.first_weather.unlocked && learnedItems.size >= 1)           { achievements.first_weather.unlocked = true; showAchievementBadge(achievements.first_weather); changed = true; }
+      if (!achievements.halfway.unlocked        && learnedItems.size >= 10)          { achievements.halfway.unlocked = true;        showAchievementBadge(achievements.halfway);        changed = true; }
+      if (!achievements.all_seasons.unlocked    && learnedItems.size >= TOTAL_ITEMS) { achievements.all_seasons.unlocked = true;    showAchievementBadge(achievements.all_seasons);    changed = true; }
+      if (changed) saveAchievements();
+    }
+
+    document.getElementById('statsBtn').addEventListener('click', () => {
+      const s2  = JSON.parse(localStorage.getItem(GAME_KEY + '_stats') || '{"totalQuizzes":0,"totalCorrect":0,"totalQuestions":0,"highScore":0}');
+      const acc = s2.totalQuestions > 0 ? ((s2.totalCorrect / s2.totalQuestions) * 100).toFixed(1) : 0;
+      document.getElementById('statsContent').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;color:white;font-size:16px;">
+          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🌦️ ${learnedItems.size}/${TOTAL_ITEMS}</div><div>Weather Learned</div></div>
+          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">📝 ${s2.totalQuizzes}</div><div>Quizzes Taken</div></div>
+          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">✅ ${acc}%</div><div>Accuracy</div></div>
+          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🏆 ${s2.highScore}%</div><div>High Score</div></div>
+        </div>`;
+      const achList = document.getElementById('achievementsList');
+      achList.innerHTML = '';
+      Object.values(achievements).forEach(a => {
+        const d = document.createElement('div');
+        d.style.cssText = `background:${a.unlocked ? 'linear-gradient(135deg,#ffd700,#ffed4e)' : 'rgba(255,255,255,.08)'};padding:18px;border-radius:15px;text-align:center;opacity:${a.unlocked ? 1 : .5};`;
+        d.innerHTML = `<div style="font-size:40px;margin-bottom:7px;">${a.name.split(' ')[0]}</div><div style="font-weight:bold;font-size:14px;color:${a.unlocked ? '#000' : '#fff'};">${a.name.substring(a.name.indexOf(' ')+1)}</div><div style="font-size:12px;color:${a.unlocked ? '#333' : '#aaa'};margin-top:4px;">${a.desc}</div>${a.unlocked ? '<div style="margin-top:7px;color:#000;font-weight:bold;font-size:12px;">✓ UNLOCKED</div>' : '<div style="margin-top:7px;color:#666;font-size:12px;">🔒 Locked</div>'}`;
+        achList.appendChild(d);
+      });
+      document.getElementById('statsModal').style.display = 'flex';
+    });
+    document.getElementById('closeStats').addEventListener('click', () => { document.getElementById('statsModal').style.display = 'none'; });
+    document.getElementById('statsModal').addEventListener('click', (e) => { if (e.target === document.getElementById('statsModal')) document.getElementById('statsModal').style.display = 'none'; });
+
+    const _origShowResults = showQuizResults;
+    showQuizResults = function() {
+      stats.totalQuizzes++;
+      stats.totalCorrect   += quizState.correct;
+      stats.totalQuestions += quizState.totalQs;
+      const pct = (quizState.correct / quizState.totalQs) * 100;
+      if (pct > stats.highScore) stats.highScore = Math.round(pct);
+      if (pct === 100 && !achievements.perfect_quiz.unlocked) { achievements.perfect_quiz.unlocked = true; setTimeout(() => showAchievementBadge(achievements.perfect_quiz), 1000); saveAchievements(); }
+      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) { achievements.quiz_master.unlocked = true; setTimeout(() => showAchievementBadge(achievements.quiz_master), 1500); saveAchievements(); }
+      saveStats(); _origShowResults();
+    };
+
+    renderGrid();
+    updateProgress();
+    checkAchievements();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../service-worker.js');
+      let r = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => { if (!r) { r = true; location.reload(); } });
+    }
+  </script>
+  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:.7em;color:rgba(255,255,255,.25);"></div>
+  <script>
+    fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main')
+      .then(r => r.json())
+      .then(d => { document.getElementById('build-info').textContent = 'Build: ' + d.sha.slice(0,7) + ' · ' + d.commit.committer.date.slice(0,10); })
+      .catch(() => {});
+  </script>
+</body>
+</html>
