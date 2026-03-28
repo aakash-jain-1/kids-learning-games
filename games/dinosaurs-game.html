@@ -1,774 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dinosaurs Learning Game</title>
-  <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-      touch-action: manipulation;
-    }
-    body {
-      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #1a3a1a 0%, #2d5a1b 50%, #4a7c3f 100%);
-      text-align: center;
-      margin: 0;
-      padding: 100px 0 0 0;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-      transition: all 0.3s ease;
-    }
-    body.dark-mode { background: linear-gradient(135deg, #0a0f0a 0%, #111a0d 100%); }
-    body.font-small  { font-size: 14px; }
-    body.font-medium { font-size: 16px; }
-    body.font-large  { font-size: 18px; }
-
-    .switch input:checked + span              { background-color: #4caf50; }
-    .switch input:checked + span:before      { transform: translateX(26px); }
-    .switch span:before {
-      position: absolute; content: "";
-      height: 26px; width: 26px; left: 4px; bottom: 4px;
-      background-color: white; transition: 0.4s; border-radius: 50%;
-    }
-
-    @keyframes fadeIn     { from{opacity:0} to{opacity:1} }
-    @keyframes bounce {
-      0%,20%,50%,80%,100% { transform:translateY(0); }
-      40% { transform:translateY(-10px); }
-      60% { transform:translateY(-5px); }
-    }
-    @keyframes flip3d {
-      0%  { transform:rotateY(0deg); }
-      50% { transform:rotateY(90deg); }
-      100%{ transform:rotateY(0deg); }
-    }
-    @keyframes fadeInScale {
-      from { opacity:0; transform:scale(.5); }
-      to   { opacity:1; transform:scale(1); }
-    }
-    @keyframes dinoGlow {
-      0%   { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 20px rgba(124,205,66,.5); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 50px rgba(124,205,66,.9); }
-    }
-    @keyframes pulse-glow {
-      0%,100%{ box-shadow:0 0 20px rgba(124,205,66,.6),0 0 40px rgba(124,205,66,.4); }
-      50%    { box-shadow:0 0 30px rgba(124,205,66,.8),0 0 60px rgba(124,205,66,.6); }
-    }
-    @keyframes roar {
-      0%   { transform: scale(1); }
-      30%  { transform: scale(1.12) rotate(-3deg); }
-      60%  { transform: scale(1.08) rotate(3deg); }
-      100% { transform: scale(1); }
-    }
-    .ripple {
-      position:absolute; border-radius:50%;
-      background:rgba(124,205,66,.4); transform:scale(0);
-      animation:ripple-anim .6s ease-out; pointer-events:none;
-    }
-    @keyframes ripple-anim { to{ transform:scale(4); opacity:0; } }
-
-    /* Navigation */
-    .navigation {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(0,0,0,.6); backdrop-filter: blur(10px);
-      padding: 10px 15px;
-      display: flex; justify-content: center; align-items: center;
-      gap: 10px; flex-wrap: wrap;
-    }
-    .nav-btn {
-      background: linear-gradient(135deg, #7ccd42 0%, #4a7c1f 100%);
-      border: none; border-radius: 8px; padding: 10px 20px;
-      cursor: pointer; font-size: 1em; font-weight: 600; color: #fff;
-      transition: all .3s ease; text-decoration: none;
-      box-shadow: 0 2px 5px rgba(0,0,0,.4);
-    }
-    .nav-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(124,205,66,.5); }
-    .nav-btn.active { background: linear-gradient(135deg, #a8e063 0%, #7ccd42 100%); box-shadow:0 4px 14px rgba(124,205,66,.7); }
-
-    h1 {
-      color: #a8e063;
-      font-size: 3em; margin-top: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,.8), 0 0 30px rgba(124,205,66,.5);
-      position: relative; z-index: 1;
-      animation: dinoGlow 3s ease-in-out infinite alternate;
-    }
-
-    /* Control panel */
-    .control-panel {
-      display: flex; justify-content: center; align-items: center;
-      gap: 15px; margin: 25px auto; padding: 15px;
-      background: rgba(0,0,0,.3); backdrop-filter: blur(10px);
-      border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(124,205,66,.3);
-      max-width: 820px; position: relative; z-index: 10; flex-wrap: wrap;
-    }
-    .control-btn {
-      background: linear-gradient(145deg, #1a3a1a, #0f200f);
-      border: 2px solid #7ccd42; border-radius: 15px;
-      padding: 12px 22px; font-size: 1.1em; font-weight: bold;
-      color: #a8e063; cursor: pointer; transition: all .3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,.4); min-width: 110px; font-family: inherit;
-    }
-    .control-btn:hover:not(:disabled) {
-      background: linear-gradient(145deg, #7ccd42, #4a7c1f);
-      color: #fff; transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(124,205,66,.5);
-    }
-    .control-btn:active:not(:disabled) { transform:translateY(0); }
-    .control-btn:disabled { opacity:.4; cursor:not-allowed; }
-    .progress-counter {
-      background:rgba(0,0,0,.4); border:2px solid #7ccd42;
-      border-radius:12px; padding:10px 20px; font-size:1.2em;
-      font-weight:bold; color:#a8e063;
-      box-shadow:0 4px 10px rgba(0,0,0,.3); min-width:150px;
-    }
-
-    /* Two-pane layout */
-    .main-container {
-      display: flex; justify-content: center; align-items: flex-start;
-      gap: 40px; margin: 30px auto; padding: 0 20px;
-      max-width: 1100px; height: 76vh; position: relative; z-index: 1;
-    }
-    .left-pane {
-      flex: 1; display: flex; flex-direction: column; align-items: center;
-      background: rgba(0,0,0,.25); backdrop-filter: blur(10px);
-      border-radius: 20px; padding: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(124,205,66,.2);
-      max-height: 76vh; overflow-y: auto;
-    }
-    .right-pane {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-width: 340px;
-      background: rgba(0,0,0,.2); backdrop-filter: blur(10px);
-      border-radius: 20px; padding: 30px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5);
-      border: 1px solid rgba(124,205,66,.2);
-      position: relative; overflow-y: auto;
-    }
-
-    /* Item grid */
-    .items-grid {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 12px; width: 100%; margin-top: 15px;
-    }
-    .item-btn {
-      background: linear-gradient(145deg, #1a3a1a, #0f200f);
-      border: 2px solid #7ccd42; border-radius: 15px;
-      font-size: 1em; font-weight: bold; padding: 14px 6px;
-      cursor: pointer; transition: all .3s ease; width: 100%;
-      box-shadow: 0 4px 12px rgba(0,0,0,.4); color: #a8e063;
-      position: relative; overflow: hidden; min-height: 72px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 5px; font-family: inherit;
-    }
-    .item-btn .btn-emoji { font-size: 2em; line-height: 1; }
-    .item-btn .btn-name  { font-size: 0.78em; color: rgba(255,255,255,.9); }
-    .item-btn.flipping { animation: flip3d .6s ease-in-out; }
-    .item-btn:hover {
-      background: linear-gradient(145deg, #7ccd42, #4a7c1f);
-      color: #fff; transform: translateY(-4px) scale(1.04);
-      box-shadow: 0 10px 28px rgba(124,205,66,.5);
-    }
-    .item-btn:hover .btn-name { color: #fff; }
-    .item-btn:active { transform:translateY(0) scale(.96); }
-    .item-btn.learned { background: linear-gradient(145deg, #0d2b0d, #1a4a1a); border-color: #4caf50; }
-
-    /* Right pane display */
-    .item-name {
-      font-size: clamp(1.8em, 4.5vmin, 3.2em); font-weight: bold;
-      color: #a8e063; text-align: center; margin-bottom: 10px;
-      text-shadow: 0 0 20px rgba(124,205,66,.5);
-    }
-    .item-image {
-      width: 190px; height: 190px; border-radius: 20px;
-      padding: 10px; object-fit: contain;
-      animation: fadeInScale .8s ease-out;
-      filter: drop-shadow(0 0 18px rgba(124,205,66,.5));
-    }
-    .item-image.roaring { animation: roar .6s ease-in-out; }
-    .item-badge {
-      display: inline-block;
-      background: rgba(124,205,66,.15); border: 1px solid #7ccd42;
-      border-radius: 20px; padding: 6px 18px;
-      color: #a8e063; font-size: 1em; font-weight: bold; margin: 10px 0;
-    }
-    .item-fact {
-      font-size: 1.1em; color: rgba(255,255,255,.92);
-      margin-top: 8px; line-height: 1.65; max-width: 360px; text-align: center;
-    }
-    .item-diet {
-      font-size: 1em; margin-top: 8px;
-      padding: 5px 16px; border-radius: 20px; font-weight: bold;
-    }
-    .item-diet.carnivore { background: rgba(244,67,54,.2); color: #ff6b6b; border: 1px solid #f44336; }
-    .item-diet.herbivore { background: rgba(76,175,80,.2); color: #a8e063; border: 1px solid #4caf50; }
-    .item-diet.omnivore  { background: rgba(255,152,0,.2); color: #ffb74d; border: 1px solid #ff9800; }
-    .prompt-text {
-      color: rgba(255,255,255,.4); font-size: 1.4em;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; }
-      .items-grid     { grid-template-columns: repeat(3,1fr) !important; }
-      .right-pane     { min-width: unset !important; width: 100% !important; }
-      .left-pane      { max-height: none !important; overflow-y: visible !important; }
-      h1 { font-size: 2em !important; }
-    }
-    @media (max-width: 600px) {
-      body { padding-top: 52px !important; }
-      .navigation { padding:6px 8px; flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; -webkit-overflow-scrolling:touch; }
-      .nav-btn    { padding:6px 10px; font-size:.76em; white-space:nowrap; flex-shrink:0; }
-      .control-btn { min-width:unset !important; padding:8px 12px !important; font-size:.88em !important; }
-      .items-grid  { grid-template-columns: repeat(2,1fr) !important; }
-    }
-    body::before { display: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dinosaurs Cards</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+*{-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation;}
+body{font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;height:100dvh;overflow:hidden;}
+.layout{display:flex;height:100dvh;}
+.left-pane{width:50%;background:linear-gradient(160deg,#0a1a05 0%,#122a0a 50%,#1a3a10 100%);display:flex;flex-direction:column;align-items:center;padding:20px 16px 22px;gap:14px;overflow:hidden;}
+.left-top{width:100%;display:flex;align-items:center;justify-content:space-between;}
+.back-link{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85em;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:50px;transition:0.25s;}
+.back-link:hover{background:rgba(255,255,255,0.22);color:#fff;}
+.left-heading{color:rgba(255,255,255,0.45);font-size:0.78em;letter-spacing:3px;text-transform:uppercase;}
+.cat-bar{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;width:100%;}
+.cat-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);font-size:0.78em;font-weight:bold;padding:6px 13px;border-radius:50px;cursor:pointer;font-family:inherit;transition:0.22s;}
+.cat-btn:hover{background:rgba(255,255,255,0.22);color:#fff;}
+.cat-btn.active{background:linear-gradient(135deg,#4a9010,#7ccd42);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(124,205,66,0.5);}
+.deck-area{position:relative;flex:1;display:flex;align-items:center;justify-content:center;}
+.ghost{position:absolute;width:min(400px,42vw,calc(62dvh * 0.727));aspect-ratio:400/550;height:auto;border-radius:26px;background:linear-gradient(150deg,#0d2205 0%,#0a1a05 100%);border:2px solid rgba(255,255,255,0.08);box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+.ghost::before{content:'';position:absolute;inset:14px;border:1.5px solid rgba(255,255,255,0.07);border-radius:18px;}
+.ghost:nth-child(1){transform:rotate(8deg) translate(40px,16px);opacity:0.45;z-index:1;}
+.ghost:nth-child(2){transform:rotate(5deg) translate(25px,9px);opacity:0.62;z-index:2;}
+.ghost:nth-child(3){transform:rotate(2deg) translate(11px,4px);opacity:0.82;z-index:3;}
+.top-card{position:relative;z-index:10;width:min(400px,42vw,calc(62dvh * 0.727));aspect-ratio:400/550;height:auto;border-radius:26px;background:linear-gradient(145deg,#ffffff 0%,#f0f4ff 100%);border:3px solid rgba(255,255,255,0.9);box-shadow:0 24px 60px rgba(0,0,0,0.55),0 4px 16px rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;}
+.top-card:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 32px 70px rgba(0,0,0,0.6);}
+.top-card:active{transform:translateY(-2px) scale(0.98);}
+.card-num-badge{position:absolute;top:12px;right:14px;font-size:0.72em;color:rgba(80,100,160,0.6);font-weight:bold;}
+.card-cat-badge{position:absolute;bottom:12px;font-size:0.62em;color:rgba(80,100,160,0.55);text-align:center;padding:0 12px;}
+.card-emoji-big{font-size:clamp(4em,9vmin,9.5em);line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));}
+.card-emoji-big.pop,.card-img.pop{animation:emojiPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+@keyframes emojiPop{0%{transform:scale(0.55) rotate(-8deg);}70%{transform:scale(1.18) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
+.card-img{width:88%;max-width:320px;height:auto;max-height:360px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));}
+.card-name-big{font-size:2.4em;font-weight:bold;color:#1a2a4a;}
+.card-pill{font-size:0.72em;padding:4px 14px;border-radius:50px;font-weight:bold;}
+.card-pill.carnivore{background:#ff5252;color:#fff;}.card-pill.herbivore{background:#4caf50;color:#fff;}.card-pill.omnivore{background:#ff9800;color:#fff;}
+.card-pill.spring{background:#66bb6a;color:#fff;}.card-pill.summer{background:#ffa726;color:#1a1a1a;}.card-pill.autumn{background:#ef6c00;color:#fff;}.card-pill.winter{background:#42a5f5;color:#fff;}.card-pill.any{background:#ab47bc;color:#fff;}
+.deck-nav{display:flex;gap:14px;width:100%;justify-content:center;}
+.nav-btn{flex:1;max-width:120px;background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.3);color:#fff;font-size:1em;font-weight:bold;padding:12px 0;border-radius:50px;cursor:pointer;font-family:inherit;transition:0.22s;}
+.nav-btn:hover{background:rgba(255,255,255,0.25);transform:translateY(-2px);}
+.nav-btn:active{transform:translateY(0);}
+.prog-strip{width:100%;}
+.prog-bg{background:rgba(255,255,255,0.12);border-radius:50px;height:8px;overflow:hidden;}
+.prog-fg{height:100%;background:linear-gradient(90deg,#7ccd42,#a8e063);border-radius:50px;transition:width 0.5s ease;}
+.prog-txt{color:rgba(255,255,255,0.4);font-size:0.72em;text-align:center;margin-top:5px;}
+.right-pane{flex:1;background:linear-gradient(140deg,#ffecd2 0%,#fcb69f 100%);display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow-y:auto;overflow-x:hidden;}
+.right-pane::before{content:'';position:absolute;inset:0;z-index:0;background-image:radial-gradient(rgba(0,0,0,0.07) 1px,transparent 1px);background-size:22px 22px;}
+.machine{position:relative;z-index:1;background:linear-gradient(170deg,#0f1a08 0%,#162210 100%);border-radius:28px;padding:22px 24px 26px;width:100%;max-width:370px;box-shadow:0 0 0 3px rgba(255,255,255,0.08),0 28px 70px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.1);display:flex;flex-direction:column;align-items:center;gap:16px;}
+.machine-plate{background:linear-gradient(135deg,#1a3a08,#0f1a05);border-radius:8px;padding:7px 22px;color:rgba(255,255,255,0.5);font-size:0.62em;letter-spacing:5px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);}
+.machine-screen{width:100%;background:#000;border-radius:16px;padding:16px 14px 14px;border:4px solid #0a0a0a;box-shadow:inset 0 0 28px rgba(124,205,66,0.08),0 4px 12px rgba(0,0,0,0.5);display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;overflow:hidden;}
+.machine-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(124,205,66,0.07),transparent 70%);pointer-events:none;}
+.machine-screen::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.1) 3px,rgba(0,0,0,0.1) 4px);pointer-events:none;border-radius:12px;}
+.scrn-emoji{font-size:5.2em;line-height:1;position:relative;z-index:1;filter:drop-shadow(0 0 12px rgba(124,205,66,0.4));transition:filter 0.3s;}
+.scrn-emoji.flash,.scrn-img.flash{animation:screenFlash 0.6s ease;}
+@keyframes screenFlash{0%{filter:drop-shadow(0 0 12px rgba(124,205,66,0.4)) brightness(1);}35%{filter:drop-shadow(0 0 40px rgba(124,205,66,1)) brightness(1.6);}100%{filter:drop-shadow(0 0 12px rgba(124,205,66,0.4)) brightness(1);}}
+.scrn-img{width:140px;height:140px;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 0 12px rgba(124,205,66,0.4));}
+.scrn-name{font-size:1.75em;font-weight:bold;color:#7ccd42;position:relative;z-index:1;text-shadow:0 0 14px rgba(124,205,66,0.5);letter-spacing:1px;font-family:'Courier New',monospace;}
+.scrn-badge-pill{font-size:0.78em;padding:4px 16px;border-radius:50px;position:relative;z-index:1;font-family:'Courier New',monospace;font-weight:bold;}
+.scrn-badge-pill.carnivore{background:rgba(239,83,80,0.25);border:1px solid #ef5350;color:#ef9a9a;}
+.scrn-badge-pill.herbivore{background:rgba(102,187,106,0.25);border:1px solid #66bb6a;color:#a5d6a7;}
+.scrn-badge-pill.omnivore{background:rgba(255,167,38,0.25);border:1px solid #ffa726;color:#ffcc80;}
+.scrn-badge-pill.spring{background:rgba(102,187,106,0.25);border:1px solid #66bb6a;color:#a5d6a7;}
+.scrn-badge-pill.summer{background:rgba(255,167,38,0.25);border:1px solid #ffa726;color:#ffcc80;}
+.scrn-badge-pill.autumn{background:rgba(239,108,0,0.25);border:1px solid #ef6c00;color:#ffab40;}
+.scrn-badge-pill.winter{background:rgba(100,181,246,0.25);border:1px solid #64b5f6;color:#bbdefb;}
+.scrn-badge-pill.any{background:rgba(206,147,216,0.25);border:1px solid #ce93d8;color:#e1bee7;}
+.scrn-badge-txt{font-size:0.68em;color:rgba(168,224,99,0.55);text-align:center;position:relative;z-index:1;font-family:'Courier New',monospace;padding:2px 8px;}
+.scrn-fact{font-size:0.7em;color:rgba(168,224,99,0.55);text-align:center;line-height:1.45;max-width:250px;position:relative;z-index:1;font-family:'Courier New',monospace;min-height:3em;}
+.grille{width:100%;background:linear-gradient(180deg,#080814,#040408);border-radius:12px;padding:12px 14px;border:1px solid rgba(255,255,255,0.05);}
+.grille-row{display:flex;gap:5px;justify-content:center;margin-bottom:5px;}
+.grille-row:last-child{margin-bottom:0;}
+.grille-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.1);box-shadow:inset 0 1px 2px rgba(0,0,0,0.5);transition:background 0.1s,box-shadow 0.1s;}
+.grille-dot.lit{background:#7ccd42;box-shadow:0 0 6px #7ccd42,0 0 12px rgba(124,205,66,0.5);animation:dotPop 0.2s ease both;}
+@keyframes dotPop{from{transform:scale(0.5);}to{transform:scale(1);}}
+.waves{display:flex;align-items:center;justify-content:center;gap:4px;height:28px;opacity:0;transition:opacity 0.3s;}
+.waves.active{opacity:1;}
+.wv{width:4px;background:#7ccd42;border-radius:4px;animation:wvPulse 0.7s ease-in-out infinite;}
+.wv:nth-child(1){height:10px;animation-delay:0s;}.wv:nth-child(2){height:20px;animation-delay:0.1s;}.wv:nth-child(3){height:26px;animation-delay:0.2s;}.wv:nth-child(4){height:20px;animation-delay:0.3s;}.wv:nth-child(5){height:10px;animation-delay:0.4s;}
+@keyframes wvPulse{0%,100%{transform:scaleY(0.4);opacity:0.5;}50%{transform:scaleY(1);opacity:1;}}
+.press-btn{width:100%;background:linear-gradient(145deg,#7ccd42,#4a9010);border:none;border-radius:18px;padding:18px 14px;cursor:pointer;font-family:inherit;color:#fff;font-size:1.25em;font-weight:bold;text-align:center;line-height:1.3;box-shadow:0 8px 0 #2d5a08,0 12px 24px rgba(124,205,66,0.5);transition:all 0.12s;letter-spacing:0.5px;}
+.press-btn:hover{background:linear-gradient(145deg,#90d958,#5aaa20);transform:translateY(-2px);}
+.press-btn:active,.press-btn.pressed{transform:translateY(6px);box-shadow:0 2px 0 #2d5a08,0 4px 10px rgba(124,205,66,0.5);}
+.btn-icon{font-size:1.2em;display:block;margin-bottom:3px;}
+.btn-sub{font-size:0.6em;opacity:0.65;font-weight:normal;display:block;margin-top:2px;}
+.done-overlay{display:none;position:absolute;inset:0;z-index:50;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;}
+.done-overlay.show{display:flex;}
+.done-card{background:#fff;border-radius:24px;padding:38px 36px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
+.done-card h2{font-size:1.8em;color:#7ccd42;margin:10px 0 8px;}
+.done-card p{color:#555;font-size:0.95em;margin-bottom:20px;}
+.restart-btn{background:linear-gradient(145deg,#7ccd42,#4a9010);color:#fff;border:none;border-radius:50px;padding:13px 36px;font-size:1em;font-weight:bold;cursor:pointer;font-family:inherit;box-shadow:0 5px 16px rgba(0,0,0,0.2);transition:0.22s;}
+.restart-btn:hover{transform:translateY(-2px);}
+@keyframes popIn{0%{transform:scale(0.5) rotate(-5deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;}}
+.cf{position:fixed;pointer-events:none;z-index:9999;animation:cfFall 2.5s linear forwards;}
+@keyframes cfFall{0%{transform:translateY(-10px) rotateZ(0);opacity:1;}100%{transform:translateY(105vh) rotateZ(720deg);opacity:0;}}
+@media(max-height:900px) and (min-width:701px){
+  .left-pane{gap:6px;padding:10px 14px 12px;overflow-y:auto;}.deck-area{min-height:0;}
+  .card-emoji-big{font-size:4.2em;}.card-name-big{font-size:1.6em;}
+  .right-pane{align-items:flex-start;overflow-y:auto;padding:16px 20px;}
+  .machine{padding:10px 14px 14px;gap:8px;}.machine-plate{padding:5px 16px;font-size:0.55em;}
+  .machine-screen{padding:10px 10px 10px;gap:5px;}.scrn-emoji{font-size:3em;}
+  .scrn-img{width:80px;height:80px;}.scrn-name{font-size:1.4em;}.scrn-fact{font-size:0.65em;min-height:2.5em;}
+  .grille{padding:8px 10px;}.waves{height:22px;}.press-btn{padding:8px 12px;font-size:1em;}
+}
+@media(max-width:700px){
+  body{overflow-y:auto;}.layout{flex-direction:column;height:auto;min-height:100dvh;}
+  .left-pane{width:100%;padding:14px 14px 18px;}.right-pane{padding:18px 14px 30px;}
+  .machine{max-width:100%;}.top-card,.ghost{width:260px;}
+  .card-emoji-big{font-size:6.5em;}.scrn-emoji{font-size:4.2em;}
+}
+</style>
 </head>
 <body>
-
-  <div class="navigation">
-    <a href="../index.html"              class="nav-btn">🏠 Home</a>
-    <a href="alphabet-game.html"         class="nav-btn">Alphabets</a>
-    <a href="numbers-game.html"          class="nav-btn">Numbers</a>
-    <a href="colors-game.html"           class="nav-btn">Colors</a>
-    <a href="shapes-game.html"           class="nav-btn">Shapes</a>
-    <a href="animals-game.html"          class="nav-btn">Animals</a>
-    <a href="hindi-alphabets.html"       class="nav-btn">Hindi</a>
-    <a href="birds.html"                 class="nav-btn">Birds</a>
-    <a href="solar-system-game.html"     class="nav-btn">🪐 Solar System</a>
-    <a href="dinosaurs-game.html"        class="nav-btn active">🦕 Dinosaurs</a>
-    <a href="weather-game.html"          class="nav-btn">🌦️ Weather</a>
-  </div>
-
-  <h1>🦕 Learn Dinosaurs 🦖</h1>
-
-  <div class="control-panel">
-    <button id="randomBtn"   class="control-btn">🎲 Random</button>
-    <button id="quizBtn"     class="control-btn" style="background:linear-gradient(145deg,#1a3a1a,#0f200f);border:2px solid #ff9800;color:#ffb74d;">🎯 Quiz</button>
-    <button id="settingsBtn" class="control-btn" style="background:linear-gradient(145deg,#1a3a1a,#0f200f);border:2px solid #9c27b0;color:#ce93d8;">⚙️ Settings</button>
-    <button id="speakBtn"    class="control-btn" disabled>🔊 Speak</button>
-    <button id="resetBtn"    class="control-btn">🔄 Reset</button>
-    <button id="statsBtn"    style="background:linear-gradient(135deg,#2196f3,#1565c0);border:none;padding:12px 28px;border-radius:25px;font-size:1.1em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(33,150,243,.4);color:white;transition:all .3s;font-family:inherit;">📊 Stats</button>
-    <div class="progress-counter" id="progressCounter" aria-live="polite">0 / 15 discovered</div>
-  </div>
-
-  <!-- Quiz Modal -->
-  <div id="quizModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
-    <div style="background:linear-gradient(145deg,#1a3a1a,#2d5a1b);border:2px solid #7ccd42;padding:30px;border-radius:25px;max-width:600px;width:90%;box-shadow:0 10px 50px rgba(124,205,66,.2);position:relative;">
-      <button id="closeQuiz" style="position:absolute;top:15px;right:15px;background:rgba(124,205,66,.2);border:none;font-size:2em;cursor:pointer;border-radius:50%;width:45px;height:45px;line-height:45px;padding:0;color:#a8e063;font-family:inherit;">×</button>
-      <h2 style="color:#a8e063;font-size:2em;margin-bottom:20px;">🎯 Dino Quiz</h2>
-      <div style="margin:15px 0;">
-        <img id="quizItemImage" src="" alt="" style="width:140px;height:140px;border-radius:20px;padding:10px;filter:drop-shadow(0 0 12px rgba(124,205,66,.4));">
+<div class="layout">
+  <div class="left-pane">
+    <div class="left-top">
+      <a href="../index.html" class="back-link">&#x1F3E0; Home</a>
+      <span class="left-heading">&#x1F995; Dinosaurs</span>
+    </div>
+    <div class="cat-bar" id="catBar"></div>
+    <div class="deck-area">
+      <div class="ghost"></div><div class="ghost"></div><div class="ghost"></div>
+      <div class="top-card" id="topCard" onclick="pressMachine()">
+        <span class="card-num-badge" id="cardNum">1 / 15</span>
+        <div id="cardFace"></div>
+        <div class="card-name-big" id="cardName"></div>
+        <div class="card-pill" id="cardPill"></div>
       </div>
-      <p id="quizQuestion" style="color:white;font-size:1.35em;margin:12px 0;">Which dinosaur is this?</p>
-      <div id="quizOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;"></div>
-      <p id="quizFeedback" style="font-size:1.2em;font-weight:bold;margin:10px 0;min-height:28px;"></p>
-      <div id="quizScore" style="color:#a8e063;font-size:1.1em;margin:10px 0;font-weight:bold;"></div>
-      <button id="nextQuizBtn" style="display:none;background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;padding:13px 35px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:10px;font-family:inherit;">Next →</button>
+    </div>
+    <div class="deck-nav">
+      <button class="nav-btn" onclick="navigate(-1)">&#9664; Prev</button>
+      <button class="nav-btn" onclick="navigate(1)">Next &#9654;</button>
+    </div>
+    <div class="prog-strip">
+      <div class="prog-bg"><div class="prog-fg" id="progFg" style="width:7%"></div></div>
+      <div class="prog-txt" id="progTxt">Card 1 of 15</div>
     </div>
   </div>
-
-  <!-- Stats Modal -->
-  <div id="statsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;overflow-y:auto;">
-    <div style="background:linear-gradient(135deg,#1a3a1a,#2d5a1b);border:2px solid #2196f3;padding:30px;border-radius:20px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;margin:20px auto;">
-      <h2 style="color:white;margin-bottom:20px;text-align:center;">📊 Your Statistics</h2>
-      <div id="statsContent"></div>
-      <h3 style="color:white;margin:28px 0 14px;text-align:center;">🏆 Achievements</h3>
-      <div id="achievementsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px;"></div>
-      <button id="closeStats" style="width:100%;padding:15px;background:white;color:#1565c0;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:18px;font-family:inherit;">Close</button>
-    </div>
-  </div>
-
-  <!-- Settings Modal -->
-  <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:1000;justify-content:center;align-items:center;">
-    <div style="background:linear-gradient(135deg,#1a3a1a,#2d5a1b);border:2px solid #7ccd42;border-radius:30px;padding:40px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative;">
-      <button id="closeSettings" style="position:absolute;top:15px;right:15px;background:rgba(124,205,66,.2);border:none;color:#a8e063;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit;">✕</button>
-      <h2 style="color:#a8e063;margin-bottom:30px;text-align:center;">⚙️ Settings</h2>
-      <div style="background:rgba(0,0,0,.2);padding:25px;border-radius:20px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
-          <label style="color:white;font-size:1.2em;font-weight:bold;">🌙 Dark Mode</label>
-          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
-            <input type="checkbox" id="darkModeToggle" style="opacity:0;width:0;height:0;">
-            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.4s;border-radius:34px;"></span>
-          </label>
-        </div>
-        <div style="margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
-          <label style="color:white;font-size:1.2em;font-weight:bold;display:block;margin-bottom:15px;">📏 Font Size</label>
-          <div style="display:flex;gap:10px;justify-content:center;">
-            <button class="fontSizeBtn" data-size="small"  style="background:rgba(124,205,66,.15);border:2px solid #7ccd42;color:#a8e063;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:.9em;font-family:inherit;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background:#7ccd42;border:2px solid #7ccd42;color:#fff;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1em;font-weight:bold;font-family:inherit;">Medium</button>
-            <button class="fontSizeBtn" data-size="large"  style="background:rgba(124,205,66,.15);border:2px solid #7ccd42;color:#a8e063;padding:10px 20px;border-radius:15px;cursor:pointer;font-size:1.1em;font-family:inherit;">Large</button>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:1px solid rgba(124,205,66,.3);">
-          <label style="color:white;font-size:1.2em;font-weight:bold;">🔊 Sound Effects</label>
-          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
-            <input type="checkbox" id="soundToggle" checked style="opacity:0;width:0;height:0;">
-            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#4caf50;transition:.4s;border-radius:34px;"></span>
-          </label>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <label style="color:white;font-size:1.2em;font-weight:bold;">🗣️ Auto-Speak</label>
-          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
-            <input type="checkbox" id="autoSpeakToggle" style="opacity:0;width:0;height:0;">
-            <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#555;transition:.4s;border-radius:34px;"></span>
-          </label>
-        </div>
+  <div class="right-pane">
+    <div class="machine">
+      <div class="machine-plate">&#x1F995; Dino Cards &#x1F995;</div>
+      <div class="machine-screen">
+        <div id="screenFace"></div>
+        <div class="scrn-name" id="screenName"></div>
+        <div class="scrn-badge-pill" id="screenBadge"></div>
+        <div class="scrn-fact" id="screenFact"></div>
       </div>
-      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;padding:15px 40px;border-radius:25px;font-size:1.2em;font-weight:bold;color:#fff;cursor:pointer;margin-top:25px;width:100%;font-family:inherit;">✓ Save Settings</button>
+      <div class="grille" id="grille"></div>
+      <div class="waves" id="waves">
+        <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+        <div class="wv"></div><div class="wv"></div>
+      </div>
+      <div class="press-btn" id="pressBtn" onclick="pressMachine()">
+        <span class="btn-icon">&#128266;</span>
+        TAP TO HEAR!
+        <span class="btn-sub">Press &#8212; I will tell you about this dinosaur!</span>
+      </div>
     </div>
-  </div>
-
-  <!-- Main layout -->
-  <div class="main-container">
-    <div class="left-pane">
-      <div class="items-grid" id="itemsGrid"></div>
-    </div>
-    <div class="right-pane">
-      <div class="prompt-text" id="promptText">🦴 Pick a dinosaur to discover!</div>
-      <div id="itemDisplayContainer" style="display:none;flex-direction:column;align-items:center;">
-        <div class="item-name"  id="itemName"></div>
-        <img class="item-image" id="itemImage" src="" alt="">
-        <div class="item-diet"  id="itemDiet"></div>
-        <div class="item-badge" id="itemBadge"></div>
-        <div class="item-fact"  id="itemFact"></div>
+    <div class="done-overlay" id="doneOverlay">
+      <div class="done-card">
+        <div style="font-size:3em">&#127881;</div>
+        <h2>Roarsome!</h2>
+        <p id="doneMsg"></p>
+        <button class="restart-btn" onclick="restart()">&#128260; Meet Again</button>
       </div>
     </div>
   </div>
+</div>
+<script>
 
-  <script>
-    const GAME_KEY    = 'dinosaurs';
-    const TOTAL_ITEMS = 15;
+var ALL_CARDS=[
+  {e:"\uD83E\uDD96",img:"https://api.iconify.design/noto/t-rex.svg?width=120&height=120",n:"T-Rex",diet:"carnivore",f:"T-Rex was one of the most feared hunters ever! It had tiny arms but the most powerful bite of any land animal \u2014 able to crush bone!"},
+  {e:"\uD83E\uDD95",img:"https://api.iconify.design/noto/triceratops.svg?width=120&height=120",n:"Triceratops",diet:"herbivore",f:"Triceratops had three sharp horns and a huge bony frill on its head. It used them to defend against T-Rex and fight rival Triceratops!"},
+  {e:"\uD83E\uDD95",img:"https://api.iconify.design/noto/sauropod.svg?width=120&height=120",n:"Brachiosaurus",diet:"herbivore",f:"Brachiosaurus was one of the tallest dinosaurs \u2014 as tall as a 5-storey building! It stretched its long neck to eat treetop leaves."},
+  {e:"\uD83E\uDD95",img:"https://api.iconify.design/noto/sauropod.svg?width=120&height=120",n:"Stegosaurus",diet:"herbivore",f:"Stegosaurus had large bony plates along its back and sharp spikes on its tail. Its brain was only the size of a walnut!"},
+  {e:"\uD83E\uDD96",img:"https://api.iconify.design/noto/t-rex.svg?width=120&height=120",n:"Velociraptor",diet:"carnivore",f:"Velociraptors were fast and smart hunters. They hunted in packs and had a deadly curved claw on each foot. They were actually feathered!"},
+  {e:"\uD83E\uDD85",img:"https://api.iconify.design/noto/eagle.svg?width=120&height=120",n:"Pterodactyl",diet:"carnivore",f:"Pterodactyl was a flying reptile, not a dinosaur! It soared on wide leathery wings and swooped to catch fish from lakes and seas."},
+  {e:"\uD83E\uDD95",img:"https://api.iconify.design/noto/sauropod.svg?width=120&height=120",n:"Diplodocus",diet:"herbivore",f:"Diplodocus was one of the longest dinosaurs at up to 27 metres! It used its whip-like tail to make sonic boom sounds to scare predators!"},
+  {e:"\uD83D\uDC22",img:"https://api.iconify.design/noto/turtle.svg?width=120&height=120",n:"Ankylosaurus",diet:"herbivore",f:"Ankylosaurus was like a living tank! Its whole body was covered in thick bony armour, and its tail had a huge club that could break bones!"},
+  {e:"\uD83E\uDD96",img:"https://api.iconify.design/noto/t-rex.svg?width=120&height=120",n:"Spinosaurus",diet:"carnivore",f:"Spinosaurus was even bigger than T-Rex \u2014 the largest meat-eating dinosaur! It had a huge sail on its back and loved to catch fish."},
+  {e:"\uD83E\uDD8E",img:"https://api.iconify.design/noto/lizard.svg?width=120&height=120",n:"Iguanodon",diet:"herbivore",f:"Iguanodon was one of the first dinosaurs ever discovered! It had a spike-like thumb claw it used to pull down branches to eat."},
+  {e:"\uD83C\uDFBA",img:"https://api.iconify.design/noto/sauropod.svg?width=120&height=120",n:"Parasaurolophus",diet:"herbivore",f:"Parasaurolophus had a long hollow crest on its head it used like a musical instrument to make loud booming calls to its herd!"},
+  {e:"\uD83E\uDD96",img:"https://api.iconify.design/noto/t-rex.svg?width=120&height=120",n:"Allosaurus",diet:"carnivore",f:"Allosaurus was the top predator of the Jurassic period. It could open its upper jaw wide like a hatchet to slice into large prey!"},
+  {e:"\uD83E\uDEA8",img:"https://api.iconify.design/noto/lizard.svg?width=120&height=120",n:"Pachycephalosaurus",diet:"omnivore",f:"Pachycephalosaurus had a super-thick dome skull up to 25 cm thick! Males would head-butt each other to compete for the herd!"},
+  {e:"\uD83D\uDC26",img:"https://api.iconify.design/noto/lizard.svg?width=120&height=120",n:"Compsognathus",diet:"carnivore",f:"Compsognathus was one of the tiniest dinosaurs \u2014 about the size of a chicken! But it was a speedy little hunter that chased lizards and insects."},
+  {e:"\uD83E\uDDA3",img:"https://api.iconify.design/noto/mammoth.svg?width=120&height=120",n:"Mammoth",diet:"herbivore",f:"The Woolly Mammoth lived during the Ice Age! It had long curved tusks and a thick furry coat to stay warm. Early humans painted pictures of them!"}
+];
+var cards=ALL_CARDS.slice();
+var idx=0;
+var activeFilter="all";
+var FILTERS=[["all","All \uD83E\uDD95"],["carnivore","\uD83E\uDD69 Carnivore"],["herbivore","\uD83C\uDF3F Herbivore"],["omnivore","\uD83C\uDF7D\uFE0F Omnivore"]];
+function buildCatBar(){
+  var bar=document.getElementById("catBar");bar.innerHTML="";
+  FILTERS.forEach(function(f){
+    var btn=document.createElement("button");btn.className="cat-btn"+(activeFilter===f[0]?" active":"");
+    btn.textContent=f[1];btn.dataset.key=f[0];btn.onclick=function(){setFilter(f[0]);};
+    bar.appendChild(btn);
+  });
+}
+function setFilter(key){
+  activeFilter=key;
+  cards=key==="all"?ALL_CARDS.slice():ALL_CARDS.filter(function(c){return c.diet===key;});
+  idx=0;
+  document.querySelectorAll(".cat-btn").forEach(function(b){b.classList.toggle("active",b.dataset.key===key);});
+  document.getElementById("doneOverlay").classList.remove("show");
+  renderAll();
+}
+function renderAll(){
+  var card=cards[idx],total=cards.length;
+  var cf=document.getElementById("cardFace");
+  cf.innerHTML='<img class="card-img" src="'+card.img+'" alt="'+card.n+'" data-e="'+card.e+'" onerror="imgFail(this)">';
+  var inner=cf.firstChild;if(inner){inner.classList.remove("pop");void inner.offsetWidth;inner.classList.add("pop");}
+  document.getElementById("cardName").textContent=card.n;
+  document.getElementById("cardNum").textContent=(idx+1)+" / "+total;
+  var dp=document.getElementById("cardPill");dp.textContent=card.diet.charAt(0).toUpperCase()+card.diet.slice(1);dp.className="card-pill "+card.diet;
+  document.getElementById("screenFace").innerHTML='<img class="scrn-img" id="screenEmojiEl" src="'+card.img+'" alt="'+card.n+'" data-e="'+card.e+'" onerror="imgFailScreen(this)">';
+  document.getElementById("screenName").textContent=card.n;
+  var sb=document.getElementById("screenBadge");
+  sb.textContent=(card.diet==="carnivore"?"\uD83E\uDD69 ":card.diet==="herbivore"?"\uD83C\uDF3F ":"\uD83C\uDF7D\uFE0F ")+card.diet.charAt(0).toUpperCase()+card.diet.slice(1);
+  sb.className="scrn-badge-pill "+card.diet;
+  document.getElementById("screenFact").textContent=card.f;
+  document.getElementById("progFg").style.width=((idx+1)/total*100)+"%";
+  document.getElementById("progTxt").textContent="Card "+(idx+1)+" of "+total;
+  buildGrille(false);
+}
+function checkDone(){
+  document.getElementById("doneMsg").textContent="Roarsome! You met all "+cards.length+" dinosaurs!";
+  document.getElementById("doneOverlay").classList.add("show");launchConfetti();
+}
+function restart(){idx=0;activeFilter="all";cards=ALL_CARDS.slice();document.getElementById("doneOverlay").classList.remove("show");buildCatBar();renderAll();}
+buildCatBar();
 
-    const items = {
-      'T-Rex': {
-        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
-        emoji: '🦖',
-        diet:  'carnivore',
-        badge: '👑 Tyrannosaurus Rex · 68–66 million years ago',
-        fact:  'T-Rex was one of the most feared hunters ever! It had tiny arms but the most powerful bite of any land animal — able to crush bone!'
-      },
-      'Triceratops': {
-        img:   'https://api.iconify.design/noto/triceratops.svg?width=120&height=120',
-        emoji: '🦕',
-        diet:  'herbivore',
-        badge: '🛡️ Three-horned Face · Late Cretaceous',
-        fact:  'Triceratops had three sharp horns and a huge bony frill on its head. It used them to defend against T-Rex and fight rival Triceratops!'
-      },
-      'Brachiosaurus': {
-        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
-        emoji: '🦕',
-        diet:  'herbivore',
-        badge: '🌿 Arm Lizard · Jurassic Period',
-        fact:  'Brachiosaurus was one of the tallest dinosaurs — as tall as a 5-storey building! It stretched its long neck to eat treetop leaves.'
-      },
-      'Stegosaurus': {
-        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
-        emoji: '🦴',
-        diet:  'herbivore',
-        badge: '🔰 Roof Lizard · Late Jurassic',
-        fact:  'Stegosaurus had large bony plates along its back and sharp spikes on its tail for defense. Its brain was only the size of a walnut!'
-      },
-      'Velociraptor': {
-        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
-        emoji: '🦖',
-        diet:  'carnivore',
-        badge: '⚡ Swift Thief · Late Cretaceous',
-        fact:  'Velociraptors were fast and smart hunters. They hunted in packs and had a deadly curved claw on each foot. They were actually feathered!'
-      },
-      'Pterodactyl': {
-        img:   'https://api.iconify.design/noto/eagle.svg?width=120&height=120',
-        emoji: '🦅',
-        diet:  'carnivore',
-        badge: '🪶 Flying Reptile · Jurassic Period',
-        fact:  "Pterodactyl was a flying reptile, not a dinosaur! It soared on wide leathery wings and swooped to catch fish from lakes and seas."
-      },
-      'Diplodocus': {
-        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
-        emoji: '🦕',
-        diet:  'herbivore',
-        badge: '📏 Double Beam · Late Jurassic',
-        fact:  "Diplodocus was one of the longest dinosaurs at up to 27 metres! It used its whip-like tail to make sonic boom sounds to scare predators!"
-      },
-      'Ankylosaurus': {
-        img:   'https://api.iconify.design/noto/turtle.svg?width=120&height=120',
-        emoji: '🐢',
-        diet:  'herbivore',
-        badge: '🛡️ Fused Lizard · Late Cretaceous',
-        fact:  'Ankylosaurus was like a living tank! Its whole body was covered in thick bony armour, and its tail had a huge club that could break bones!'
-      },
-      'Spinosaurus': {
-        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
-        emoji: '🦖',
-        diet:  'carnivore',
-        badge: '⛵ Spine Lizard · Cretaceous',
-        fact:  'Spinosaurus was even bigger than T-Rex — the largest meat-eating dinosaur! It had a huge sail on its back and loved to catch fish.'
-      },
-      'Iguanodon': {
-        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
-        emoji: '🦎',
-        diet:  'herbivore',
-        badge: '👍 Iguana Tooth · Early Cretaceous',
-        fact:  'Iguanodon was one of the first dinosaurs ever discovered! It had a spike-like thumb claw it used to pull down branches to eat.'
-      },
-      'Parasaurolophus': {
-        img:   'https://api.iconify.design/noto/sauropod.svg?width=120&height=120',
-        emoji: '🎺',
-        diet:  'herbivore',
-        badge: '🎵 Crested Lizard · Late Cretaceous',
-        fact:  'Parasaurolophus had a long hollow tube crest on its head it used like a musical instrument to make loud booming calls to its herd!'
-      },
-      'Allosaurus': {
-        img:   'https://api.iconify.design/noto/t-rex.svg?width=120&height=120',
-        emoji: '🦖',
-        diet:  'carnivore',
-        badge: '⚔️ Different Lizard · Late Jurassic',
-        fact:  'Allosaurus was the top predator of the Jurassic period. It could open its upper jaw wide like a hatchet to slice into large prey!'
-      },
-      'Pachycephalosaurus': {
-        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
-        emoji: '🪨',
-        diet:  'omnivore',
-        badge: '🪨 Thick-headed Lizard · Late Cretaceous',
-        fact:  'Pachycephalosaurus had a super-thick dome-shaped skull up to 25 cm thick! Males would head-butt each other to compete for the herd!'
-      },
-      'Compsognathus': {
-        img:   'https://api.iconify.design/noto/lizard.svg?width=120&height=120',
-        emoji: '🐦',
-        diet:  'carnivore',
-        badge: '🐦 Pretty Jaw · Late Jurassic',
-        fact:  "Compsognathus was one of the tiniest dinosaurs — about the size of a chicken! But it was a speedy little hunter that chased lizards and insects."
-      },
-      'Mammoth': {
-        img:   'https://api.iconify.design/noto/mammoth.svg?width=120&height=120',
-        emoji: '🦣',
-        diet:  'herbivore',
-        badge: '❄️ Woolly Mammoth · Ice Age',
-        fact:  "The Woolly Mammoth lived during the Ice Age! It had long curved tusks and a thick furry coat to stay warm. Early humans painted pictures of them!"
-      }
-    };
+function imgFail(img){var d=document.createElement("div");d.className="card-emoji-big pop";d.textContent=img.dataset.e;img.replaceWith(d);}
+function imgFailScreen(img){var d=document.createElement("div");d.className="scrn-emoji";d.id="screenEmojiEl";d.textContent=img.dataset.e;img.replaceWith(d);}
+function buildGrille(lit){
+  var g=document.getElementById("grille");g.innerHTML="";
+  for(var r=0;r<4;r++){var row=document.createElement("div");row.className="grille-row";for(var c=0;c<14;c++){var dot=document.createElement("div");dot.className="grille-dot"+(lit&&Math.random()>0.35?" lit":"");row.appendChild(dot);}g.appendChild(row);}
+}
+function navigate(dir){
+  var next=idx+dir;
+  if(next<0)return;
+  if(next>=cards.length){checkDone();return;}
+  idx=next;renderAll();
+}
+function pressMachine(){
+  var btn=document.getElementById("pressBtn");btn.classList.add("pressed");setTimeout(function(){btn.classList.remove("pressed");},180);
+  var sel=document.getElementById("screenEmojiEl");if(sel){sel.classList.remove("flash");void sel.offsetWidth;sel.classList.add("flash");}
+  buildGrille(true);setTimeout(function(){buildGrille(false);},1100);
+  document.getElementById("waves").classList.add("active");speak();
+}
+function speak(){
+  if(!("speechSynthesis" in window))return;
+  var card=cards[idx];window.speechSynthesis.cancel();
+  var utt=new SpeechSynthesisUtterance(card.n+"!   "+card.f);utt.rate=0.9;utt.pitch=1.1;
+  utt.onend=function(){document.getElementById("waves").classList.remove("active");};
+  window.speechSynthesis.speak(utt);
+}
+function launchConfetti(){
+  var cols=["#7ccd42","#ffe030","#ff6b6b","#43cea2","#667eea","#f093fb","#84fab0","#fff"];
+  for(var i=0;i<100;i++){(function(i){setTimeout(function(){var p=document.createElement("div");p.className="cf";var sz=8+Math.random()*12;p.style.cssText="width:"+sz+"px;height:"+sz+"px;left:"+(Math.random()*100)+"vw;top:-20px;background:"+cols[Math.floor(Math.random()*cols.length)]+";animation-duration:"+(1.6+Math.random()*2.2)+"s;border-radius:"+(Math.random()>0.5?"50%":"3px")+";";document.body.appendChild(p);setTimeout(function(){p.remove();},5000);},i*20);})(i);}
+}
 
-    const itemNames   = Object.keys(items);
-    let currentItem   = '';
-    let learnedItems  = new Set(JSON.parse(localStorage.getItem(GAME_KEY + '_learned') || '[]'));
-    let soundEnabled  = true;
-    let autoSpeak     = false;
-
-    const itemsGrid            = document.getElementById('itemsGrid');
-    const itemName             = document.getElementById('itemName');
-    const itemImage            = document.getElementById('itemImage');
-    const itemDisplayContainer = document.getElementById('itemDisplayContainer');
-    const itemFact             = document.getElementById('itemFact');
-    const itemBadge            = document.getElementById('itemBadge');
-    const itemDiet             = document.getElementById('itemDiet');
-    const promptText           = document.getElementById('promptText');
-    const progressCounter      = document.getElementById('progressCounter');
-    const speakBtn             = document.getElementById('speakBtn');
-    const randomBtn            = document.getElementById('randomBtn');
-    const resetBtn             = document.getElementById('resetBtn');
-
-    function speak(text) {
-      if (!soundEnabled) return;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utt = new SpeechSynthesisUtterance(text);
-        utt.rate = 0.85; utt.pitch = 1.1; utt.volume = 1;
-        window.speechSynthesis.speak(utt);
-      }
-    }
-
-    function displayItem(name) {
-      currentItem = name;
-      const data  = items[name];
-
-      promptText.style.display = 'none';
-      itemDisplayContainer.style.display = 'flex';
-
-      itemName.textContent = name;
-      itemName.style.animation = 'none';
-      void itemName.offsetHeight;
-      itemName.style.animation = 'bounce .6s ease-in-out';
-
-      itemBadge.textContent = data.badge;
-      itemFact.textContent  = data.fact;
-
-      itemDiet.textContent  = data.diet === 'carnivore' ? '🥩 Carnivore (meat eater)'
-                            : data.diet === 'herbivore' ? '🌿 Herbivore (plant eater)'
-                            : '🍽️ Omnivore (eats both)';
-      itemDiet.className = 'item-diet ' + data.diet;
-
-      itemImage.src = data.img;
-      itemImage.alt = name;
-      itemImage.className = 'item-image';
-      itemImage.style.animation = 'none';
-      void itemImage.offsetHeight;
-      itemImage.style.animation = 'fadeInScale .8s ease-out';
-      itemImage.onerror = () => {
-        itemImage.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${data.emoji}</text></svg>`;
-      };
-
-      speakBtn.disabled = false;
-      learnedItems.add(name);
-      localStorage.setItem(GAME_KEY + '_learned', JSON.stringify([...learnedItems]));
-      updateProgress();
-      checkAchievements();
-      renderGrid();
-      if (autoSpeak) speak(name);
-    }
-
-    function updateProgress() {
-      progressCounter.textContent = learnedItems.size + ' / ' + TOTAL_ITEMS + ' discovered';
-    }
-
-    function renderGrid() {
-      itemsGrid.innerHTML = '';
-      itemNames.forEach(name => {
-        const btn = document.createElement('button');
-        btn.className = 'item-btn' + (learnedItems.has(name) ? ' learned' : '');
-        btn.setAttribute('aria-label', 'Learn about ' + name);
-        btn.innerHTML = `<span class="btn-emoji">${items[name].emoji}</span><span class="btn-name">${name}</span>`;
-        btn.addEventListener('click', (e) => {
-          createRipple(e);
-          btn.classList.add('flipping');
-          setTimeout(() => btn.classList.remove('flipping'), 600);
-          displayItem(name);
-        });
-        itemsGrid.appendChild(btn);
-      });
-    }
-
-    function createRipple(e) {
-      const btn  = e.currentTarget;
-      const rect = btn.getBoundingClientRect();
-      const rip  = document.createElement('span');
-      const size = Math.max(rect.width, rect.height);
-      rip.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
-      rip.classList.add('ripple');
-      btn.appendChild(rip);
-      setTimeout(() => rip.remove(), 600);
-    }
-
-    randomBtn.addEventListener('click', () => {
-      displayItem(itemNames[Math.floor(Math.random() * TOTAL_ITEMS)]);
-    });
-    speakBtn.addEventListener('click', () => { if (currentItem) speak(currentItem); });
-    resetBtn.addEventListener('click', () => {
-      if (confirm('Reset all Dinosaurs progress?')) {
-        learnedItems.clear();
-        ['_learned','_stats','_achievements'].forEach(k => localStorage.removeItem(GAME_KEY + k));
-        currentItem = '';
-        itemDisplayContainer.style.display = 'none';
-        promptText.style.display = 'block';
-        speakBtn.disabled = true;
-        updateProgress(); renderGrid();
-      }
-    });
-
-    // QUIZ
-    const quizModal    = document.getElementById('quizModal');
-    const closeQuiz    = document.getElementById('closeQuiz');
-    const quizOptions  = document.getElementById('quizOptions');
-    const quizFeedback = document.getElementById('quizFeedback');
-    const quizScore    = document.getElementById('quizScore');
-    const nextQuizBtn  = document.getElementById('nextQuizBtn');
-    const quizImgEl    = document.getElementById('quizItemImage');
-    const quizBtn      = document.getElementById('quizBtn');
-
-    let quizState = { current: null, correct: 0, totalQs: 0, idx: 0, answered: false };
-
-    function startQuiz() {
-      quizState = { current: null, correct: 0, totalQs: Math.min(10, TOTAL_ITEMS), idx: 0, answered: false };
-      quizModal.style.display = 'flex';
-      loadQuizQuestion();
-    }
-
-    function loadQuizQuestion() {
-      quizState.answered = false;
-      quizFeedback.textContent = '';
-      nextQuizBtn.style.display = 'none';
-      quizScore.textContent = `Question ${quizState.idx + 1} / ${quizState.totalQs}  ·  Score: ${quizState.correct}`;
-
-      const shuffled = [...itemNames].sort(() => Math.random() - .5);
-      const answer   = shuffled[0];
-      const choices  = shuffled.slice(0, 4).sort(() => Math.random() - .5);
-      quizState.current = answer;
-
-      quizImgEl.src = items[answer].img;
-      quizImgEl.onerror = () => {
-        quizImgEl.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${items[answer].emoji}</text></svg>`;
-      };
-
-      quizOptions.innerHTML = '';
-      choices.forEach(choice => {
-        const opt = document.createElement('button');
-        opt.textContent = choice;
-        opt.style.cssText = 'padding:12px;font-size:1.05em;border-radius:15px;border:2px solid #7ccd42;background:rgba(124,205,66,.1);color:#a8e063;cursor:pointer;transition:all .3s;font-weight:bold;font-family:inherit;';
-        opt.addEventListener('click', () => checkAnswer(choice, opt));
-        quizOptions.appendChild(opt);
-      });
-    }
-
-    function checkAnswer(choice, btn) {
-      if (quizState.answered) return;
-      quizState.answered = true;
-      const correct = choice === quizState.current;
-      if (correct) {
-        quizState.correct++;
-        quizFeedback.innerHTML = '✅ <span style="color:#4caf50">Correct! Roar! 🦖</span>';
-        btn.style.cssText += 'background:#4caf50;border-color:#4caf50;color:white;';
-      } else {
-        quizFeedback.innerHTML = `❌ <span style="color:#f44336">It's ${quizState.current}!</span>`;
-        btn.style.cssText += 'background:#f44336;border-color:#f44336;color:white;';
-        quizOptions.querySelectorAll('button').forEach(b => {
-          if (b.textContent === quizState.current) b.style.cssText += 'background:#4caf50;border-color:#4caf50;color:white;';
-        });
-      }
-      quizState.idx++;
-      if (quizState.idx < quizState.totalQs) nextQuizBtn.style.display = 'inline-block';
-      else setTimeout(showQuizResults, 900);
-    }
-
-    function showQuizResults() {
-      const pct  = Math.round((quizState.correct / quizState.totalQs) * 100);
-      const star = pct === 100 ? '🦖' : pct >= 70 ? '🦕' : '🦴';
-      quizOptions.innerHTML = '';
-      quizImgEl.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="86">${star}</text></svg>`;
-      quizFeedback.textContent = '';
-      nextQuizBtn.style.display = 'none';
-      const msg = pct === 100 ? 'Perfect! You are a Dino Expert! 🦖'
-                : pct >= 70  ? 'Great job, Palaeontologist!'
-                :               'Keep exploring — more dinos await!';
-      quizScore.innerHTML = `<div style="font-size:1.7em;color:#a8e063;margin-bottom:8px;">${star} Quiz Complete!</div>
-        <div style="font-size:1.3em;color:white;">Score: ${quizState.correct} / ${quizState.totalQs} (${pct}%)</div>
-        <div style="font-size:.95em;color:rgba(255,255,255,.7);margin-top:8px;">${msg}</div>`;
-      const rb = document.createElement('button');
-      rb.textContent = '🔄 Play Again';
-      rb.style.cssText = 'margin-top:14px;padding:12px 30px;font-size:1.1em;font-weight:bold;background:linear-gradient(145deg,#7ccd42,#4a7c1f);border:none;border-radius:20px;cursor:pointer;color:#fff;font-family:inherit;display:block;margin-left:auto;margin-right:auto;';
-      rb.addEventListener('click', startQuiz);
-      quizScore.appendChild(rb);
-    }
-
-    quizBtn.addEventListener('click', startQuiz);
-    closeQuiz.addEventListener('click', () => { quizModal.style.display = 'none'; });
-    quizModal.addEventListener('click', (e) => { if (e.target === quizModal) quizModal.style.display = 'none'; });
-    nextQuizBtn.addEventListener('click', loadQuizQuestion);
-
-    // SETTINGS
-    document.getElementById('settingsBtn').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'flex'; });
-    document.getElementById('closeSettings').addEventListener('click', () => { document.getElementById('settingsModal').style.display = 'none'; });
-    document.getElementById('darkModeToggle').addEventListener('change', (e) => { document.body.classList.toggle('dark-mode', e.target.checked); });
-    document.getElementById('soundToggle').addEventListener('change', (e) => { soundEnabled = e.target.checked; });
-    document.getElementById('autoSpeakToggle').addEventListener('change', (e) => { autoSpeak = e.target.checked; });
-    document.querySelectorAll('.fontSizeBtn').forEach(b => {
-      b.addEventListener('click', () => {
-        document.querySelectorAll('.fontSizeBtn').forEach(x => { x.style.background='rgba(124,205,66,.15)'; x.style.color='#a8e063'; x.style.fontWeight='normal'; });
-        b.style.background = '#7ccd42'; b.style.color = '#fff'; b.style.fontWeight = 'bold';
-        document.body.className = document.body.className.replace(/font-\w+/g, '');
-        document.body.classList.add('font-' + b.dataset.size);
-      });
-    });
-
-    // ACHIEVEMENTS & STATS
-    const achievements = {
-      first_dino:   { name: '🦴 First Fossil',    desc: 'Discover your first dino',    unlocked: false },
-      halfway:      { name: '🦕 Dino Fan',         desc: 'Discover 8 dinosaurs',        unlocked: false },
-      all_found:    { name: '🦖 Palaeontologist',  desc: 'Discover all 15',             unlocked: false },
-      perfect_quiz: { name: '💯 Perfect Score',    desc: 'Score 100% in a quiz',        unlocked: false },
-      quiz_master:  { name: '🎓 Quiz Master',      desc: 'Complete 10 quizzes',         unlocked: false }
-    };
-    const savedAch = JSON.parse(localStorage.getItem(GAME_KEY + '_achievements') || '{}');
-    Object.keys(savedAch).forEach(k => { if (achievements[k]) achievements[k].unlocked = savedAch[k]; });
-    let stats = JSON.parse(localStorage.getItem(GAME_KEY + '_stats') || '{"totalQuizzes":0,"totalCorrect":0,"totalQuestions":0,"highScore":0}');
-
-    function saveAchievements() {
-      const out = {}; Object.keys(achievements).forEach(k => { out[k] = achievements[k].unlocked; });
-      localStorage.setItem(GAME_KEY + '_achievements', JSON.stringify(out));
-    }
-    function saveStats() { localStorage.setItem(GAME_KEY + '_stats', JSON.stringify(stats)); }
-
-    function showAchievementBadge(ach) {
-      const el = document.createElement('div');
-      el.style.cssText = 'position:fixed;top:20px;right:20px;background:linear-gradient(135deg,#ffd700,#ffed4e);color:#333;padding:20px 30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:10001;font-weight:bold;border:3px solid #ff8800;';
-      el.innerHTML = `<div style="font-size:1.5em;margin-bottom:5px;">${ach.name}</div><div style="font-size:.9em;opacity:.8;">${ach.desc}</div>`;
-      document.body.appendChild(el);
-      if (!document.getElementById('achAnimStyle')) {
-        const s = document.createElement('style'); s.id = 'achAnimStyle';
-        s.textContent = '@keyframes slideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}';
-        document.head.appendChild(s);
-      }
-      el.style.animation = 'slideIn .5s ease-out';
-      speak('Achievement unlocked: ' + ach.name.replace(/[^\w\s]/g, ''));
-      setTimeout(() => { el.style.transition = 'all .5s'; el.style.transform = 'translateX(400px)'; el.style.opacity = '0'; setTimeout(() => el.remove(), 500); }, 3000);
-    }
-
-    function checkAchievements() {
-      let changed = false;
-      if (!achievements.first_dino.unlocked  && learnedItems.size >= 1)           { achievements.first_dino.unlocked = true;  showAchievementBadge(achievements.first_dino);  changed = true; }
-      if (!achievements.halfway.unlocked      && learnedItems.size >= 8)           { achievements.halfway.unlocked = true;      showAchievementBadge(achievements.halfway);      changed = true; }
-      if (!achievements.all_found.unlocked    && learnedItems.size >= TOTAL_ITEMS) { achievements.all_found.unlocked = true;    showAchievementBadge(achievements.all_found);    changed = true; }
-      if (changed) saveAchievements();
-    }
-
-    document.getElementById('statsBtn').addEventListener('click', () => {
-      const s2  = JSON.parse(localStorage.getItem(GAME_KEY + '_stats') || '{"totalQuizzes":0,"totalCorrect":0,"totalQuestions":0,"highScore":0}');
-      const acc = s2.totalQuestions > 0 ? ((s2.totalCorrect / s2.totalQuestions) * 100).toFixed(1) : 0;
-      document.getElementById('statsContent').innerHTML = `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;color:white;font-size:16px;">
-          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🦕 ${learnedItems.size}/${TOTAL_ITEMS}</div><div>Dinos Discovered</div></div>
-          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">📝 ${s2.totalQuizzes}</div><div>Quizzes Taken</div></div>
-          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">✅ ${acc}%</div><div>Accuracy</div></div>
-          <div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;"><div style="font-size:22px;margin-bottom:4px;">🏆 ${s2.highScore}%</div><div>High Score</div></div>
-        </div>`;
-      const achList = document.getElementById('achievementsList');
-      achList.innerHTML = '';
-      Object.values(achievements).forEach(a => {
-        const d = document.createElement('div');
-        d.style.cssText = `background:${a.unlocked ? 'linear-gradient(135deg,#ffd700,#ffed4e)' : 'rgba(255,255,255,.08)'};padding:18px;border-radius:15px;text-align:center;opacity:${a.unlocked ? 1 : .5};`;
-        d.innerHTML = `<div style="font-size:40px;margin-bottom:7px;">${a.name.split(' ')[0]}</div><div style="font-weight:bold;font-size:14px;color:${a.unlocked ? '#000' : '#fff'};">${a.name.substring(a.name.indexOf(' ')+1)}</div><div style="font-size:12px;color:${a.unlocked ? '#333' : '#aaa'};margin-top:4px;">${a.desc}</div>${a.unlocked ? '<div style="margin-top:7px;color:#000;font-weight:bold;font-size:12px;">✓ UNLOCKED</div>' : '<div style="margin-top:7px;color:#666;font-size:12px;">🔒 Locked</div>'}`;
-        achList.appendChild(d);
-      });
-      document.getElementById('statsModal').style.display = 'flex';
-    });
-    document.getElementById('closeStats').addEventListener('click', () => { document.getElementById('statsModal').style.display = 'none'; });
-    document.getElementById('statsModal').addEventListener('click', (e) => { if (e.target === document.getElementById('statsModal')) document.getElementById('statsModal').style.display = 'none'; });
-
-    const _origShowResults = showQuizResults;
-    showQuizResults = function() {
-      stats.totalQuizzes++;
-      stats.totalCorrect   += quizState.correct;
-      stats.totalQuestions += quizState.totalQs;
-      const pct = (quizState.correct / quizState.totalQs) * 100;
-      if (pct > stats.highScore) stats.highScore = Math.round(pct);
-      if (pct === 100 && !achievements.perfect_quiz.unlocked) { achievements.perfect_quiz.unlocked = true; setTimeout(() => showAchievementBadge(achievements.perfect_quiz), 1000); saveAchievements(); }
-      if (stats.totalQuizzes >= 10 && !achievements.quiz_master.unlocked) { achievements.quiz_master.unlocked = true; setTimeout(() => showAchievementBadge(achievements.quiz_master), 1500); saveAchievements(); }
-      saveStats(); _origShowResults();
-    };
-
-    renderGrid();
-    updateProgress();
-    checkAchievements();
-  </script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../service-worker.js');
-      let r = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => { if (!r) { r = true; location.reload(); } });
-    }
-  </script>
-  <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:.7em;color:rgba(255,255,255,.25);"></div>
-  <script>
-    fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main')
-      .then(r => r.json())
-      .then(d => { document.getElementById('build-info').textContent = 'Build: ' + d.sha.slice(0,7) + ' · ' + d.commit.committer.date.slice(0,10); })
-      .catch(() => {});
-  </script>
+renderAll();
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../service-worker.js");let r=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!r){r=true;location.reload();}});}</script>
 </body>
 </html>
