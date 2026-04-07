@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kids-learning-games-v16';
+const CACHE_NAME = 'kids-learning-games-v17';
 const urlsToCache = [
   './',
   'index.html',
@@ -81,4 +81,7 @@ self.addEventListener('activate', (event) => {
     })
   );
   self.clients.claim();
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) => client.postMessage({ type: 'SW_UPDATED' }));
+  });
 });

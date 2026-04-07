@@ -41,7 +41,7 @@ function initBuildInfo(){
   var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info');
   if(!el)return;
   var c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;
-  if(c&&Date.now()-ct<3600000){el.textContent=c;return;}
+  if(c&&Date.now()-ct<300000){el.textContent=c;return;}
   fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});
 }
 

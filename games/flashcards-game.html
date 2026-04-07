@@ -1044,7 +1044,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeQuiz()
 document.querySelectorAll(".modal-overlay").forEach(function(ov){ov.addEventListener("click",function(e){if(e.target===ov){closeQuiz();closeStats();closeSettings();}});});
 </script>
 
-<script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+<script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;localStorage.removeItem('_buildInfo');localStorage.removeItem('_buildInfoT');location.reload();}});navigator.serviceWorker.addEventListener('message',(e)=>{if(e.data&&e.data.type==='SW_UPDATED'){localStorage.removeItem('_buildInfo');localStorage.removeItem('_buildInfoT');}});}</script>
 <div class="modal-overlay" id="quizOverlay" role="dialog" aria-modal="true" aria-label="Quiz">
   <div class="modal-box">
     <button class="modal-close" onclick="closeQuiz()">&times;</button>
@@ -1086,6 +1086,6 @@ document.querySelectorAll(".modal-overlay").forEach(function(ov){ov.addEventList
   </div>
 </div>
 <div id="build-info" style="text-align:center;padding:10px;font-size:0.7em;color:rgba(255,255,255,0.25);"></div>
-<script>(function(){var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info'),c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;if(c&&Date.now()-ct<3600000){el.textContent=c;return;}fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});})();</script>
+<script>(function(){var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info'),c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;if(c&&Date.now()-ct<300000){el.textContent=c;return;}fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});})();</script>
 </body>
 </html>
