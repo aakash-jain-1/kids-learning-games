@@ -9,9 +9,10 @@ Copy the patterns below and customise the theme-specific values.
 
 | What | Pattern | Example |
 |------|---------|---------|
-| Game file | `games/<topic>-game.html` | `games/solar-system-game.html` |
+| Standalone game file | `games/<topic>-game.html` | `games/solar-system-game.html` |
 | File name words | lowercase, hyphen-separated | `hindi-alphabets.html` |
-| Data images | Iconify Noto SVG via CDN | `https://api.iconify.design/noto/<icon>.svg?width=96&height=96` |
+| Images (classic two-pane) | Iconify Noto SVG via CDN | `https://api.iconify.design/noto/<icon>.svg?width=96&height=96` |
+| Images (flashcard decks) | Microsoft Fluent UI 3D PNG via CDN | `https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/...` |
 | Fallback image | Inline SVG with relevant emoji | see §6 |
 
 ---
@@ -35,9 +36,69 @@ Copy the patterns below and customise the theme-specific values.
 
 When adding a new game, pick a **unique gradient** not already used above.
 
+> **Flashcard decks** (Body Parts, etc.) live inside `flashcards-game.html` as entries in the `DECKS` object.
+> They do not appear in this inventory as separate files — see §3A below.
+
 ---
 
-## 3. Step-by-Step Checklist for a New Game
+## 3. Choosing: Standalone Game vs. Flashcard Deck
+
+Before creating a new topic, decide which path fits best:
+
+| Criteria | Standalone Game | Flashcard Deck |
+|----------|----------------|----------------|
+| Best for | Unique interaction (two-pane explore, story, planet orbit, etc.) | Simple "learn items one at a time" topics |
+| Visual assets | Iconify Noto SVG or CSS art | Microsoft Fluent UI 3D PNG via CDN |
+| Effort | ~800–1400 lines new HTML file, update 12+ files | ~20 lines added to `flashcards-game.html` DECKS object |
+| Quiz/achievements/stats | Must implement per-game | Already built into the flashcard engine |
+| Examples | Animals, Solar System, Dinosaurs, Weather | Animals (deck), Food, Body Parts, Insects |
+
+**Rule of thumb:** If the topic is a list of items with image + name + fun fact and no special interaction, add it as a **flashcard deck**. If it needs custom layout, animations, or story flow, create a **standalone game**.
+
+### 3A. Checklist — Adding a Flashcard Deck
+
+1. [ ] Add a new entry to the `DECKS` object in `games/flashcards-game.html` (see §3B).
+2. [ ] Bump `CACHE_NAME` in `service-worker.js` (file itself doesn't change, but content does).
+3. [ ] Update `dev/SESSION_CONTEXT.md` and `dev/ACTION_ITEMS.md`.
+
+No changes needed to `index.html`, navbars, or `manifest.json` — decks appear automatically in the flashcard category bar.
+
+### 3B. Flashcard Deck Data Format
+
+Each deck entry in the `DECKS` object follows this structure:
+
+```js
+var DECKS = {
+  // ...existing decks...
+  mytopic:{
+    label: E(0x1F4DA)+' My Topic',       // emoji codepoint + label shown in category pill
+    cards:[
+      // Option A: Fluent UI 3D image (preferred for recognizable visuals)
+      {img:'FolderName/3D/file_name_3d.png', code:'XXXX', e:E(0xXXXX), n:'Name', f:'Fun fact.'},
+
+      // Option B: Emoji only (for abstract concepts like colors, shapes)
+      {e:E(0xXXXX), n:'Name', f:'Fun fact.'},
+
+      // Option C: Number
+      {num:'7', n:'Seven', f:'Fun fact.'},
+    ]
+  }
+};
+```
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `img` | No | Path under `https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/`. URL-encode spaces as `%20`. |
+| `code` | If `img` set | Unicode codepoint hex string — used by `onerror` fallback to render emoji if image fails. |
+| `e` | Yes | Emoji character via `E(0xXXXX)` — shown on the machine screen and as fallback. |
+| `n` | Yes | Display name shown on card and spoken aloud. |
+| `f` | Yes | Fun fact — spoken after the name. Keep it one short sentence. |
+| `num` | No | For number cards only — renders large numeral instead of emoji. |
+| `shape` | No | For shape cards only — renders a CSS shape (`rect`, `oval`). |
+
+**Finding Fluent UI 3D image paths:** Browse https://github.com/microsoft/fluentui-emoji/tree/main/assets — folder names match emoji names. The 3D PNG is always at `FolderName/3D/snake_case_3d.png`.
+
+### 3C. Checklist — Adding a Standalone Game
 
 1. [ ] Create `games/<name>-game.html` using the HTML template in §4.
 2. [ ] Add all topic items to the JS data object (§6).

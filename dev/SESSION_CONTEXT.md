@@ -181,7 +181,12 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 ### Data & images
 - Classic games: Iconify Noto SVG CDN (`api.iconify.design/noto/...`)
 - Card-machine games: Mix of CSS art (solar system, dinosaurs) and CDN images (weather, flashcards)
+- Flashcard decks: Microsoft Fluent UI 3D PNG CDN (`cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/...`)
 - Fallback: Inline SVG with emoji for broken images
+
+### Flashcard deck vs. standalone game
+- **Flashcard deck** (preferred for simple "list of items" topics): Add a `DECKS` entry in `flashcards-game.html`. Gets quiz, achievements, stats, settings, speech for free. No changes to `index.html`, navbars, or SW cache list. ~20 lines of code. Examples: Animals, Food, Body Parts, Insects.
+- **Standalone game**: Only when the topic requires custom interaction (two-pane explore, story narrative, orbital animation, etc.). Requires ~800–1400 lines, plus updates to 12+ files (navbars, index, SW). See `GAME_REFERENCE.md` §3 for decision criteria.
 
 ---
 

@@ -210,11 +210,16 @@ The following mobile rendering issues were identified earlier and have been **fi
 
 ## 12. New Game Ideas (for 3-year-olds)
 
+> **Design decision:** Simple "list of items" topics should be added as **flashcard decks** inside
+> `flashcards-game.html` (see `GAME_REFERENCE.md` §3A). Only create a standalone game if the topic
+> needs unique interaction (story flow, drag-and-drop, etc.). Flashcard decks get quiz, achievements,
+> stats, and settings for free.
+
 | # | Game | Architecture | Status |
 |---|---|---|---|
-| 1 | Body Parts | Flashcard Deck (inside Flash Cards) | ✅ Done — redesigned from standalone two-pane to flashcard deck with Fluent UI 3D images |
-| 2 | Emotions / Feelings | Card Machine | Planned |
-| 3 | Opposites | Card Machine | Planned |
-| 4 | Musical Instruments | Card Machine | Planned |
-| 5 | Daily Routines | Story Mode | Planned |
-| 6 | Rhyming Words | Card Machine | Planned |
+| 1 | Body Parts | Flashcard Deck | ✅ Done — 15 cards with Fluent UI 3D images |
+| 2 | Emotions / Feelings | Flashcard Deck | Planned — emoji faces are highly recognizable |
+| 3 | Opposites | Flashcard Deck | Planned — pair-based (big/small, hot/cold) |
+| 4 | Musical Instruments | Flashcard Deck | Planned — Fluent 3D has guitar, drum, trumpet, etc. |
+| 5 | Daily Routines | Story Mode (standalone) | Planned — needs sequential narrative flow |
+| 6 | Rhyming Words | Flashcard Deck | Planned |
