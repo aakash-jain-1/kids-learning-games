@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Read the tale of the Honest Woodcutter — an interactive story with animations for kids.">
   <title>The Honest Woodcutter Story</title>
+  <meta property="og:title" content="The Honest Woodcutter Story — Kids Learning Games">
+  <meta property="og:description" content="An interactive animated story about honesty with beautiful scenes!">
+  <meta property="og:image" content="../icon-512.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="The Honest Woodcutter Story — Kids Learning Games">
   <style>
     * {
       margin: 0;
@@ -442,35 +447,39 @@
       z-index: 100;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      padding: 6px 12px;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       overflow-x: auto;
       white-space: nowrap;
       scrollbar-width: none;
+      flex-wrap: wrap;
     }
     .navigation::-webkit-scrollbar { display: none; }
     
     .nav-btn {
-      color: rgba(255,255,255,0.8);
+      color: #fff;
       text-decoration: none;
       font-size: 0.72em;
       font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 50px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.15);
+      padding: 5px 14px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
       transition: 0.2s;
       flex-shrink: 0;
       font-family: inherit;
       display: inline-block;
       cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     
     .nav-btn:hover {
-      background: rgba(255,255,255,0.22);
-      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
     
     /* Animation states */
@@ -558,6 +567,7 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(100px); }
     }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
   </style>
 </head>
 <body>
@@ -655,6 +665,16 @@
         <h2>✨ Moral of the Story ✨</h2>
         <p>Honesty is always rewarded. Truth and integrity are the greatest virtues one can possess.</p>
       </div>
+
+      <div class="story-quiz" id="storyQuiz" style="background:rgba(255,255,255,0.95);border-radius:20px;padding:25px;margin-top:30px;color:#333;">
+        <h2 style="color:#2e7d32;text-align:center;margin-bottom:18px;">📝 Comprehension Quiz</h2>
+        <div id="quizBody"></div>
+        <div id="quizResultBox" style="display:none;text-align:center;padding:20px;">
+          <div style="font-size:3em;" id="quizResEmoji"></div>
+          <div style="font-size:1.4em;font-weight:bold;margin:10px 0;" id="quizResText"></div>
+          <button onclick="startStoryQuiz()" style="margin-top:10px;padding:10px 28px;border-radius:50px;border:2px solid #2e7d32;background:#e8f5e9;color:#2e7d32;font-size:1em;font-weight:bold;cursor:pointer;font-family:inherit;">Try Again</button>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -725,9 +745,46 @@
     window.addEventListener('load', () => {
       setTimeout(() => playAnimation(), 500);
     });
+
+    var storyQuizData=[
+      {q:"What did the woodcutter lose in the river?",opts:["His shoes","His axe","A golden coin","His hat"],ans:1},
+      {q:"Who appeared when the woodcutter was crying?",opts:["A king","A wizard","A fairy","A fish"],ans:2},
+      {q:"What did the fairy bring up first from the river?",opts:["Silver axe","Iron axe","Golden axe","Diamond axe"],ans:2},
+      {q:"Did the woodcutter claim the golden axe was his?",opts:["Yes, he did","No, he said it was not his","He was not sure","He ran away"],ans:1},
+      {q:"How was the woodcutter rewarded for his honesty?",opts:["He got money","He got all three axes","He got a house","He got nothing"],ans:1},
+      {q:"What is the moral of the story?",opts:["Be greedy","Honesty is always rewarded","Don't go near rivers","Fairies are scary"],ans:1}
+    ];
+    var sqIdx=0,sqCorrect=0;
+    function startStoryQuiz(){
+      sqIdx=0;sqCorrect=0;
+      document.getElementById("quizResultBox").style.display="none";
+      document.getElementById("quizBody").style.display="block";
+      renderStoryQ();
+    }
+    function renderStoryQ(){
+      if(sqIdx>=storyQuizData.length){showStoryResult();return;}
+      var qd=storyQuizData[sqIdx];
+      var h='<div style="font-weight:bold;font-size:1.1em;margin-bottom:12px;">'+(sqIdx+1)+'/'+storyQuizData.length+': '+qd.q+'</div>';
+      qd.opts.forEach(function(o,i){
+        h+='<button onclick="answerStoryQ('+i+')" style="display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;border-radius:12px;border:2px solid #c8e6c9;background:#f1f8e9;color:#333;font-size:1em;cursor:pointer;font-family:inherit;font-weight:600;transition:0.2s;" onmouseover="this.style.background=\'#c8e6c9\'" onmouseout="this.style.background=\'#f1f8e9\'">'+o+'</button>';
+      });
+      document.getElementById("quizBody").innerHTML=h;
+    }
+    function answerStoryQ(i){
+      if(i===storyQuizData[sqIdx].ans)sqCorrect++;
+      sqIdx++;renderStoryQ();
+    }
+    function showStoryResult(){
+      document.getElementById("quizBody").style.display="none";
+      var pct=Math.round(sqCorrect/storyQuizData.length*100);
+      document.getElementById("quizResEmoji").textContent=pct===100?"🌟":pct>=67?"👏":"📚";
+      document.getElementById("quizResText").textContent=sqCorrect+'/'+storyQuizData.length+' correct ('+pct+'%) — '+(pct===100?"Perfect! You understood the story!":pct>=67?"Great job!":"Read the story again and try once more!");
+      document.getElementById("quizResultBox").style.display="block";
+    }
+    startStoryQuiz();
   </script>
   <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
-  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
+  <script>(function(){var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info'),c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;if(c&&Date.now()-ct<3600000){el.textContent=c;return;}fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});})();</script>
 </body>
 </html>

@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Meet 37 amazing animals A-Z with images, facts and quizzes! Interactive animals game for kids.">
   <title>Animals Learning Game</title>
+  <meta property="og:title" content="Animals Game — Kids Learning Games">
+  <meta property="og:description" content="Discover animals with fun sounds, quizzes, and achievements!">
+  <meta property="og:image" content="../icon-512.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Animals Game — Kids Learning Games">
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -431,6 +436,7 @@
     body::before { display: none; }
     #particleCanvas { display: none; }
     .right-pane::before { display: none; }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
   </style>
 </head>
 <body>
@@ -1562,6 +1568,6 @@
 
   <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
-  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
+  <script>(function(){var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info'),c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;if(c&&Date.now()-ct<3600000){el.textContent=c;return;}fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});})();</script>
 </body>
 </html>

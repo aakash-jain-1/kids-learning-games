@@ -1,7 +1,8 @@
-const CACHE_NAME = 'kids-learning-games-v13';
+const CACHE_NAME = 'kids-learning-games-v14';
 const urlsToCache = [
   './',
   'index.html',
+  'offline.html',
   'games/alphabet-game.html',
   'games/numbers-game.html',
   'games/colors-game.html',
@@ -14,7 +15,11 @@ const urlsToCache = [
   'games/dinosaurs-game.html',
   'games/weather-game.html',
   'games/woodcutter-story.html',
-  'manifest.json'
+  'games/common-cards.css',
+  'games/common-cards.js',
+  'manifest.json',
+  'icon-192.svg',
+  'icon-512.svg'
 ];
 
 // Install event - cache files
@@ -43,20 +48,19 @@ self.addEventListener('fetch', (event) => {
         const fetchRequest = event.request.clone();
         
         return fetch(fetchRequest).then((response) => {
-          // Check if valid response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-          
-          // Clone the response
           const responseToCache = response.clone();
-          
           caches.open(CACHE_NAME)
             .then((cache) => {
               cache.put(event.request, responseToCache);
             });
-          
           return response;
+        }).catch(() => {
+          if (event.request.mode === 'navigate') {
+            return caches.match('offline.html');
+          }
         });
       })
   );

@@ -25,13 +25,13 @@ Copy the patterns below and customise the theme-specific values.
 | `colors-game.html` | Colors Learning Game | Colors | `#ff9a9e → #fecfef` | `colors` | 🌈 |
 | `shapes-game.html` | Shapes Learning Game | Shapes | `#f093fb → #f5576c` | `shapes` | ⬛ |
 | `animals-game.html` | Animals Learning Game | Animals | `#43cea2 → #185a9d` | `animals` | 🐾 |
-| `hindi-alphabets.html` | Hindi Alphabets | Hindi | `#ff9933 → #138808` | `alphabets` | 🇮🇳 |
-| `birds.html` | Birds | Birds | `#00c6ff → #0072ff` | `animals` | 🦜 |
-| `flashcards-game.html` | Flash Cards | Flashcards | `#0f2027 → #2c5364` | *(inline style)* | 🃏 |
-| `solar-system-game.html` | Solar System Cards | Solar System | `#0f0c29 → #302b63` | *(inline style)* | 🪐 |
-| `dinosaurs-game.html` | Dinosaurs Cards | Dinosaurs | `#0a1a05 → #1a3a10` | *(inline style)* | 🦕 |
-| `weather-game.html` | Weather and Seasons Cards | Weather | `#0a1428 → #1e3c72` | *(inline style)* | 🌦️ |
-| `woodcutter-story.html` | The Honest Woodcutter Story | Story | `#1e3c72 → #7e22ce` | *(inline style)* | 📖 |
+| `hindi-alphabets.html` | Hindi Alphabets | Hindi | `#ff9933 → #138808` | `hindi` | 🇮🇳 |
+| `birds.html` | Birds | Birds | `#00c6ff → #0072ff` | `birds` | 🦜 |
+| `flashcards-game.html` | Flash Cards | Flashcards | `#0f2027 → #2c5364` | `flashcards` | 🃏 |
+| `solar-system-game.html` | Solar System Cards | Solar System | `#0f0c29 → #302b63` | `solar` | 🪐 |
+| `dinosaurs-game.html` | Dinosaurs Cards | Dinosaurs | `#0a1a05 → #1a3a10` | `dinosaurs` | 🦕 |
+| `weather-game.html` | Weather and Seasons Cards | Weather | `#0a1428 → #1e3c72` | `weather` | 🌦️ |
+| `woodcutter-story.html` | The Honest Woodcutter Story | Story | `#1e3c72 → #7e22ce` | `story` | 📖 |
 
 When adding a new game, pick a **unique gradient** not already used above.
 

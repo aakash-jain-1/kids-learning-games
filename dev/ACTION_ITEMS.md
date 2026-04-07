@@ -71,7 +71,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 
 | Feature | Classic (7 games) | Card-machine (4 games) | Woodcutter |
 |---|---|---|---|
-| Quiz mode | Yes | Yes | No |
+| Quiz mode | Yes | Yes | Yes (comprehension) |
 | Achievements (5 badges) | Yes | Yes | No |
 | Stats dashboard | Yes | Yes | No |
 | Settings panel | Yes | Yes | No |
@@ -133,6 +133,38 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 | 7 | ~~GAME_REFERENCE.md outdated~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 8 | ~~Build info footer missing~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 9 | ~~Meta descriptions missing~~ | ~~Low~~ | ~~Small~~ | ✅ Done |
+| 10 | ~~Enhancement Audit (22 findings)~~ | ~~Mixed~~ | ~~Large~~ | ✅ Done (21/22, M1 deferred) |
+
+---
+
+## 10. ~~Enhancement Audit — 22 findings across bugs, UX, perf, accessibility, SEO, architecture~~ ✅
+
+**Severity:** Mixed (2 Critical, 5 High, 8 Medium, 7 Low) | **Status:** Done
+
+| ID | Finding | Severity | Status |
+|---|---|---|---|
+| C1 | PWA icons missing | Critical | ✅ Created icon-192.svg + icon-512.svg |
+| C2 | Quiz crash if <4 cards | Critical | ✅ Bounded wrongs loop |
+| H1 | No Escape key / click-outside for modals | High | ✅ Added to 4 card-machine games |
+| H2 | Auto-speak fires on page load | High | ✅ _pageReady guard |
+| H3 | Dark mode incomplete (card-machine) | High | ✅ Added top-card, card-name, done-card, fact-box, bottom-bar |
+| H4 | No prefers-reduced-motion | High | ✅ Added to all 13 pages |
+| H5 | lang attribute wrong on hindi | High | ✅ Already lang="hi" |
+| M2 | Outdated descriptions | Medium | ✅ Updated index.html + manifest.json |
+| M3 | No OG / Twitter meta tags | Medium | ✅ Added to all 13 pages |
+| M4 | GitHub API call every page load | Medium | ✅ localStorage cache w/ 1hr TTL |
+| M5 | No loading="lazy" on images | Medium | ✅ Added to weather + flashcards |
+| M6 | Code duplication | Medium | ✅ Created common-cards.css + common-cards.js |
+| M7 | Woodcutter has no quiz | Medium | ✅ Added 6-question comprehension quiz |
+| M8 | Tablet grid single-column too early | Medium | ✅ 2-column at 768px, 1-column at 480px |
+| L1 | Navbar style inconsistency | Low | ✅ Unified to white/gradient style |
+| L2 | No favicon | Low | ✅ SVG favicon added |
+| L3 | push.bat leftover | Low | ✅ Deleted |
+| L4 | CSS class reuse on home cards | Low | ✅ Unique classes for all 12 cards |
+| L5 | No offline fallback | Low | ✅ Created offline.html + SW fallback |
+| L6 | Confetti = 100 DOM divs | Low | ✅ Canvas-based (80 particles, 1 element) |
+| L7 | AudioContext per answer | Low | ✅ Singleton _getAudioCtx() |
+| M1 | SW cache-first staleness | Medium | Deferred (needs stale-while-revalidate; not urgent) |
 
 ---
 

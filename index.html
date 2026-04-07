@@ -4,10 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#667eea">
-  <meta name="description" content="Fun educational games for kids - Learn Alphabets, Numbers, Colors, Shapes, and Animals!">
+  <meta name="description" content="Fun educational games for kids — Alphabets, Numbers, Colors, Shapes, Animals, Birds, Hindi, Flashcards, Solar System, Dinosaurs, Weather and Story Time!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
   <title>Kids Learning Games</title>
+  <meta property="og:title" content="Kids Learning Games">
+  <meta property="og:description" content="Fun educational games for kids — Alphabets, Numbers, Colors, Shapes, Animals, Birds, Hindi, Flashcards, Solar System, Dinosaurs, Weather and Story Time!">
+  <meta property="og:image" content="icon-512.svg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Kids Learning Games">
+  <meta name="twitter:description" content="Fun educational games for kids — learn with interactive quizzes, achievements and audio!">
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.svg">
   <style>
     * {
       margin: 0;
@@ -187,6 +195,13 @@
     .game-card.colors { border-top: 5px solid #ff6b9d; }
     .game-card.shapes { border-top: 5px solid #f093fb; }
     .game-card.animals { border-top: 5px solid #43cea2; }
+    .game-card.hindi { border-top: 5px solid #ff9800; }
+    .game-card.birds { border-top: 5px solid #26a69a; }
+    .game-card.flashcards { border-top: 5px solid #f7971e; }
+    .game-card.solar { border-top: 5px solid #f7c948; }
+    .game-card.dinosaurs { border-top: 5px solid #4a9010; }
+    .game-card.weather { border-top: 5px solid #1565c0; }
+    .game-card.story { border-top: 5px solid #1e3c72; }
     
     .install-btn {
       display: none;
@@ -236,12 +251,12 @@
       }
       
       .games-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
       }
       
       .game-card {
-        padding: 25px;
+        padding: 20px;
       }
       
       .game-icon {
@@ -250,6 +265,10 @@
     }
     
     @media (max-width: 480px) {
+      .games-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
       body {
         padding: 15px;
       }
@@ -266,6 +285,7 @@
         font-size: 1em;
       }
     }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
   </style>
 </head>
 <body>
@@ -306,42 +326,42 @@
         <p>Meet amazing animals and their sounds!</p>
       </a>
 
-      <a href="games/hindi-alphabets.html" class="game-card alphabets">
+      <a href="games/hindi-alphabets.html" class="game-card hindi">
         <div class="game-icon">🇮🇳</div>
         <h2>Hindi Alphabets</h2>
         <p>Learn हिंदी वर्णमाला with words!</p>
       </a>
 
-      <a href="games/birds.html" class="game-card animals">
+      <a href="games/birds.html" class="game-card birds">
         <div class="game-icon">🦜</div>
         <h2>Birds</h2>
         <p>Discover beautiful birds of the world!</p>
       </a>
 
-      <a href="games/flashcards-game.html" class="game-card" style="border-top:5px solid #f7971e;">
+      <a href="games/flashcards-game.html" class="game-card flashcards">
         <div class="game-icon">🃏</div>
         <h2>Flash Cards</h2>
         <p>Flip cards to learn Animals, Food, Shapes, Colors & more!</p>
       </a>
-      <a href="games/solar-system-game.html" class="game-card" style="border-top:5px solid #f7c948;">
+      <a href="games/solar-system-game.html" class="game-card solar">
         <div class="game-icon">🪐</div>
         <h2>Solar System</h2>
         <p>Explore planets, the Sun, Moon and more in our Solar System!</p>
       </a>
 
-      <a href="games/dinosaurs-game.html" class="game-card" style="border-top:5px solid #4a9010;">
+      <a href="games/dinosaurs-game.html" class="game-card dinosaurs">
         <div class="game-icon">🦕</div>
         <h2>Dinosaurs</h2>
         <p>Discover mighty dinosaurs that once roamed the Earth!</p>
       </a>
 
-      <a href="games/weather-game.html" class="game-card" style="border-top:5px solid #1565c0;">
+      <a href="games/weather-game.html" class="game-card weather">
         <div class="game-icon">🌦️</div>
         <h2>Weather</h2>
         <p>Learn about weather, seasons and the world around us!</p>
       </a>
 
-      <a href="games/woodcutter-story.html" class="game-card" style="border-top:5px solid #1e3c72;">
+      <a href="games/woodcutter-story.html" class="game-card story">
         <div class="game-icon">📖</div>
         <h2>Story Time</h2>
         <p>Read the tale of the Honest Woodcutter!</p>
@@ -399,6 +419,6 @@
     });
   </script>
   <div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
-  <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
+  <script>(function(){var K='_buildInfo',T='_buildInfoT',el=document.getElementById('build-info'),c=localStorage.getItem(K),ct=+localStorage.getItem(T)||0;if(c&&Date.now()-ct<3600000){el.textContent=c;return;}fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){var t='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);el.textContent=t;try{localStorage.setItem(K,t);localStorage.setItem(T,''+Date.now());}catch(e){}}).catch(function(){if(c)el.textContent=c;});})();</script>
 </body>
 </html>
