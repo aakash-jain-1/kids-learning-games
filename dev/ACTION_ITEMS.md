@@ -12,18 +12,9 @@
 
 ---
 
-## 1. Home Page — Missing game cards
+## 1. ~~Home Page — Missing game cards~~ ✅
 
-**Severity:** High | **Effort:** Small
-
-`index.html` only links to 9 of the 12 games. Three games exist in `games/` but have no card on the home page — users can't discover them.
-
-**Missing from home page:**
-- `dinosaurs-game.html`
-- `weather-game.html`
-- `woodcutter-story.html`
-
-**Fix:** Add `<a>` cards for each inside the `.games-grid` div, following the existing card pattern.
+**Severity:** High | **Effort:** Small | **Status:** Done
 
 - [x] Add Dinosaurs card to `index.html`
 - [x] Add Weather card to `index.html`
@@ -31,15 +22,9 @@
 
 ---
 
-## 2. Cross-game navigation — Card-machine games have no navbar
+## 2. ~~Cross-game navigation — Card-machine games have no navbar~~ ✅
 
-**Severity:** High | **Effort:** Medium
-
-The 4 "card-machine" games (`flashcards`, `solar-system`, `dinosaurs`, `weather`) only have Prev/Next card buttons and a "Home" back-link. There is no cross-game navigation bar — once inside, you can't jump to another game without going back to the home page.
-
-`woodcutter-story.html` only links to Home and Alphabets.
-
-**Fix:** Add a consistent `.navigation` bar (matching the classic games) to all 5 files.
+**Severity:** High | **Effort:** Medium | **Status:** Done
 
 - [x] Add navbar to `flashcards-game.html`
 - [x] Add navbar to `solar-system-game.html`
@@ -49,40 +34,36 @@ The 4 "card-machine" games (`flashcards`, `solar-system`, `dinosaurs`, `weather`
 
 ---
 
-## 3. Navigation — Flashcards and Woodcutter not linked from any game
+## 3. ~~Navigation — Flashcards and Woodcutter not linked from any game~~ ✅
 
-**Severity:** High | **Effort:** Small
+**Severity:** High | **Effort:** Small | **Status:** Done
 
-No game's navigation bar includes links to Flashcards or Woodcutter Story. These two games are completely orphaned from the cross-game navigation mesh.
-
-**Fix:** Add `<a href="flashcards-game.html" class="nav-btn">Flashcards</a>` and `<a href="woodcutter-story.html" class="nav-btn">Story</a>` to the `.navigation` div in all game files.
-
-**Files to update:**
-- [ ] `alphabet-game.html`
-- [ ] `numbers-game.html`
-- [ ] `colors-game.html`
-- [ ] `shapes-game.html`
-- [ ] `animals-game.html`
-- [ ] `hindi-alphabets.html`
-- [ ] `birds.html`
-- [ ] `flashcards-game.html` (once it has a navbar)
-- [ ] `solar-system-game.html` (once it has a navbar)
-- [ ] `dinosaurs-game.html` (once it has a navbar)
-- [ ] `weather-game.html` (once it has a navbar)
-- [ ] `woodcutter-story.html` (once it has a full navbar)
+- [x] `alphabet-game.html`
+- [x] `numbers-game.html`
+- [x] `colors-game.html`
+- [x] `shapes-game.html`
+- [x] `animals-game.html`
+- [x] `hindi-alphabets.html`
+- [x] `birds.html`
+- [x] `flashcards-game.html` (added with navbar in #2)
+- [x] `solar-system-game.html` (added with navbar in #2)
+- [x] `dinosaurs-game.html` (added with navbar in #2)
+- [x] `weather-game.html` (added with navbar in #2)
+- [x] `woodcutter-story.html` (added with navbar in #2)
 
 ---
 
-## 4. Service Worker — `woodcutter-story.html` not cached
+## 4. Service Worker — `woodcutter-story.html` not cached + no SW registration
 
 **Severity:** Medium | **Effort:** Tiny
 
 `service-worker.js` lists all 11 other game files in `urlsToCache` but is missing `games/woodcutter-story.html`. The story won't work offline.
 
-**Fix:** Add `'games/woodcutter-story.html'` to the `urlsToCache` array and bump the cache version.
+Additionally, `woodcutter-story.html` is the only game file that does **not** include the service worker registration `<script>` block at the bottom.
 
-- [ ] Add woodcutter to `service-worker.js`
+- [ ] Add `'games/woodcutter-story.html'` to `urlsToCache` in `service-worker.js`
 - [ ] Bump `CACHE_NAME` version
+- [ ] Add SW registration script to `woodcutter-story.html`
 
 ---
 
@@ -92,16 +73,14 @@ No game's navigation bar includes links to Flashcards or Woodcutter Story. These
 
 The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboard, and settings panel (dark mode, font size, sound, auto-speak). The 4 card-machine games have none of these.
 
-| Feature | Classic (7 games) | Card-machine (4 games) |
-|---|---|---|
-| Quiz mode | Yes | No |
-| Achievements (5 badges) | Yes | No |
-| Stats dashboard | Yes | No |
-| Settings panel | Yes | No |
-| Dark mode | Yes | No |
-| Progress persistence (localStorage) | Yes | Partial (progress bar only) |
-
-**Fix:** Add quiz, achievements, stats, and settings to each card-machine game. Can be done incrementally per game.
+| Feature | Classic (7 games) | Card-machine (4 games) | Woodcutter |
+|---|---|---|---|
+| Quiz mode | Yes | No | No |
+| Achievements (5 badges) | Yes | No | No |
+| Stats dashboard | Yes | No | No |
+| Settings panel | Yes | No | No |
+| Dark mode | Yes | No | No |
+| Progress persistence (localStorage) | Yes | Partial (progress bar only) | No |
 
 - [ ] Add features to `flashcards-game.html`
 - [ ] Add features to `solar-system-game.html`
@@ -110,11 +89,9 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 
 ---
 
-## 6. Home Page — Duplicate CSS rules
+## 6. ~~Home Page — Duplicate CSS rules~~ ✅
 
-**Severity:** Low | **Effort:** Tiny
-
-`index.html` lines 123-126 define `.game-card:nth-child(10)` and `:nth-child(11)` animation delays twice (duplicate rules).
+**Status:** Done
 
 - [x] Remove the duplicate CSS block
 
@@ -130,17 +107,42 @@ The "Existing Games Inventory" table in `dev/GAME_REFERENCE.md` only lists 8 gam
 
 ---
 
+## 8. Build info footer missing from newer games
+
+**Severity:** Low | **Effort:** Tiny
+
+The classic games + flashcards show a build info footer (commit SHA + date from GitHub API). The following files are missing it:
+
+- [ ] `solar-system-game.html`
+- [ ] `dinosaurs-game.html`
+- [ ] `weather-game.html`
+- [ ] `woodcutter-story.html`
+
+---
+
+## 9. No `<meta name="description">` on game pages
+
+**Severity:** Low | **Effort:** Small
+
+Only `index.html` has a `<meta name="description">` tag. None of the 12 game files have one. This affects SEO and social sharing previews.
+
+- [ ] Add `<meta name="description">` to all 12 game files
+
+---
+
 ## Priority Summary
 
-| # | Issue | Severity | Effort | Items |
+| # | Issue | Severity | Effort | Status |
 |---|---|---|---|---|
-| 1 | Missing home page cards | High | Small | 3 cards |
-| 2 | Card games missing navbar | High | Medium | 5 files |
-| 3 | Flashcards + Story not in any navbar | High | Small | 12 files |
-| 4 | Woodcutter not in service worker | Medium | Tiny | 1 file |
-| 5 | Card games missing quiz/achievements/stats | Medium | Large | 4 files |
-| 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | Done |
-| 7 | GAME_REFERENCE.md outdated | Low | Tiny | 1 file |
+| 1 | ~~Missing home page cards~~ | ~~High~~ | ~~Small~~ | ✅ Done |
+| 2 | ~~Card games missing navbar~~ | ~~High~~ | ~~Medium~~ | ✅ Done |
+| 3 | ~~Flashcards + Story not in any navbar~~ | ~~High~~ | ~~Small~~ | ✅ Done |
+| 4 | Woodcutter not in SW cache + no SW reg | Medium | Tiny | Open |
+| 5 | Card games missing quiz/achievements/stats | Medium | Large | Open |
+| 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
+| 7 | GAME_REFERENCE.md outdated | Low | Tiny | Open |
+| 8 | Build info footer missing from 4 games | Low | Tiny | Open |
+| 9 | No meta description on game pages | Low | Small | Open |
 
 ---
 
