@@ -42,7 +42,8 @@ body{font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;height
 .card-emoji-big{font-size:clamp(4em,9vmin,9.5em);line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));}
 .card-emoji-big.pop,.card-img.pop{animation:emojiPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
 @keyframes emojiPop{0%{transform:scale(0.55) rotate(-8deg);}70%{transform:scale(1.18) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
-.card-img{width:88%;max-width:320px;height:auto;max-height:360px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));}
+#cardFace{width:100%;display:flex;align-items:center;justify-content:center;}
+.card-img{width:88%;max-width:320px;height:auto;min-height:120px;max-height:360px;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));}
 .card-name-big{font-size:2.4em;font-weight:bold;color:#1a2a4a;}
 .card-pill{font-size:0.72em;padding:4px 14px;border-radius:50px;font-weight:bold;}
 .card-pill.carnivore{background:#ff5252;color:#fff;}.card-pill.herbivore{background:#4caf50;color:#fff;}.card-pill.omnivore{background:#ff9800;color:#fff;}
@@ -297,7 +298,7 @@ function setFilter(key){
 function renderAll(){
   var card=cards[idx],total=cards.length;
   var cf=document.getElementById("cardFace");
-  cf.innerHTML='<img class="card-img" src="'+card.img+'" alt="'+card.n+'" loading="lazy" data-e="'+card.e+'" onerror="imgFail(this)">';
+  cf.innerHTML='<img class="card-img" src="'+card.img+'" alt="'+card.n+'" data-e="'+card.e+'" onerror="imgFail(this)">';
   var inner=cf.firstChild;if(inner){inner.classList.remove("pop");void inner.offsetWidth;inner.classList.add("pop");}
   document.getElementById("cardName").textContent=card.n;
   document.getElementById("cardNum").textContent=(idx+1)+" / "+total;

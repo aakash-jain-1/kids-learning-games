@@ -105,8 +105,9 @@
       70% {transform:scale(1.18) rotate(3deg);}
       100%{transform:scale(1)    rotate(0);}
     }
+    #cardFace{width:100%;display:flex;align-items:center;justify-content:center;}
     .card-img{
-      width:88%;max-width:320px;height:auto;max-height:360px;
+      width:88%;max-width:320px;height:auto;min-height:120px;max-height:360px;
       object-fit:contain;
       filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));
     }
@@ -760,7 +761,7 @@ function cardEmojiFace(card,bigClass,numClass){
     return '<div class="'+numClass+'">'+card.num+'</div>';
   }
   if(card.img){
-    return '<img class="card-img" src="'+FLUENT+card.img+'" alt="'+card.n+'" loading="lazy" data-code="'+card.code+'" onerror="imgFail(this)">';
+    return '<img class="card-img" src="'+FLUENT+card.img+'" alt="'+card.n+'" data-code="'+card.code+'" onerror="imgFail(this)">';
   }
   if(card.shape){
     return '<div class="css-shape"><div class="csh-'+card.shape+'"></div></div>';
@@ -772,7 +773,7 @@ function screenEmojiFace(card){
     return '<div class="scrn-num">'+card.num+'</div>';
   }
   if(card.img){
-    return '<img class="scrn-img" id="screenEmojiEl" src="'+FLUENT+card.img+'" alt="'+card.n+'" loading="lazy" data-code="'+card.code+'" onerror="imgFailScreen(this)">';
+    return '<img class="scrn-img" id="screenEmojiEl" src="'+FLUENT+card.img+'" alt="'+card.n+'" data-code="'+card.code+'" onerror="imgFailScreen(this)">';
   }
   return '<div class="scrn-emoji" id="screenEmojiEl">'+card.e+'</div>';
 }
