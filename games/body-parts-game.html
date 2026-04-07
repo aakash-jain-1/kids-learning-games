@@ -204,9 +204,9 @@
       background: linear-gradient(145deg, #ffffff, #f0f0f0);
       border: 3px solid #ff6b9d;
       border-radius: 15px;
-      font-size: 1.3em;
+      font-size: 1.1em;
       font-weight: bold;
-      padding: 15px 8px;
+      padding: 10px 6px;
       cursor: pointer;
       transition: all 0.3s ease;
       width: 100%;
@@ -215,10 +215,12 @@
       color: #c44569;
       position: relative;
       overflow: hidden;
-      min-height: 60px;
+      min-height: 70px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
       transform-style: preserve-3d;
       perspective: 1000px;
     }
@@ -253,7 +255,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(67,206,162,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,107,157,0.3), transparent);
       transition: left 0.5s;
     }
     .bodypart-btn:hover::before {
@@ -262,7 +264,7 @@
     .bodypart-btn:hover {
       background: linear-gradient(145deg, #ffe0e8, #ffb3c6);
       transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(67, 206, 162, 0.4);
+      box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
       border-color: #c44569;
     }
     .bodypart-btn:active {
@@ -333,7 +335,11 @@
     .part-image {
       width: min(250px, 28vh);
       height: min(250px, 28vh);
-      object-fit: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: min(150px, 18vh);
+      line-height: 1;
       border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
       background: rgba(255, 255, 255, 0.95);
@@ -341,7 +347,7 @@
       transition: all 0.6s ease;
       animation: fadeInScale 0.8s ease-out;
       cursor: pointer;
-      padding: 20px;
+      user-select: none;
     }
     .part-image:hover {
       transform: scale(1.1) rotate(5deg);
@@ -427,7 +433,7 @@
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
       .part-name { font-size: 1.6em !important; min-height: auto !important; margin-bottom: 8px !important; }
-      .part-image { width: 150px !important; height: 150px !important; padding: 10px !important; }
+      .part-image { width: 150px !important; height: 150px !important; font-size: 90px !important; }
       .part-info { font-size: 0.95em !important; max-width: 100% !important; }
       .part-sound { font-size: 1.3em !important; }
     }
@@ -494,7 +500,7 @@
       <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Body Parts Quiz</h2>
       
       <div style="margin: 20px 0;">
-        <img id="quizPartImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
+        <div id="quizPartImage" role="img" aria-label="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; display: flex; align-items: center; justify-content: center; font-size: 120px; line-height: 1; margin: 0 auto;"></div>
       </div>
       
       <p style="color: white; font-size: 1.5em; margin: 20px 0;">Which body part is this?</p>
@@ -571,7 +577,7 @@
     <div class="right-pane">
       <div class="part-name" id="partName"></div>
       <div class="part-display-container" id="partDisplayContainer" style="display:none;">
-        <img class="part-image" id="partImage" src="" alt="">
+        <div class="part-image" id="partImage" role="img" aria-label=""></div>
         <div class="part-sound" id="partSound"></div>
         <div class="part-info" id="partInfo"></div>
       </div>
@@ -662,106 +668,26 @@
     }
 
     const bodyParts = {
-      'Head': {
-        img: 'https://api.iconify.design/noto/brain.svg?width=96&height=96',
-        sound: '🧠 Think think!',
-        info: 'Your head holds your amazing brain that helps you think!'
-      },
-      'Eyes': {
-        img: 'https://api.iconify.design/noto/eyes.svg?width=96&height=96',
-        sound: '👀 Blink blink!',
-        info: 'Your eyes help you see all the beautiful colors in the world!'
-      },
-      'Ears': {
-        img: 'https://api.iconify.design/noto/ear.svg?width=96&height=96',
-        sound: '👂 Listen!',
-        info: 'Your ears help you hear music, birds singing, and people talking!'
-      },
-      'Nose': {
-        img: 'https://api.iconify.design/noto/nose.svg?width=96&height=96',
-        sound: '👃 Sniff sniff!',
-        info: 'Your nose helps you smell yummy food and beautiful flowers!'
-      },
-      'Mouth': {
-        img: 'https://api.iconify.design/noto/mouth.svg?width=96&height=96',
-        sound: '👄 Nom nom!',
-        info: 'Your mouth helps you eat, talk, sing, and smile!'
-      },
-      'Teeth': {
-        img: 'https://api.iconify.design/noto/tooth.svg?width=96&height=96',
-        sound: '🦷 Chomp chomp!',
-        info: 'Your teeth help you chew food — brush them every day!'
-      },
-      'Tongue': {
-        img: 'https://api.iconify.design/noto/tongue.svg?width=96&height=96',
-        sound: '👅 Taste taste!',
-        info: 'Your tongue helps you taste sweet, sour, salty, and bitter things!'
-      },
-      'Hair': {
-        img: 'https://api.iconify.design/noto/person-blond-hair.svg?width=96&height=96',
-        sound: '💇 Swish swish!',
-        info: 'Hair grows on top of your head and keeps it warm!'
-      },
-      'Hand': {
-        img: 'https://api.iconify.design/noto/raised-hand.svg?width=96&height=96',
-        sound: '🖐️ Wave wave!',
-        info: 'Your hands help you hold things, wave hello, and draw pictures!'
-      },
-      'Fingers': {
-        img: 'https://api.iconify.design/noto/victory-hand.svg?width=96&height=96',
-        sound: '✌️ Wiggle wiggle!',
-        info: 'You have 10 fingers — 5 on each hand — to grab and point!'
-      },
-      'Arm': {
-        img: 'https://api.iconify.design/noto/flexed-biceps.svg?width=96&height=96',
-        sound: '💪 Flex flex!',
-        info: 'Your arms help you hug, reach high, and carry things!'
-      },
-      'Leg': {
-        img: 'https://api.iconify.design/noto/leg.svg?width=96&height=96',
-        sound: '🦵 Kick kick!',
-        info: 'Your legs help you walk, run, jump, and dance!'
-      },
-      'Knee': {
-        img: 'https://api.iconify.design/noto/mechanical-leg.svg?width=96&height=96',
-        sound: '🦿 Bend bend!',
-        info: 'Your knees help your legs bend so you can sit and jump!'
-      },
-      'Foot': {
-        img: 'https://api.iconify.design/noto/foot.svg?width=96&height=96',
-        sound: '🦶 Stomp stomp!',
-        info: 'Your feet help you stand, walk, run, and kick a ball!'
-      },
-      'Toes': {
-        img: 'https://api.iconify.design/noto/footprints.svg?width=96&height=96',
-        sound: '👣 Tippy toes!',
-        info: 'You have 10 toes — they help you balance when you walk!'
-      },
-      'Tummy': {
-        img: 'https://api.iconify.design/noto/baby.svg?width=96&height=96',
-        sound: '🤰 Rumble rumble!',
-        info: 'Your tummy digests all the yummy food you eat!'
-      },
-      'Heart': {
-        img: 'https://api.iconify.design/noto/anatomical-heart.svg?width=96&height=96',
-        sound: '❤️ Thump thump!',
-        info: 'Your heart pumps blood all around your body — it never stops!'
-      },
-      'Lungs': {
-        img: 'https://api.iconify.design/noto/lungs.svg?width=96&height=96',
-        sound: '🫁 Breathe in, breathe out!',
-        info: 'Your lungs help you breathe — take a deep breath and feel them expand!'
-      },
-      'Bones': {
-        img: 'https://api.iconify.design/noto/bone.svg?width=96&height=96',
-        sound: '🦴 Strong strong!',
-        info: 'You have 206 bones inside your body that hold you up!'
-      },
-      'Shoulder': {
-        img: 'https://api.iconify.design/noto/person-shrugging.svg?width=96&height=96',
-        sound: '🤷 Shrug shrug!',
-        info: 'Your shoulders help you lift your arms up high!'
-      }
+      'Face':     { emoji: '😊', sound: '😊 Smile!',              info: 'Your face shows how you feel — happy, sad, or surprised!' },
+      'Eyes':     { emoji: '👁️', sound: '👀 Blink blink!',        info: 'Your eyes help you see all the beautiful colors in the world!' },
+      'Ears':     { emoji: '👂', sound: '👂 Listen!',              info: 'Your ears help you hear music, birds singing, and people talking!' },
+      'Nose':     { emoji: '👃', sound: '👃 Sniff sniff!',         info: 'Your nose helps you smell yummy food and beautiful flowers!' },
+      'Mouth':    { emoji: '👄', sound: '👄 Nom nom!',             info: 'Your mouth helps you eat, talk, sing, and smile!' },
+      'Teeth':    { emoji: '🦷', sound: '🦷 Chomp chomp!',         info: 'Your teeth help you chew food — brush them every day!' },
+      'Tongue':   { emoji: '👅', sound: '👅 Taste taste!',         info: 'Your tongue helps you taste sweet, sour, salty, and bitter things!' },
+      'Hair':     { emoji: '💇', sound: '💇 Swish swish!',         info: 'Hair grows on top of your head and keeps it warm!' },
+      'Hand':     { emoji: '🖐️', sound: '🖐️ Wave wave!',         info: 'Your hands help you hold things, wave hello, and draw pictures!' },
+      'Fingers':  { emoji: '✌️', sound: '✌️ Wiggle wiggle!',      info: 'You have 10 fingers — 5 on each hand — to grab and point!' },
+      'Arm':      { emoji: '💪', sound: '💪 Flex flex!',            info: 'Your arms help you hug, reach high, and carry things!' },
+      'Tummy':    { emoji: '🤰', sound: '🤰 Rumble rumble!',       info: 'Your tummy digests all the yummy food you eat!' },
+      'Leg':      { emoji: '🦵', sound: '🦵 Kick kick!',           info: 'Your legs help you walk, run, jump, and dance!' },
+      'Knee':     { emoji: '🦵', sound: '🦵 Bend bend!',           info: 'Your knees help your legs bend so you can sit and jump!' },
+      'Foot':     { emoji: '🦶', sound: '🦶 Stomp stomp!',         info: 'Your feet help you stand, walk, run, and kick a ball!' },
+      'Toes':     { emoji: '👣', sound: '👣 Tippy toes!',          info: 'You have 10 toes — they help you balance when you walk!' },
+      'Back':     { emoji: '🧍', sound: '🧍 Stand tall!',          info: 'Your back keeps you standing straight and strong!' },
+      'Belly Button': { emoji: '🫃', sound: '🫃 Tickle tickle!',   info: 'Your belly button is where you were connected to your mummy!' },
+      'Thumb':    { emoji: '👍', sound: '👍 Thumbs up!',            info: 'Your thumb is special — it helps you grab and hold things!' },
+      'Cheeks':   { emoji: '🥰', sound: '🥰 Pinch pinch!',         info: 'Your cheeks puff up when you blow and turn pink when you laugh!' }
     };
     
     // State management
@@ -809,15 +735,11 @@
       // Show display container
       partDisplayContainer.style.display = 'flex';
       
-      partImage.src = partData.img;
-      partImage.alt = part;
+      partImage.textContent = partData.emoji;
+      partImage.setAttribute('aria-label', part);
       partImage.style.animation = 'none';
       partImage.offsetHeight;
       partImage.style.animation = 'fadeInScale 0.8s ease-out';
-      
-      partImage.onerror = () => {
-        partImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="48">🦴</text></svg>';
-      };
       
       partSound.textContent = partData.sound;
       partSound.style.animation = 'none';
@@ -841,7 +763,7 @@
       
       // Update button styling
       document.querySelectorAll('.bodypart-btn').forEach(btn => {
-        if (btn.textContent === part) {
+        if (btn.dataset.part === part) {
           btn.style.backgroundColor = '#ff6b9d';
           btn.style.color = 'white';
         }
@@ -911,7 +833,8 @@
     partNames.forEach(part => {
       const btn = document.createElement('button');
       btn.className = 'bodypart-btn';
-      btn.textContent = part;
+      btn.innerHTML = '<span style="font-size:1.5em;line-height:1">' + bodyParts[part].emoji + '</span><span>' + part + '</span>';
+      btn.dataset.part = part;
       btn.setAttribute('aria-label', `Learn about ${part}`);
       btn.tabIndex = 0;
       
@@ -1032,9 +955,9 @@
       const correctPart = partNames[Math.floor(Math.random() * partNames.length)];
       quizState.currentCorrectPart = correctPart;
       
-      // Show part image
-      quizPartImage.src = bodyParts[correctPart].img;
-      quizPartImage.alt = correctPart;
+      quizPartImage.textContent = bodyParts[correctPart].emoji;
+      quizPartImage.setAttribute('aria-label', correctPart);
+      quizPartImage.style.display = 'flex';
       
       // Generate 4 options (1 correct + 3 wrong)
       const options = [correctPart];
@@ -1052,7 +975,8 @@
       quizOptions.innerHTML = '';
       options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.textContent = opt;
+        btn.textContent = bodyParts[opt].emoji + ' ' + opt;
+        btn.dataset.part = opt;
         btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #ff6b9d; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #c44569;';
         
         btn.onclick = () => checkAnswer(opt, btn);
