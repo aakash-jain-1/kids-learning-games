@@ -13,7 +13,7 @@
 **Live URL:** https://aakash-jain-1.github.io/kids-learning-games/
 **Stack:** HTML5 + CSS3 + Vanilla JS — zero frameworks, zero build tools
 **Total commits:** 28 (as of 2026-04-07)
-**Service Worker cache version:** v16
+**Service Worker cache version:** v19
 
 A Progressive Web App with **12 educational games** for children, organised into three architectures:
 
@@ -30,7 +30,7 @@ A Progressive Web App with **12 educational games** for children, organised into
 ```
 ├── index.html              # Home page / game launcher
 ├── manifest.json           # PWA manifest
-├── service-worker.js       # Offline cache (v15)
+├── service-worker.js       # Offline cache + network-first strategy (v19)
 ├── offline.html            # Offline fallback page
 ├── assets/
 │   ├── icon-192.svg        # PWA icon 192×192
@@ -52,7 +52,7 @@ A Progressive Web App with **12 educational games** for children, organised into
 │   └── common-cards.js     # Shared JS utilities (reference file, not yet linked)
 └── dev/
     ├── SETUP.html           # Dev setup guide
-    ├── ACTION_ITEMS.md      # Issue tracker (all 10 issues resolved)
+    ├── ACTION_ITEMS.md      # Issue tracker (all 11 issues resolved)
     ├── GAME_REFERENCE.md    # Template & conventions for adding new games
     ├── SESSION_CONTEXT.md   # This file
     ├── _gen_solar_css_planets.py
@@ -94,10 +94,10 @@ Comprehensive audit across bugs, UX, performance, accessibility, SEO, and archit
 | H3 | Dark mode incomplete (card-machine) | Added styles for `.top-card`, `.card-name-big`, `.done-card`, `.fact-box`, `.bottom-bar` |
 | H4 | No `prefers-reduced-motion` | Added media query block to all 13 HTML pages |
 | H5 | Hindi lang attribute | Already correct (`lang="hi"`) |
-| M1 | SW cache-first staleness | **Deferred** — needs `stale-while-revalidate`; not urgent |
+| M1 | SW cache-first staleness | ✅ Switched to network-first for HTML, stale-while-revalidate for assets (v19) |
 | M2 | Outdated descriptions | Updated `index.html` + `manifest.json` |
 | M3 | No Open Graph / Twitter meta tags | Added to all 13 pages with absolute `og:image` URLs |
-| M4 | GitHub API fetched every page load | `localStorage` cache with 1-hour TTL |
+| M4 | GitHub API fetched every page load | Direct fetch on each load (no cache — avoids stale SHA after deploy) |
 | M5 | No `loading="lazy"` on images | Added to weather + flashcards (others use CSS art) |
 | M6 | Code duplication across card-machine games | Extracted `common-cards.css` + `common-cards.js` |
 | M7 | Woodcutter has no quiz | Added 6-question comprehension quiz |
@@ -141,6 +141,13 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 - **L5**: Added `localStorage` persistence for woodcutter story quiz (attempts, best score, last played)
 - Bumped service worker cache to v16
 
+### Phase 6 — Service Worker & Build-Info Overhaul
+- **Removed `localStorage` caching** for build-info commit SHA — was causing stale footer after deploys
+- **Switched service worker from cache-first to network-first** for HTML pages (navigations always hit network; cache is offline fallback only)
+- **Sub-resources (CSS/JS/images)** use stale-while-revalidate (serve cached, update in background)
+- Removed `SW_UPDATED` messaging (no longer needed without localStorage cache)
+- Bumped service worker cache to v19
+
 ---
 
 ## 4. Architecture & Design Decisions
@@ -155,14 +162,14 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 - `common-cards.js` is a **reference file only** — it contains extracted utility functions (`_getAudioCtx`, `lsGet`, `lsSet`, `checkAchievementsBase`, `showAchToast`, `playCorrectSound`, `launchConfettiCanvas`, `initModalDismiss`, `initBuildInfo`, `applySettingsBase`) but is **not yet `<script src>`-linked** from any game. The inline JS in each game uses differently-named versions of these functions, so linking both would add dead code without breaking anything. A future refactor could replace inline code with imports from this file.
 
 ### Service Worker strategy
-- **Cache-first** with network fallback (cache-first for all, network for uncached).
-- Navigation failures serve `offline.html`.
+- **HTML pages (navigations): network-first** — always fetches from network; falls back to cache if offline, then `offline.html`.
+- **Sub-resources (CSS/JS/images): stale-while-revalidate** — serves cached version instantly, fetches fresh copy in background.
 - Cache version bump (`CACHE_NAME`) triggers old cache deletion on activate.
-- **Known limitation (M1):** No staleness control — a `stale-while-revalidate` strategy would be better but is deferred.
+- `skipWaiting()` + `clients.claim()` ensure new SW takes effect immediately.
 
 ### Build info footer
-- All pages fetch the latest commit from GitHub API (`/repos/.../commits`) for a "Last updated" footer.
-- Cached in `localStorage` under `_buildInfo` key with a 1-hour TTL to avoid rate-limiting.
+- All pages fetch the latest commit from GitHub API (`/repos/.../commits/main`) on every page load.
+- No localStorage caching — ensures the footer always shows the actual latest deployed commit.
 
 ### Data & images
 - Classic games: Iconify Noto SVG CDN (`api.iconify.design/noto/...`)
@@ -175,7 +182,6 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 
 | Item | Priority | Notes |
 |---|---|---|
-| M1: Service Worker staleness | Medium | Switch from cache-first to `stale-while-revalidate` for better freshness |
 | `common-cards.js` full integration | Low | Replace inline JS in card-machine games with `<script src="common-cards.js">` + thin per-game config. Requires renaming functions to match or updating call sites. |
 | Woodcutter: achievements/stats/settings | Low | Story mode has a comprehension quiz but no badge/stats/settings system |
 | Automated testing | Low | No test suite exists; consider Playwright for PWA testing |
@@ -186,7 +192,7 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 
 | File | Purpose |
 |---|---|
-| `service-worker.js` | Controls offline caching; bump `CACHE_NAME` version after any file change |
+| `service-worker.js` | Network-first for HTML, stale-while-revalidate for assets; bump `CACHE_NAME` after changes |
 | `manifest.json` | PWA metadata, icons, shortcuts |
 | `index.html` | Home page with game grid; has its own build-info, OG tags, PWA registration |
 | `games/common-cards.css` | Shared styles for card-machine modals, quizzes, achievements, settings |
@@ -214,8 +220,8 @@ The Amdocs GitLab account uses the **global** git config with HTTP/HTTPS proxy s
 cd kids-learning-games && python3 -m http.server 8000
 
 # Check what's cached in SW
-# Open DevTools → Application → Cache Storage → kids-learning-games-v15
+# Open DevTools → Application → Cache Storage → kids-learning-games-v19
 
 # Bump cache after changes
-# Edit CACHE_NAME in service-worker.js (e.g., v15 → v16)
+# Edit CACHE_NAME in service-worker.js (e.g., v19 → v20)
 ```

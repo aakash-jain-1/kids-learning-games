@@ -802,11 +802,15 @@ Also update the animation-delay counter:
 
 ## 8. service-worker.js — Add to Cache
 
-Open `service-worker.js` and add the new file to the `urlsToCache` array:
+Open `service-worker.js` and add the new file to the `urlsToCache` array, then bump `CACHE_NAME`:
 
 ```js
 'games/TOPIC-game.html',
 ```
+
+> **Strategy note:** The service worker uses **network-first** for HTML pages (navigations always
+> hit the network; cache is offline fallback only) and **stale-while-revalidate** for sub-resources
+> (CSS/JS/images served from cache instantly, updated in background).
 
 ---
 

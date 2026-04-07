@@ -80,7 +80,7 @@ A Progressive Web App featuring 12 educational games for children — Alphabets,
 - HTML5, CSS3, Vanilla JavaScript (no frameworks or build tools)
 - Web Audio API (sound effects)
 - Web Speech API (text-to-speech)
-- Service Workers (offline caching, auto cache-bust on version bump)
+- Service Workers (network-first for HTML, stale-while-revalidate for assets, offline fallback)
 - Web App Manifest (PWA install prompt)
 - LocalStorage (progress, achievements, settings)
 - Canvas API (confetti animations)
@@ -98,7 +98,7 @@ All layout sizing uses fluid CSS values instead of device-specific `@media (max-
 ### Updating the App
 
 1. Make changes to HTML/JS/CSS files
-2. Increment the version in `service-worker.js` (e.g., `kids-learning-games-v15`)
+2. Increment the version in `service-worker.js` (e.g., `kids-learning-games-v19`)
 3. Commit and push — active users auto-reload when the new SW activates
 
 ## 📲 Installing the PWA
@@ -130,7 +130,7 @@ PWA icons (`assets/icon-192.svg` and `assets/icon-512.svg`) are included in the 
 
 ## ⚡ Performance
 
-- Loads instantly after first visit (service worker cache)
+- Always serves latest content (network-first HTML); assets cached for instant sub-resource loads
 - No external dependencies — all assets self-contained
 - Background animations removed for smooth performance on low-end devices
 - Lazy image loading via FluentUI Emoji CDN

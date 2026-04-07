@@ -133,7 +133,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 | 7 | ~~GAME_REFERENCE.md outdated~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 8 | ~~Build info footer missing~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 9 | ~~Meta descriptions missing~~ | ~~Low~~ | ~~Small~~ | ✅ Done |
-| 10 | ~~Enhancement Audit (22 findings)~~ | ~~Mixed~~ | ~~Large~~ | ✅ Done (21/22, M1 deferred) |
+| 10 | ~~Enhancement Audit (22 findings)~~ | ~~Mixed~~ | ~~Large~~ | ✅ Done (22/22, all resolved) |
 | 11 | ~~Polish Audit (15 findings)~~ | ~~Mixed~~ | ~~Medium~~ | ✅ Done (13/15, M5 N/A, L2 already done) |
 
 ---
@@ -165,7 +165,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 | L5 | No offline fallback | Low | ✅ Created offline.html + SW fallback |
 | L6 | Confetti = 100 DOM divs | Low | ✅ Canvas-based (80 particles, 1 element) |
 | L7 | AudioContext per answer | Low | ✅ Singleton _getAudioCtx() |
-| M1 | SW cache-first staleness | Medium | Deferred (needs stale-while-revalidate; not urgent) |
+| M1 | SW cache-first staleness | Medium | ✅ Network-first for HTML, stale-while-revalidate for assets (v19) |
 
 ---
 
