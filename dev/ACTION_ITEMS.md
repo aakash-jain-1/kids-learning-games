@@ -63,25 +63,25 @@
 
 ---
 
-## 5. Feature parity — Card-machine games missing quiz, achievements, stats, settings
+## 5. ~~Feature parity — Card-machine games missing quiz, achievements, stats, settings~~ ✅
 
-**Severity:** Medium | **Effort:** Large
+**Severity:** Medium | **Effort:** Large | **Status:** Done
 
-The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboard, and settings panel (dark mode, font size, sound, auto-speak). The 4 card-machine games have none of these.
+The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboard, and settings panel (dark mode, font size, sound, auto-speak). The 4 card-machine games now have all of these too.
 
 | Feature | Classic (7 games) | Card-machine (4 games) | Woodcutter |
 |---|---|---|---|
-| Quiz mode | Yes | No | No |
-| Achievements (5 badges) | Yes | No | No |
-| Stats dashboard | Yes | No | No |
-| Settings panel | Yes | No | No |
-| Dark mode | Yes | No | No |
-| Progress persistence (localStorage) | Yes | Partial (progress bar only) | No |
+| Quiz mode | Yes | Yes | No |
+| Achievements (5 badges) | Yes | Yes | No |
+| Stats dashboard | Yes | Yes | No |
+| Settings panel | Yes | Yes | No |
+| Dark mode | Yes | Yes | No |
+| Progress persistence (localStorage) | Yes | Yes | No |
 
-- [ ] Add features to `flashcards-game.html`
-- [ ] Add features to `solar-system-game.html`
-- [ ] Add features to `dinosaurs-game.html`
-- [ ] Add features to `weather-game.html`
+- [x] Add features to `flashcards-game.html`
+- [x] Add features to `solar-system-game.html`
+- [x] Add features to `dinosaurs-game.html`
+- [x] Add features to `weather-game.html`
 
 ---
 
@@ -128,7 +128,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 | 2 | ~~Card games missing navbar~~ | ~~High~~ | ~~Medium~~ | ✅ Done |
 | 3 | ~~Flashcards + Story not in any navbar~~ | ~~High~~ | ~~Small~~ | ✅ Done |
 | 4 | ~~Woodcutter not in SW cache + no SW reg~~ | ~~Medium~~ | ~~Tiny~~ | ✅ Done |
-| 5 | Card games missing quiz/achievements/stats | Medium | Large | Open |
+| 5 | ~~Card games missing quiz/achievements/stats~~ | ~~Medium~~ | ~~Large~~ | ✅ Done |
 | 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 7 | ~~GAME_REFERENCE.md outdated~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 8 | ~~Build info footer missing~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |

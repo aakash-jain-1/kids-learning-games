@@ -337,6 +337,51 @@
     .game-nav a{color:rgba(255,255,255,0.8);text-decoration:none;font-size:0.72em;font-weight:600;padding:4px 12px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);transition:0.2s;flex-shrink:0;font-family:inherit;}
     .game-nav a:hover{background:rgba(255,255,255,0.22);color:#fff;}
     .layout{height:calc(100dvh - 36px);}
+    body.dark-mode .left-pane{background:linear-gradient(160deg,#080e14 0%,#101d22 50%,#162a32 100%);}
+    body.dark-mode .right-pane{background:linear-gradient(140deg,#1a1a1a 0%,#2a2a2a 100%);}
+    body.font-small{font-size:14px;}body.font-medium{font-size:16px;}body.font-large{font-size:18px;}
+    .ctrl-pill{color:rgba(255,255,255,0.75);font-size:0.7em;font-weight:600;padding:4px 10px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);cursor:pointer;font-family:inherit;transition:0.2s;flex-shrink:0;}
+    .ctrl-pill:hover{background:rgba(255,255,255,0.22);color:#fff;}
+    .modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;overflow-y:auto;padding:20px;}
+    .modal-overlay.show{display:flex;}
+    .modal-box{background:linear-gradient(145deg,#2c2c54,#1a1a3e);border-radius:24px;padding:28px 24px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.6);position:relative;color:#fff;max-height:90vh;overflow-y:auto;}
+    .modal-box h2{text-align:center;margin-bottom:18px;font-size:1.6em;}
+    .modal-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.15);border:none;font-size:1.5em;cursor:pointer;border-radius:50%;width:36px;height:36px;line-height:36px;text-align:center;color:#fff;transition:0.2s;}
+    .modal-close:hover{background:rgba(255,255,255,0.3);}
+    .quiz-emoji{font-size:5em;text-align:center;margin:10px 0;}
+    .quiz-q{text-align:center;font-size:1.2em;margin:10px 0;}
+    .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+    .quiz-opt{padding:12px;font-size:1em;border-radius:14px;border:2px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-weight:bold;font-family:inherit;transition:0.2s;}
+    .quiz-opt:hover{background:rgba(255,255,255,0.2);}
+    .quiz-opt.correct{background:#4caf50;border-color:#4caf50;}
+    .quiz-opt.wrong{background:#f44336;border-color:#f44336;}
+    .quiz-fb{text-align:center;font-size:1.1em;font-weight:bold;min-height:28px;margin:8px 0;}
+    .quiz-score{text-align:center;font-size:1em;margin:8px 0;opacity:0.8;}
+    .quiz-next{display:none;margin:10px auto 0;padding:10px 30px;border-radius:50px;border:2px solid #fff;background:rgba(255,255,255,0.15);color:#fff;font-size:1em;font-weight:bold;cursor:pointer;font-family:inherit;}
+    .quiz-next:hover{background:rgba(255,255,255,0.3);}
+    .stat-grid{display:grid;gap:10px;margin-bottom:16px;}
+    .stat-card{background:rgba(255,255,255,0.08);padding:14px;border-radius:12px;text-align:center;}
+    .stat-card .num{font-size:1.5em;font-weight:bold;margin-bottom:4px;}
+    .ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+    .ach-item{background:rgba(255,255,255,0.06);padding:14px 10px;border-radius:14px;text-align:center;opacity:0.45;}
+    .ach-item.unlocked{opacity:1;background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,237,78,0.15));}
+    .ach-item .ach-icon{font-size:2em;margin-bottom:6px;}
+    .ach-item .ach-name{font-weight:bold;font-size:0.85em;}
+    .ach-item .ach-desc{font-size:0.7em;opacity:0.7;margin-top:3px;}
+    .settings-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.1);}
+    .settings-row:last-child{border-bottom:none;}
+    .settings-label{font-size:1em;font-weight:bold;}
+    .toggle{position:relative;width:50px;height:28px;cursor:pointer;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle span{position:absolute;inset:0;background:#555;border-radius:28px;transition:0.3s;}
+    .toggle span::before{content:'';position:absolute;width:22px;height:22px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s;}
+    .toggle input:checked+span{background:#4caf50;}
+    .toggle input:checked+span::before{transform:translateX(22px);}
+    .font-btns{display:flex;gap:6px;}
+    .font-btn{padding:6px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-family:inherit;font-weight:bold;transition:0.2s;}
+    .font-btn.active{background:#fff;color:#2c2c54;}
+    .ach-toast{position:fixed;top:16px;right:16px;background:linear-gradient(135deg,#ffd700,#ffed4e);color:#333;padding:16px 22px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:9999;font-weight:bold;border:2px solid #ff8800;animation:slideInRight 0.4s ease-out;max-width:280px;}
+    @keyframes slideInRight{from{transform:translateX(400px);opacity:0;}to{transform:translateX(0);opacity:1;}}
   </style>
 </head>
 <body>
@@ -360,7 +405,11 @@
   <div class="left-pane">
     <div class="left-top">
       <a href="../index.html" class="back-link">&#x1F3E0; Home</a>
-      <span class="left-heading">Card Deck</span>
+      <div style="display:flex;gap:6px;">
+        <button class="ctrl-pill" onclick="openQuiz()">&#x1F9E0; Quiz</button>
+        <button class="ctrl-pill" onclick="openStats()">&#x1F4CA; Stats</button>
+        <button class="ctrl-pill" onclick="openSettings()">&#x2699;&#xFE0F; Settings</button>
+      </div>
     </div>
 
     <div class="cat-bar" id="catBar"></div>
@@ -839,10 +888,201 @@ function launchConfetti(){
 
 /* ── INIT ── */
 buildCatBar();
+
+/* --- localStorage persistence, quiz, achievements, stats, settings --- */
+var GAME_KEY="flashcards";
+function lsGet(k,def){try{var v=localStorage.getItem(GAME_KEY+"_"+k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function lsSet(k,v){try{localStorage.setItem(GAME_KEY+"_"+k,JSON.stringify(v));}catch(e){}}
+var learnedSet=new Set(lsGet("learned",[]));
+var fStats=lsGet("stats",{quizzes:0,questions:0,correct:0,highScore:0});
+var achievements=lsGet("achievements",{first_step:false,halfway:false,all_learned:false,perfect_quiz:false,quiz_master:false});
+var settings=lsGet("settings",{dark:false,fontSize:"medium",sound:true,autoSpeak:false});
+
+function getAllCards(){var all=[];Object.keys(DECKS).forEach(function(k){all=all.concat(DECKS[k].cards);});return all;}
+var ACH_DEFS=[
+  {id:"first_step",icon:"\uD83D\uDC63",name:"First Step",desc:"Learn your first flashcard"},
+  {id:"halfway",icon:"\u2B50",name:"Halfway",desc:"Learn half of all flashcards"},
+  {id:"all_learned",icon:"\uD83D\uDC51",name:"Card Master",desc:"Learn every flashcard"},
+  {id:"perfect_quiz",icon:"\uD83C\uDF1F",name:"Perfect Quiz",desc:"Score 10/10 on a quiz"},
+  {id:"quiz_master",icon:"\uD83C\uDFC6",name:"Quiz Master",desc:"Complete 5 quizzes"}
+];
+
+function markLearned(){
+  var card=DECKS[deck].cards[idx];
+  if(!learnedSet.has(card.n)){
+    learnedSet.add(card.n);
+    lsSet("learned",Array.from(learnedSet));
+    checkAchievements();
+  }
+}
+function checkAchievements(){
+  var total=getAllCards().length,learned=learnedSet.size,changed=false;
+  if(!achievements.first_step&&learned>=1){achievements.first_step=true;changed=true;showAchToast(ACH_DEFS[0]);}
+  if(!achievements.halfway&&learned>=Math.ceil(total/2)){achievements.halfway=true;changed=true;showAchToast(ACH_DEFS[1]);}
+  if(!achievements.all_learned&&learned>=total){achievements.all_learned=true;changed=true;showAchToast(ACH_DEFS[2]);}
+  if(!achievements.quiz_master&&fStats.quizzes>=5){achievements.quiz_master=true;changed=true;showAchToast(ACH_DEFS[4]);}
+  if(changed)lsSet("achievements",achievements);
+}
+function showAchToast(ach){
+  var t=document.createElement("div");t.className="ach-toast";t.innerHTML=ach.icon+" <b>"+ach.name+"</b> unlocked!";
+  document.body.appendChild(t);setTimeout(function(){t.style.opacity="0";t.style.transition="opacity 0.4s";setTimeout(function(){t.remove();},500);},2800);
+}
+
+var _origRenderAll=renderAll;
+renderAll=function(){_origRenderAll();markLearned();if(settings.autoSpeak)speak();};
+
+/* Quiz — uses active deck */
+var quizQs=[],quizIdx=0,quizCorrect=0,quizAnswered=false;
+function openQuiz(){document.getElementById("quizOverlay").classList.add("show");startQuiz();}
+function closeQuiz(){document.getElementById("quizOverlay").classList.remove("show");}
+function startQuiz(){
+  quizQs=[];quizIdx=0;quizCorrect=0;
+  var pool=DECKS[deck].cards.slice();
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  quizQs=pool.slice(0,Math.min(10,pool.length));
+  document.getElementById("quizArea").style.display="block";
+  document.getElementById("quizResult").style.display="none";
+  renderQuizQ();
+}
+function quizVisual(card){
+  if(card.num!=null)return card.num;
+  return card.e||"?";
+}
+function renderQuizQ(){
+  quizAnswered=false;
+  var q=quizQs[quizIdx];
+  document.getElementById("quizEmoji").textContent=quizVisual(q);
+  document.getElementById("quizQ").textContent="What is this? ("+(quizIdx+1)+"/"+quizQs.length+")";
+  document.getElementById("quizFb").textContent="";
+  document.getElementById("quizNext").style.display="none";
+  document.getElementById("quizScore").textContent="Score: "+quizCorrect+"/"+quizQs.length;
+  var deckCards=DECKS[deck].cards;
+  var wrongs=deckCards.filter(function(c){return c.n!==q.n;});
+  for(var i=wrongs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=wrongs[i];wrongs[i]=wrongs[j];wrongs[j]=t;}
+  var opts=[q.n,wrongs[0].n,wrongs[1].n,wrongs[2].n];
+  for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=opts[i];opts[i]=opts[j];opts[j]=t;}
+  var container=document.getElementById("quizOpts");container.innerHTML="";
+  opts.forEach(function(o){
+    var btn=document.createElement("button");btn.className="quiz-opt";btn.textContent=o;
+    btn.onclick=function(){answerQuiz(o,q.n,btn);};container.appendChild(btn);
+  });
+}
+function answerQuiz(picked,correct,btn){
+  if(quizAnswered)return;quizAnswered=true;
+  fStats.questions++;
+  var allBtns=document.querySelectorAll(".quiz-opt");
+  if(picked===correct){
+    quizCorrect++;btn.classList.add("correct");
+    document.getElementById("quizFb").textContent="\u2705 Correct!";
+    fStats.correct++;
+    if(settings.sound)try{var a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.value=0.1;o.start();o.stop(a.currentTime+0.15);}catch(e){}
+  }else{
+    btn.classList.add("wrong");
+    allBtns.forEach(function(b){if(b.textContent===correct)b.classList.add("correct");});
+    document.getElementById("quizFb").textContent="\u274C It's "+correct+"!";
+  }
+  document.getElementById("quizScore").textContent="Score: "+quizCorrect+"/"+quizQs.length;
+  lsSet("stats",fStats);
+  if(quizIdx<quizQs.length-1){
+    document.getElementById("quizNext").style.display="block";
+  }else{
+    setTimeout(showQuizResult,1200);
+  }
+}
+function nextQuizQ(){quizIdx++;renderQuizQ();}
+function showQuizResult(){
+  document.getElementById("quizArea").style.display="none";
+  document.getElementById("quizResult").style.display="block";
+  var pct=Math.round(quizCorrect/quizQs.length*100);
+  document.getElementById("quizResultTitle").textContent=quizCorrect+"/"+quizQs.length+" ("+pct+"%)";
+  document.getElementById("quizResultMsg").textContent=pct===100?"PERFECT! You're a Flashcard Genius!":pct>=70?"Great job!":"Keep learning, you'll get there!";
+  fStats.quizzes++;
+  if(quizCorrect>fStats.highScore)fStats.highScore=quizCorrect;
+  lsSet("stats",fStats);
+  if(pct===100&&!achievements.perfect_quiz){achievements.perfect_quiz=true;lsSet("achievements",achievements);showAchToast(ACH_DEFS[3]);}
+  checkAchievements();
+}
+
+/* Stats */
+function openStats(){
+  var sg=document.getElementById("statGrid");
+  var acc=fStats.questions>0?Math.round(fStats.correct/fStats.questions*100):0;
+  sg.innerHTML='<div class="stat-card"><div class="num">'+learnedSet.size+'/'+getAllCards().length+'</div>Cards Learned</div>'
+    +'<div class="stat-card"><div class="num">'+fStats.quizzes+'</div>Quizzes Taken</div>'
+    +'<div class="stat-card"><div class="num">'+fStats.questions+'</div>Questions Answered</div>'
+    +'<div class="stat-card"><div class="num">'+acc+'%</div>Accuracy</div>'
+    +'<div class="stat-card"><div class="num">'+fStats.highScore+'/10</div>High Score</div>';
+  var ag=document.getElementById("achGrid");ag.innerHTML="";
+  ACH_DEFS.forEach(function(a){
+    var un=achievements[a.id];
+    ag.innerHTML+='<div class="ach-item'+(un?" unlocked":"")+'"><div class="ach-icon">'+(un?a.icon:"\uD83D\uDD12")+'</div><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>';
+  });
+  document.getElementById("statsOverlay").classList.add("show");
+}
+function closeStats(){document.getElementById("statsOverlay").classList.remove("show");}
+
+/* Settings */
+function applySettings(){
+  document.body.classList.toggle("dark-mode",settings.dark);
+  document.getElementById("togDark").checked=settings.dark;
+  document.body.classList.remove("font-small","font-medium","font-large");
+  document.body.classList.add("font-"+settings.fontSize);
+  document.querySelectorAll(".font-btn").forEach(function(b){b.classList.toggle("active",b.dataset.size===settings.fontSize);});
+  document.getElementById("togSound").checked=settings.sound;
+  document.getElementById("togSpeak").checked=settings.autoSpeak;
+}
+function openSettings(){applySettings();document.getElementById("settingsOverlay").classList.add("show");}
+function closeSettings(){document.getElementById("settingsOverlay").classList.remove("show");}
+function toggleDark(){settings.dark=document.getElementById("togDark").checked;lsSet("settings",settings);applySettings();}
+function setFontSize(s){settings.fontSize=s;lsSet("settings",settings);applySettings();}
+function toggleSound(){settings.sound=document.getElementById("togSound").checked;lsSet("settings",settings);}
+function toggleAutoSpeak(){settings.autoSpeak=document.getElementById("togSpeak").checked;lsSet("settings",settings);}
+applySettings();
+
 renderAll();
 </script>
 
 <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+<div class="modal-overlay" id="quizOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeQuiz()">&times;</button>
+    <h2>&#x1F9E0; Flashcard Quiz</h2>
+    <div id="quizArea">
+      <div class="quiz-emoji" id="quizEmoji"></div>
+      <div class="quiz-q" id="quizQ">What is this?</div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-fb" id="quizFb"></div>
+      <div class="quiz-score" id="quizScore"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuizQ()">Next &raquo;</button>
+    </div>
+    <div id="quizResult" style="display:none;text-align:center;">
+      <div style="font-size:3em;margin:10px 0;">&#x1F3C6;</div>
+      <h2 id="quizResultTitle"></h2>
+      <p id="quizResultMsg" style="font-size:1.1em;margin:10px 0;opacity:0.8;"></p>
+      <button class="quiz-next" style="display:inline-block;" onclick="startQuiz()">&#x1F504; Play Again</button>
+      <button class="quiz-next" style="display:inline-block;" onclick="closeQuiz()">&#x2705; Done</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="statsOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeStats()">&times;</button>
+    <h2>&#x1F4CA; Stats & Achievements</h2>
+    <div class="stat-grid" id="statGrid"></div>
+    <h3 style="margin:16px 0 6px;">&#x1F3C5; Achievements</h3>
+    <div class="ach-grid" id="achGrid"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeSettings()">&times;</button>
+    <h2>&#x2699;&#xFE0F; Settings</h2>
+    <div class="settings-row"><span class="settings-label">&#x1F319; Dark Mode</span><label class="toggle"><input type="checkbox" id="togDark" onchange="toggleDark()"><span></span></label></div>
+    <div class="settings-row"><span class="settings-label">&#x1F524; Font Size</span><div class="font-btns"><button class="font-btn" data-size="small" onclick="setFontSize('small')">S</button><button class="font-btn" data-size="medium" onclick="setFontSize('medium')">M</button><button class="font-btn" data-size="large" onclick="setFontSize('large')">L</button></div></div>
+    <div class="settings-row"><span class="settings-label">&#x1F50A; Sound</span><label class="toggle"><input type="checkbox" id="togSound" onchange="toggleSound()"><span></span></label></div>
+    <div class="settings-row"><span class="settings-label">&#x1F5E3;&#xFE0F; Auto-Speak</span><label class="toggle"><input type="checkbox" id="togSpeak" onchange="toggleAutoSpeak()"><span></span></label></div>
+  </div>
+</div>
 <div id="build-info" style="text-align:center;padding:10px;font-size:0.7em;color:rgba(255,255,255,0.25);"></div>
 <script>fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(r=>r.json()).then(d=>{document.getElementById('build-info').textContent='Build: '+d.sha.slice(0,7)+' · '+d.commit.committer.date.slice(0,10);}).catch(()=>{});</script>
 </body>
