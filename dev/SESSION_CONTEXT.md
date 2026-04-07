@@ -13,14 +13,14 @@
 **Live URL:** https://aakash-jain-1.github.io/kids-learning-games/
 **Stack:** HTML5 + CSS3 + Vanilla JS — zero frameworks, zero build tools
 **Total commits:** 28 (as of 2026-04-07)
-**Service Worker cache version:** v19
+**Service Worker cache version:** v22
 
 A Progressive Web App with **12 educational games** for children, organised into three architectures:
 
 | Architecture | Games | Key traits |
 |---|---|---|
 | Classic Two-Pane | Alphabets, Numbers, Colors, Shapes, Animals, Birds, Hindi | Left pane = item list/grid, right pane = detail card; quiz, achievements, stats, settings |
-| Card Machine | Flashcards, Solar System, Dinosaurs, Weather | Swipeable card deck; quiz, achievements, stats, settings |
+| Card Machine | Flashcards (incl. Body Parts deck), Solar System, Dinosaurs, Weather | Swipeable card deck; quiz, achievements, stats, settings |
 | Story Mode | Woodcutter Story | Animated narrative with comprehension quiz |
 
 ---
@@ -30,7 +30,7 @@ A Progressive Web App with **12 educational games** for children, organised into
 ```
 ├── index.html              # Home page / game launcher
 ├── manifest.json           # PWA manifest
-├── service-worker.js       # Offline cache + network-first strategy (v19)
+├── service-worker.js       # Offline cache + network-first strategy (v22)
 ├── offline.html            # Offline fallback page
 ├── assets/
 │   ├── icon-192.svg        # PWA icon 192×192
@@ -148,6 +148,13 @@ A third pass focused on consistency, accessibility, SEO completeness, and UX pol
 - Removed `SW_UPDATED` messaging (no longer needed without localStorage cache)
 - Bumped service worker cache to v19
 
+### Phase 7 — Body Parts Game Redesign
+- **Deleted standalone `body-parts-game.html`** — emoji-based two-pane layout was not suitable for toddlers (images too small, not recognizable)
+- **Added "Body Parts" as a flashcard deck** inside `flashcards-game.html` with 15 cards using Microsoft Fluent UI 3D images (Eyes, Ear, Nose, Mouth, Tongue, Tooth, Hand, Thumb, Fingers, Arm, Leg, Foot, Brain, Heart, Bone)
+- Removed Body Parts card from `index.html` home page grid
+- Removed "Body Parts" nav link from all game navbars
+- Removed from `service-worker.js` urlsToCache; bumped cache to v22
+
 ---
 
 ## 4. Architecture & Design Decisions
@@ -223,5 +230,5 @@ cd kids-learning-games && python3 -m http.server 8000
 # Open DevTools → Application → Cache Storage → kids-learning-games-v19
 
 # Bump cache after changes
-# Edit CACHE_NAME in service-worker.js (e.g., v19 → v20)
+# Edit CACHE_NAME in service-worker.js (e.g., v22 → v23)
 ```

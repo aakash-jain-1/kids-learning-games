@@ -98,7 +98,7 @@ All layout sizing uses fluid CSS values instead of device-specific `@media (max-
 ### Updating the App
 
 1. Make changes to HTML/JS/CSS files
-2. Increment the version in `service-worker.js` (e.g., `kids-learning-games-v19`)
+2. Increment the version in `service-worker.js` (e.g., `kids-learning-games-v22`)
 3. Commit and push — active users auto-reload when the new SW activates
 
 ## 📲 Installing the PWA

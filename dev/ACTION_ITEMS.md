@@ -212,7 +212,7 @@ The following mobile rendering issues were identified earlier and have been **fi
 
 | # | Game | Architecture | Status |
 |---|---|---|---|
-| 1 | Body Parts | Classic Two-Pane | ✅ Done |
+| 1 | Body Parts | Flashcard Deck (inside Flash Cards) | ✅ Done — redesigned from standalone two-pane to flashcard deck with Fluent UI 3D images |
 | 2 | Emotions / Feelings | Card Machine | Planned |
 | 3 | Opposites | Card Machine | Planned |
 | 4 | Musical Instruments | Card Machine | Planned |
