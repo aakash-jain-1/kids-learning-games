@@ -435,30 +435,41 @@
     
     .navigation {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
     }
+    .navigation::-webkit-scrollbar { display: none; }
     
     .nav-btn {
-      background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #4CAF50;
-      border-radius: 10px;
-      padding: 10px 20px;
-      margin: 0 5px;
-      cursor: pointer;
-      font-size: 1.1em;
-      font-weight: bold;
-      color: #2e7d32;
-      transition: all 0.3s ease;
+      color: rgba(255,255,255,0.8);
       text-decoration: none;
+      font-size: 0.72em;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: 0.2s;
+      flex-shrink: 0;
+      font-family: inherit;
       display: inline-block;
+      cursor: pointer;
     }
     
     .nav-btn:hover {
-      background: #4CAF50;
-      color: white;
-      transform: translateY(-2px);
+      background: rgba(255,255,255,0.22);
+      color: #fff;
     }
     
     /* Animation states */
@@ -553,7 +564,17 @@
   
   <div class="navigation">
     <a href="../index.html" class="nav-btn">Home</a>
-    <a href="alphabet-game.html" class="nav-btn">Games</a>
+    <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
+    <a href="animals-game.html" class="nav-btn">Animals</a>
+    <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
+    <a href="birds.html" class="nav-btn">Birds</a>
+    <a href="flashcards-game.html" class="nav-btn">Flashcards</a>
+    <a href="solar-system-game.html" class="nav-btn">Solar System</a>
+    <a href="dinosaurs-game.html" class="nav-btn">Dinosaurs</a>
+    <a href="weather-game.html" class="nav-btn">Weather</a>
   </div>
   
   <div class="container">

@@ -106,11 +106,17 @@ body{font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;height
   .grille{padding:8px 10px;}.waves{height:22px;}.press-btn{padding:8px 12px;font-size:1em;}
 }
 @media(max-width:700px){
-  body{overflow-y:auto;}.layout{flex-direction:column;height:auto;min-height:100dvh;}
+  body{overflow-y:auto;}.layout{flex-direction:column;height:auto;min-height:calc(100dvh - 36px);}
   .left-pane{width:100%;padding:14px 14px 18px;}.right-pane{padding:18px 14px 30px;}
   .machine{max-width:100%;}.top-card,.ghost{width:260px;}
   .card-emoji-big{font-size:6.5em;}.scrn-emoji{font-size:4.2em;}
 }
+
+.game-nav{display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
+.game-nav::-webkit-scrollbar{display:none;}
+.game-nav a{color:rgba(255,255,255,0.8);text-decoration:none;font-size:0.72em;font-weight:600;padding:4px 12px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);transition:0.2s;flex-shrink:0;font-family:inherit;}
+.game-nav a:hover{background:rgba(255,255,255,0.22);color:#fff;}
+.layout{height:calc(100dvh - 36px);}
 
 /* ═══════════════════════════════════════════
    CSS PLANET ART  —  no external images
@@ -271,6 +277,20 @@ body{font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;height
 </style>
 </head>
 <body>
+<div class="game-nav">
+  <a href="../index.html">Home</a>
+  <a href="alphabet-game.html">Alphabets</a>
+  <a href="numbers-game.html">Numbers</a>
+  <a href="colors-game.html">Colors</a>
+  <a href="shapes-game.html">Shapes</a>
+  <a href="animals-game.html">Animals</a>
+  <a href="hindi-alphabets.html">Hindi</a>
+  <a href="birds.html">Birds</a>
+  <a href="flashcards-game.html">Flashcards</a>
+  <a href="dinosaurs-game.html">Dinosaurs</a>
+  <a href="weather-game.html">Weather</a>
+  <a href="woodcutter-story.html">Story</a>
+</div>
 <div class="layout">
   <div class="left-pane">
     <div class="left-top">

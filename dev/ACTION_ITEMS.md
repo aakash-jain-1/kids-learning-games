@@ -1,108 +1,158 @@
-# Mobile Rendering — Action Items
+# Kids Learning Games — Action Items
 
-## Root Cause Summary
-All games except `flashcards-game.html` use a **two-column desktop layout**
-(`.main-container` with `display:flex`, `height:80vh`, `gap:40px`) that never
-stacks to a single column on mobile. The top navbar also wraps into multiple rows
-and overlaps content. Flashcards works because it was rebuilt with a mobile-first
-flex layout from scratch.
+> Last updated: 2026-04-07
 
 ---
 
-## Action Items
+## Issue Tracker
 
-### 1. `alphabet-game.html` — Two-pane layout does not stack on mobile
-**Problem:** `.main-container` is `display:flex` with `height:80vh` and `gap:40px`.
-No `@media` rule changes it to `flex-direction:column` on small screens.
-Left pane (alphabet grid — repeat(6,1fr)) and right pane overflow side-by-side.  
-**Fix:**
-- Add `@media (max-width:768px)` rule: `.main-container { flex-direction:column; height:auto; gap:20px; }`
-- Change `.alphabet-grid` from `repeat(6,1fr)` → `repeat(4,1fr)` on mobile
-- Change `.alphabet-btn` font-size from `2.5em` → `1.6em` on mobile
-- Reduce `.alphabet-btn` padding from `25px 0` → `14px 0` on mobile
-- Reduce body `padding-top` from `100px` to `70px` on mobile so navbar doesn't overlap
+### Status Legend
+- [ ] Open
+- [x] Done
 
 ---
 
-### 2. `animals-game.html` — Two-pane layout does not stack on mobile
-**Problem:** Same as above. `.main-container` uses `height:80vh` with two side-by-side panes.
-Animals grid is `repeat(4,1fr)` — too wide for phone.  
-**Fix:**
-- Add `@media (max-width:768px)` rule: `.main-container { flex-direction:column; height:auto; gap:20px; }`
-- Change `.animals-grid` from `repeat(4,1fr)` → `repeat(3,1fr)` on mobile
-- Reduce body `padding-top` to `70px` on mobile
+## 1. Home Page — Missing game cards
+
+**Severity:** High | **Effort:** Small
+
+`index.html` only links to 9 of the 12 games. Three games exist in `games/` but have no card on the home page — users can't discover them.
+
+**Missing from home page:**
+- `dinosaurs-game.html`
+- `weather-game.html`
+- `woodcutter-story.html`
+
+**Fix:** Add `<a>` cards for each inside the `.games-grid` div, following the existing card pattern.
+
+- [x] Add Dinosaurs card to `index.html`
+- [x] Add Weather card to `index.html`
+- [x] Add Woodcutter Story card to `index.html`
 
 ---
 
-### 3. `numbers-game.html` — Two-pane layout does not stack on mobile
-**Problem:** Same two-pane layout issue. Number display and objects grid overflow.  
-**Fix:**
-- Add `@media (max-width:768px)` rule: `.main-container { flex-direction:column; height:auto; gap:20px; }`
-- Reduce body `padding-top` to `70px` on mobile
+## 2. Cross-game navigation — Card-machine games have no navbar
+
+**Severity:** High | **Effort:** Medium
+
+The 4 "card-machine" games (`flashcards`, `solar-system`, `dinosaurs`, `weather`) only have Prev/Next card buttons and a "Home" back-link. There is no cross-game navigation bar — once inside, you can't jump to another game without going back to the home page.
+
+`woodcutter-story.html` only links to Home and Alphabets.
+
+**Fix:** Add a consistent `.navigation` bar (matching the classic games) to all 5 files.
+
+- [x] Add navbar to `flashcards-game.html`
+- [x] Add navbar to `solar-system-game.html`
+- [x] Add navbar to `dinosaurs-game.html`
+- [x] Add navbar to `weather-game.html`
+- [x] Add full navbar to `woodcutter-story.html`
 
 ---
 
-### 4. `hindi-alphabets.html` — Two-pane layout does not stack on mobile
-**Problem:** Same two-pane layout issue. Hindi characters are small and the grid overflows.  
-**Fix:**
-- Add `@media (max-width:768px)` rule: `.main-container { flex-direction:column; height:auto; gap:20px; }`
-- Change `.letter-grid` to `repeat(auto-fit, minmax(65px, 1fr))` on mobile
-- Reduce body `padding-top` to `70px` on mobile
+## 3. Navigation — Flashcards and Woodcutter not linked from any game
+
+**Severity:** High | **Effort:** Small
+
+No game's navigation bar includes links to Flashcards or Woodcutter Story. These two games are completely orphaned from the cross-game navigation mesh.
+
+**Fix:** Add `<a href="flashcards-game.html" class="nav-btn">Flashcards</a>` and `<a href="woodcutter-story.html" class="nav-btn">Story</a>` to the `.navigation` div in all game files.
+
+**Files to update:**
+- [ ] `alphabet-game.html`
+- [ ] `numbers-game.html`
+- [ ] `colors-game.html`
+- [ ] `shapes-game.html`
+- [ ] `animals-game.html`
+- [ ] `hindi-alphabets.html`
+- [ ] `birds.html`
+- [ ] `flashcards-game.html` (once it has a navbar)
+- [ ] `solar-system-game.html` (once it has a navbar)
+- [ ] `dinosaurs-game.html` (once it has a navbar)
+- [ ] `weather-game.html` (once it has a navbar)
+- [ ] `woodcutter-story.html` (once it has a full navbar)
 
 ---
 
-### 5. `colors-game.html` — Nav overflows, body has `padding-top:100px`
-**Problem:** Navigation bar wraps to 2 rows at ~380px width, covering content.
-Body `padding-top:100px` is hard-coded and not reduced on mobile.  
-**Fix:**
-- Reduce body `padding-top` to `70px` on screens ≤ 768px
-- Add nav `.nav-btn` `font-size:0.85em; padding:8px 12px` on mobile to keep single row
+## 4. Service Worker — `woodcutter-story.html` not cached
+
+**Severity:** Medium | **Effort:** Tiny
+
+`service-worker.js` lists all 11 other game files in `urlsToCache` but is missing `games/woodcutter-story.html`. The story won't work offline.
+
+**Fix:** Add `'games/woodcutter-story.html'` to the `urlsToCache` array and bump the cache version.
+
+- [ ] Add woodcutter to `service-worker.js`
+- [ ] Bump `CACHE_NAME` version
 
 ---
 
-### 6. `shapes-game.html` — Same nav + padding issue as colors
-**Problem:** Same as #5 above.  
-**Fix:**
-- Reduce body `padding-top` to `70px` on screens ≤ 768px
-- Shrink nav buttons on mobile
+## 5. Feature parity — Card-machine games missing quiz, achievements, stats, settings
+
+**Severity:** Medium | **Effort:** Large
+
+The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboard, and settings panel (dark mode, font size, sound, auto-speak). The 4 card-machine games have none of these.
+
+| Feature | Classic (7 games) | Card-machine (4 games) |
+|---|---|---|
+| Quiz mode | Yes | No |
+| Achievements (5 badges) | Yes | No |
+| Stats dashboard | Yes | No |
+| Settings panel | Yes | No |
+| Dark mode | Yes | No |
+| Progress persistence (localStorage) | Yes | Partial (progress bar only) |
+
+**Fix:** Add quiz, achievements, stats, and settings to each card-machine game. Can be done incrementally per game.
+
+- [ ] Add features to `flashcards-game.html`
+- [ ] Add features to `solar-system-game.html`
+- [ ] Add features to `dinosaurs-game.html`
+- [ ] Add features to `weather-game.html`
 
 ---
 
-### 7. `birds.html` — Already has the two-pane column-stack fix ✅
-**Status:** Has `@media (max-width:768px) { .main-container { flex-direction:column; height:auto; } }`
-This is the pattern to replicate in items 1–4 above.
+## 6. Home Page — Duplicate CSS rules
+
+**Severity:** Low | **Effort:** Tiny
+
+`index.html` lines 123-126 define `.game-card:nth-child(10)` and `:nth-child(11)` animation delays twice (duplicate rules).
+
+- [x] Remove the duplicate CSS block
 
 ---
 
-### 8. All games — Navbar too tall on small screens
-**Problem:** The fixed navbar uses `padding:15px 20px` and `gap:10px`.
-On phones ≤ 400px it wraps to 2–3 rows, taking 80–100px of height and
-overlapping the game content underneath.  
-**Fix (all files):**
-```css
-@media (max-width: 600px) {
-  .navigation { padding: 8px 10px; gap: 6px; }
-  .nav-btn { padding: 7px 10px; font-size: 0.78em; }
-  body { padding-top: 72px; }
-}
-```
+## 7. Dev docs — `GAME_REFERENCE.md` inventory table outdated
+
+**Severity:** Low | **Effort:** Tiny
+
+The "Existing Games Inventory" table in `dev/GAME_REFERENCE.md` only lists 8 games. Missing: `solar-system-game.html`, `dinosaurs-game.html`, `weather-game.html`, `woodcutter-story.html`.
+
+- [ ] Update inventory table with all 12 games
 
 ---
 
-## Priority Order
-| # | File | Severity | Fix Effort |
-|---|------|----------|-----------|
-| 1 | `alphabet-game.html` | High | Small |
-| 2 | `animals-game.html` | High | Small |
-| 3 | `numbers-game.html` | High | Small |
-| 4 | `hindi-alphabets.html` | High | Small |
-| 5 | All games — navbar | Medium | Small |
-| 6 | `colors-game.html` | Medium | Small |
-| 7 | `shapes-game.html` | Medium | Small |
+## Priority Summary
+
+| # | Issue | Severity | Effort | Items |
+|---|---|---|---|---|
+| 1 | Missing home page cards | High | Small | 3 cards |
+| 2 | Card games missing navbar | High | Medium | 5 files |
+| 3 | Flashcards + Story not in any navbar | High | Small | 12 files |
+| 4 | Woodcutter not in service worker | Medium | Tiny | 1 file |
+| 5 | Card games missing quiz/achievements/stats | Medium | Large | 4 files |
+| 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | Done |
+| 7 | GAME_REFERENCE.md outdated | Low | Tiny | 1 file |
 
 ---
 
-## Reference: What flashcards does right
-- Uses `height:100vh; overflow:hidden` with a flex `.layout` that is already a column stack on mobile
-- Left pane and right pane are `width:50%` each with their own scroll — handled via `@media` with `flex-direction:column`
-- No fixed pixel `padding-top` on body — navbar is part of the flow, not `position:fixed`
+## Resolved Issues (from previous audit)
+
+The following mobile rendering issues were identified earlier and have been **fixed**:
+
+- [x] `alphabet-game.html` — Two-pane layout stacks on mobile
+- [x] `animals-game.html` — Two-pane layout stacks on mobile
+- [x] `numbers-game.html` — Two-pane layout stacks on mobile
+- [x] `hindi-alphabets.html` — Two-pane layout stacks on mobile
+- [x] `colors-game.html` — Nav overflow + padding fixed
+- [x] `shapes-game.html` — Nav overflow + padding fixed
+- [x] `birds.html` — Already had the fix (reference implementation)
+- [x] All classic games — Navbar compact on small screens
