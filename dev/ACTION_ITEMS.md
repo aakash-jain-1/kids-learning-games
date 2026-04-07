@@ -205,3 +205,16 @@ The following mobile rendering issues were identified earlier and have been **fi
 | L3 | Build-info div outside .container on index.html | Low | ✅ Moved inside .container |
 | L4 | SVG icons use fixed sizes in manifest (should be "any" for SVG) | Low | ✅ Simplified to 2 entries with sizes="any" |
 | L5 | Woodcutter story has no progress persistence | Low | ✅ Added localStorage for quiz attempts, best score, last played |
+
+---
+
+## 12. New Game Ideas (for 3-year-olds)
+
+| # | Game | Architecture | Status |
+|---|---|---|---|
+| 1 | Body Parts | Classic Two-Pane | ✅ Done |
+| 2 | Emotions / Feelings | Card Machine | Planned |
+| 3 | Opposites | Card Machine | Planned |
+| 4 | Musical Instruments | Card Machine | Planned |
+| 5 | Daily Routines | Story Mode | Planned |
+| 6 | Rhyming Words | Card Machine | Planned |

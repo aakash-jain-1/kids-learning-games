@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#56ab2f">
-  <meta name="description" content="Count from 1 to 10 with colorful objects and quizzes! Interactive numbers game for kids.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
-  <title>Numbers Learning Game</title>
-  <meta property="og:title" content="Numbers Game — Kids Learning Games">
-  <meta property="og:description" content="Learn numbers 1-20 with interactive quizzes, fun facts, and audio!">
+  <meta name="theme-color" content="#ff6b9d">
+  <meta name="description" content="Learn 20 body parts with images, facts and quizzes! Interactive body parts game for kids.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦴</text></svg>">
+  <title>Body Parts Learning Game</title>
+  <meta property="og:title" content="Body Parts Game — Kids Learning Games">
+  <meta property="og:description" content="Discover body parts with fun sounds, quizzes, and achievements!">
   <meta property="og:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Numbers Game — Kids Learning Games">
-  <meta name="twitter:description" content="Learn numbers 1-20 with interactive quizzes, fun facts, and audio!">
+  <meta name="twitter:title" content="Body Parts Game — Kids Learning Games">
+  <meta name="twitter:description" content="Discover body parts with fun sounds, quizzes, and achievements!">
   <meta name="twitter:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
-  <meta property="og:url" content="https://aakash-jain-1.github.io/kids-learning-games/games/numbers-game.html">
+  <meta property="og:url" content="https://aakash-jain-1.github.io/kids-learning-games/games/body-parts-game.html">
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -25,7 +25,7 @@
     }
     body {
       font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
-      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 50%, #88d8a3 100%);
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
       text-align: center;
       margin: 0;
       padding: 100px 0 0 0;
@@ -34,45 +34,10 @@
       overflow-x: hidden;
       transition: all 0.3s ease;
     }
-    body.dark-mode {
-      background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-    }
+    body.dark-mode { background: linear-gradient(135deg, #5a1a2a 0%, #1e272e 100%); }
     body.font-small { font-size: 14px; }
     body.font-medium { font-size: 16px; }
     body.font-large { font-size: 18px; }
-    .switch input:checked + span {
-      background-color: #4caf50;
-    }
-    .switch input:checked + span:before {
-      transform: translateX(26px);
-    }
-    .switch span:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
-      pointer-events: none;
-      animation: sparkle 18s linear infinite;
-    }
-    @keyframes sparkle {
-      0% { transform: translateY(0px) rotate(0deg); }
-      100% { transform: translateY(-100px) rotate(360deg); }
-    }
-    /* Particle Background Canvas */
     #particleCanvas {
       position: fixed;
       top: 0;
@@ -83,23 +48,10 @@
       z-index: 0;
       opacity: 0.6;
     }
-    h1 {
-      color: #fff;
-      font-size: 3.5em;
-      margin-top: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 1;
-      animation: numberGlow 3s ease-in-out infinite alternate;
-    }
-    @keyframes numberGlow {
-      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(86,171,47,0.6); }
-      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(168,230,207,0.6); }
-      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(136,216,163,0.6); }
-      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(46,125,50,0.6); }
-      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(102,187,106,0.6); }
-    }
-    /* Smooth Transition Animations */
+    .switch input:checked + span { background-color: #4caf50; }
+    .switch input:checked + span:before { transform: translateX(26px); }
+    .switch span:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
+    /* Phase 5: Smooth Transition Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -120,36 +72,98 @@
       0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); }
       50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
     }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="90" r="1.5" fill="rgba(255,255,255,0.22)"/></svg>') repeat;
+      pointer-events: none;
+      animation: sparkle 17s linear infinite;
+    }
+    @keyframes sparkle {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    h1 {
+      color: #fff;
+      font-size: 3.5em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: bodyGlow 3s ease-in-out infinite alternate;
+    }
+    @keyframes bodyGlow {
+      0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+      25% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 25px rgba(67,206,162,0.6); }
+      75% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(24,90,157,0.6); }
+      100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(67,206,162,0.6); }
+    }
     .confetti { position: fixed; width: 10px; height: 10px; background: #f0f; position: absolute; animation: confetti-fall 3s linear forwards; z-index: 9999; }
     @keyframes confetti-fall { 0% { transform: translateY(0) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; } }
     .celebration-burst { position: fixed; top: 50%; left: 50%; width: 200px; height: 200px; transform: translate(-50%, -50%); animation: burst 0.6s ease-out; pointer-events: none; z-index: 9999; }
     @keyframes burst { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
-    /* 3D Flip Animation */
-    .flipping {
-      animation: flip3d 0.6s ease-in-out;
+    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .bodypart-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .bodypart-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; gap: 12px !important; padding: 10px !important; } .bodypart-item { font-size: 2.5em !important; padding: 15px !important; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .bodypart-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } .bodypart-item { font-size: 2em !important; padding: 12px !important; } }
+    .control-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 25px auto;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 700px;
+      position: relative;
+      z-index: 10;
+      flex-wrap: wrap;
     }
-    @keyframes flip3d {
-      0% { transform: rotateY(0deg); }
-      50% { transform: rotateY(90deg); }
-      100% { transform: rotateY(0deg); }
+    .control-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border: 3px solid #ff6b9d;
+      border-radius: 15px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #c44569;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      min-width: 130px;
     }
-    /* Ripple Effect */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      transform: scale(0);
-      animation: ripple-animation 0.6s ease-out;
-      pointer-events: none;
+    .control-btn:hover:not(:disabled) {
+      background: linear-gradient(145deg, #ff6b9d, #d44f7a);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(67, 206, 162, 0.4);
     }
-    @keyframes ripple-animation {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
+    .control-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
-    @media (max-width: 768px) { body { padding: 10px; padding-top: 70px; font-size: 14px; } h1 { font-size: 2em !important; margin: 10px 0 !important; } .number-display { font-size: 6em !important; width: 200px !important; height: 200px !important; } .objects-grid { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)) !important; gap: 8px !important; } .object-item { font-size: 2em !important; } .control-panel { flex-direction: column; gap: 10px; padding: 10px; } button { padding: 12px 25px !important; font-size: 1em !important; min-width: unset; touch-action: manipulation; } .progress-display { font-size: 1em !important; padding: 8px 15px !important; } .quiz-modal-content { width: 95% !important; max-width: 95% !important; padding: 15px !important; } .quiz-options { grid-template-columns: 1fr !important; gap: 12px !important; } .quiz-option { padding: 15px !important; font-size: 1.2em !important; } .settings-modal-content { width: 95% !important; padding: 20px !important; } .setting-group { flex-direction: column; align-items: flex-start !important; } }
-    @media (max-width: 480px) { h1 { font-size: 1.5em !important; } .number-display { font-size: 5em !important; width: 150px !important; height: 150px !important; } button { padding: 10px 20px !important; font-size: 0.9em !important; } }
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .progress-counter {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #ff6b9d;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #c44569;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      min-width: 150px;
+    }
     .main-container {
       display: flex;
       justify-content: center;
@@ -175,53 +189,83 @@
       padding: 20px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
+      max-height: 80vh;
+      overflow-y: auto;
     }
-    .numbers-grid {
+    .bodyparts-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
       margin-top: 20px;
     }
-    .number-btn {
+    .bodypart-btn {
       background: linear-gradient(145deg, #ffffff, #f0f0f0);
-      border: 3px solid #4caf50;
+      border: 3px solid #ff6b9d;
       border-radius: 15px;
-      font-size: 2.5em;
+      font-size: 1.3em;
       font-weight: bold;
-      padding: 20px 0;
+      padding: 15px 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       width: 100%;
       margin: 0;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      color: #2e7d32;
+      color: #c44569;
       position: relative;
       overflow: hidden;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transform-style: preserve-3d;
       perspective: 1000px;
     }
-    .number-btn::before {
+    /* Phase 5: 3D Flip Animation */
+    .bodypart-btn.flipping {
+      animation: flip3d 0.6s ease-in-out;
+    }
+    @keyframes flip3d {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    /* Phase 5: Ripple Effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .bodypart-btn::before {
       content: '';
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(76,175,80,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(67,206,162,0.3), transparent);
       transition: left 0.5s;
     }
-    .number-btn:hover::before {
+    .bodypart-btn:hover::before {
       left: 100%;
     }
-    .number-btn:hover {
-      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
-      transform: translateY(-5px) scale(1.08);
-      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
-      border-color: #1b5e20;
+    .bodypart-btn:hover {
+      background: linear-gradient(145deg, #ffe0e8, #ffb3c6);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(67, 206, 162, 0.4);
+      border-color: #c44569;
     }
-    .number-btn:active {
+    .bodypart-btn:active {
       transform: translateY(0) scale(0.95);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
@@ -251,14 +295,14 @@
       width: 200%;
       height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: rotate 30s linear infinite;
+      animation: rotate 26s linear infinite;
       pointer-events: none;
     }
     @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .number-word {
+    .part-name {
       font-size: clamp(1.8em, 4.5vmin, 3.5em);
       font-weight: bold;
       color: #fff;
@@ -275,71 +319,73 @@
       40% { transform: translateY(-20px); }
       80% { transform: translateY(-10px); }
     }
-    .objects-container {
+    .bodypart-display-container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      gap: 15px;
+      justify-content: center;
       width: 100%;
       max-width: 400px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
-      min-height: 0;
-      padding: 20px;
     }
-    .count-object {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, #4caf50, #2e7d32);
-      border: 3px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    .part-image {
+      width: min(250px, 28vh);
+      height: min(250px, 28vh);
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+      border: 4px solid rgba(255, 255, 255, 0.9);
       transition: all 0.6s ease;
       animation: fadeInScale 0.8s ease-out;
       cursor: pointer;
-      position: relative;
+      padding: 20px;
     }
-    .count-object::before {
-      content: '★';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .part-image:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 20px 50px rgba(67, 206, 162, 0.5);
+    }
+    .part-info {
+      margin-top: 25px;
+      font-size: 1.4em;
       color: #fff;
-      font-size: 1.5em;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+      max-width: 350px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1s ease-out;
+      text-align: center;
     }
-    .count-object:hover {
-      transform: scale(1.2) rotate(15deg);
-      box-shadow: 0 12px 30px rgba(76, 175, 80, 0.5);
-    }
-    .count-object:nth-child(even) {
-      background: linear-gradient(145deg, #ff9800, #f57c00);
-      animation-delay: 0.1s;
-    }
-    .count-object:nth-child(3n) {
-      background: linear-gradient(145deg, #e91e63, #c2185b);
-      animation-delay: 0.2s;
-    }
-    .count-object:nth-child(4n) {
-      background: linear-gradient(145deg, #2196f3, #1976d2);
-      animation-delay: 0.3s;
-    }
-    .count-object:nth-child(5n) {
-      background: linear-gradient(145deg, #9c27b0, #7b1fa2);
-      animation-delay: 0.4s;
+    .part-sound {
+      margin-top: 15px;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      font-weight: bold;
+      animation: pulse 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
     }
     @keyframes fadeInScale {
       0% { 
         opacity: 0; 
-        transform: scale(0.3) rotate(-20deg); 
+        transform: scale(0.5) rotate(-10deg); 
       }
       100% { 
         opacity: 1; 
         transform: scale(1) rotate(0deg); 
       }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
     .navigation {
       position: fixed;
@@ -358,7 +404,7 @@
       flex-wrap: wrap;
     }
     .nav-btn {
-      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
@@ -374,32 +420,22 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
-    .large-number {
-      font-size: clamp(3.5em, 8vmin, 6em);
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
-      margin-bottom: 10px;
-      animation: pulse 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.1); }
-    }
     @media (max-width: 768px) {
       .main-container { flex-direction: column !important; height: auto !important; gap: 20px !important; padding: 0 10px; }
-      .numbers-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
-      .number-btn { font-size: 1.6em !important; padding: 12px 0 !important; }
+      .bodyparts-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+      .bodypart-btn { font-size: 1em !important; padding: 10px 4px !important; min-height: unset !important; }
       .right-pane { min-width: unset !important; width: 100% !important; height: auto !important; min-height: unset !important; padding: 15px !important; }
       .left-pane { max-height: none !important; overflow-y: visible !important; }
-      .large-number { font-size: 3em !important; }
-      .number-word { font-size: 1.8em !important; min-height: auto !important; margin-bottom: 8px !important; }
-      .objects-container { min-height: unset !important; padding: 8px !important; gap: 8px !important; }
+      .part-name { font-size: 1.6em !important; min-height: auto !important; margin-bottom: 8px !important; }
+      .part-image { width: 150px !important; height: 150px !important; padding: 10px !important; }
+      .part-info { font-size: 0.95em !important; max-width: 100% !important; }
+      .part-sound { font-size: 1.3em !important; }
     }
     @media (max-width: 600px) {
       body { padding-top: 52px !important; }
       .navigation { padding: 6px 8px; gap: 4px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
       .nav-btn { padding: 6px 10px; font-size: 0.76em; white-space: nowrap; flex-shrink: 0; }
+      .control-btn { min-width: unset !important; padding: 8px 12px !important; font-size: 0.9em !important; }
     }
     /* Performance: background animations disabled */
     body::before { display: none; }
@@ -410,14 +446,13 @@
   </style>
 </head>
 <body>
-  <!-- Particle Background Canvas -->
   <canvas id="particleCanvas"></canvas>
   <div class="navigation">
     <a href="../index.html" class="nav-btn">Home</a>
     <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
     <a href="colors-game.html" class="nav-btn">Colors</a>
     <a href="shapes-game.html" class="nav-btn">Shapes</a>
-    <a href="animals-game.html" class="nav-btn">Animals</a>
     <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
     <a href="birds.html" class="nav-btn">Birds</a>
     <a href="solar-system-game.html" class="nav-btn">Solar System</a>
@@ -428,80 +463,73 @@
     <a href="body-parts-game.html" class="nav-btn">Body Parts</a>
   </div>
   
-  <h1>🔢 Learn Numbers 🔢</h1>
+  <h1>🦴 Body Parts 🦴</h1>
   
-  <!-- Control Panel -->
-  <div style="text-align: center; margin: 20px auto; position: relative; z-index: 1;">
-    <button id="randomBtn" style="background: linear-gradient(145deg, #ffeb3b, #fbc02d); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(251, 192, 45, 0.4); margin: 0 10px; transition: all 0.3s;">
+  <div class="control-panel">
+    <button id="randomBtn" class="control-btn" aria-label="Show random body part" tabindex="0">
       🎲 Random
     </button>
-    <button id="quizBtn" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
-      🎯 Quiz Mode
+    <button id="quizBtn" class="control-btn" aria-label="Start quiz" tabindex="0" style="background: linear-gradient(145deg, #ff9800, #f57c00); border: 3px solid #e65100;">
+      🎯 Quiz
     </button>
-    <button id="settingsBtn" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+    <button id="settingsBtn" class="control-btn" aria-label="Settings" tabindex="0" style="background: linear-gradient(145deg, #9c27b0, #7b1fa2); border: 3px solid #6a1b9a;">
       ⚙️ Settings
     </button>
-    <button id="speakBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+    <button id="speakBtn" class="control-btn" aria-label="Speak current body part" tabindex="0" disabled>
       🔊 Speak
     </button>
-    <button id="resetBtn" style="background: linear-gradient(145deg, #f44336, #c62828); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">
+    <button id="resetBtn" class="control-btn" aria-label="Reset all progress" tabindex="0">
       🔄 Reset
     </button>
     <button id="statsBtn" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4); margin: 0 10px; color: white; transition: all 0.3s;">📊 Stats</button>
-    <div style="display: inline-block; background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 20px; margin: 0 10px; font-weight: bold; color: #56ab2f;">
-      <span id="progressCounter">0 / 10</span> learned
+    <div class="progress-counter" id="progressCounter" aria-live="polite">
+      0 / 37 learned
     </div>
   </div>
   
   <!-- Quiz Modal -->
-  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
-      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
+  <div id="quizModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(145deg, #ff6b9d, #c44569); padding: 30px; border-radius: 25px; max-width: 600px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeQuiz" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; font-size: 2em; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; line-height: 45px; padding: 0; color: white;">×</button>
+      <h2 style="color: white; font-size: 2.5em; margin-bottom: 20px;">🎯 Body Parts Quiz</h2>
       
-      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px;">🎯 Numbers Quiz</h2>
-      
-      <div id="quizQuestion" style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(10px);">
-        <div id="quizObjects" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
-          <!-- Objects will be generated here -->
-        </div>
-        <p style="color: white; font-size: 1.8em; margin-top: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">How many objects do you see?</p>
+      <div style="margin: 20px 0;">
+        <img id="quizPartImage" src="" alt="" style="width: 200px; height: 200px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); background: white; padding: 20px;">
       </div>
       
-      <div id="quizOptions" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
-        <!-- Options will be generated here -->
-      </div>
+      <p style="color: white; font-size: 1.5em; margin: 20px 0;">Which body part is this?</p>
       
-      <div id="quizFeedback" style="min-height: 60px; color: white; font-size: 1.3em; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
-      </div>
+      <div id="quizOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;"></div>
       
-      <div style="display: flex; justify-content: space-between; align-items: center; color: white; font-size: 1.1em;">
-        <span id="quizScore">Score: 0/0</span>
-        <button id="nextQuizBtn" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 12px 30px; border-radius: 20px; font-weight: bold; color: white; cursor: pointer; display: none;">Next Question ➜</button>
-      </div>
+      <p id="quizFeedback" style="font-size: 1.3em; font-weight: bold; margin: 15px 0; min-height: 30px;"></p>
+      
+      <div id="quizScore" style="color: white; font-size: 1.2em; margin: 15px 0; font-weight: bold;"></div>
+      
+      <button id="nextQuizBtn" style="display: none; background: linear-gradient(145deg, #ff6b9d, #c44569); border: 3px solid white; padding: 15px 40px; border-radius: 25px; font-size: 1.3em; font-weight: bold; color: white; cursor: pointer; margin-top: 15px;">
+        Next →
+      </button>
     </div>
   </div>
   
   <!-- Stats Modal -->
-  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto; animation: fadeIn 0.3s ease;">
-    <div style="background: rgba(33, 150, 243, 0.95); backdrop-filter: blur(40px); border-radius: 30px; padding: 40px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1); position: relative; margin: 20px auto; animation: slideUp 0.4s ease;">
-      <button id="closeStats" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s; z-index: 10;">✕</button>
-      <h2 style="color: white; margin-bottom: 20px; text-align: center; animation: fadeInDown 0.5s ease;">📊 Your Statistics</h2>
-      <div id="statsContent" style="animation: fadeInUp 0.6s ease;"></div>
+  <div id="statsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+    <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); padding: 30px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; margin: 20px auto;">
+      <h2 style="color: white; margin-bottom: 20px; text-align: center;">📊 Your Statistics</h2>
+      <div id="statsContent"></div>
       <h3 style="color: white; margin: 30px 0 15px 0; text-align: center;">🏆 Achievements</h3>
-      <div id="achievementsDisplay" style="animation: fadeInUp 0.7s ease;">
+      <div id="achievementsDisplay">
         <div id="achievementsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;"></div>
       </div>
+      <button id="closeStats" style="width: 100%; padding: 15px; background: white; color: #2196f3; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; position: relative; z-index: 10;">Close</button>
     </div>
   </div>
   
   <!-- Settings Modal -->
   <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
-      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">✕</button>
-      
-      <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
-      
-      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px; backdrop-filter: blur(10px);">
+    <div style="background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%); border-radius: 30px; padding: 40px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative;">
+      <button id="closeSettings" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.3); border: none; color: white; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">✕</button>
+      <h2 style="color: white; margin-bottom: 30px; text-align: center;">⚙️ Settings</h2>
+      <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
           <label style="color: white; font-size: 1.2em; font-weight: bold;">🌙 Dark Mode</label>
           <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
@@ -512,9 +540,9 @@
         <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
           <label style="color: white; font-size: 1.2em; font-weight: bold; display: block; margin-bottom: 15px;">📏 Font Size</label>
           <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em; transition: all 0.3s;">Small</button>
-            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #56ab2f; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s;">Medium</button>
-            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em; transition: all 0.3s;">Large</button>
+            <button class="fontSizeBtn" data-size="small" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 0.9em;">Small</button>
+            <button class="fontSizeBtn active" data-size="medium" style="background: white; border: 2px solid white; color: #ff6b9d; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1em; font-weight: bold;">Medium</button>
+            <button class="fontSizeBtn" data-size="large" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-size: 1.1em;">Large</button>
           </div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2);">
@@ -532,29 +560,26 @@
           </label>
         </div>
       </div>
-      
-      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-        ✓ Save Settings
-      </button>
+      <button onclick="document.getElementById('settingsModal').style.display='none'" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin-top: 25px; width: 100%;">✓ Save Settings</button>
     </div>
   </div>
   
   <div class="main-container">
     <div class="left-pane">
-      <div class="numbers-grid" id="numbersGrid"></div>
+      <div class="bodyparts-grid" id="partsGrid"></div>
     </div>
     <div class="right-pane">
-      <div class="large-number" id="largeNumber" style="display:none;"></div>
-      <div class="number-word" id="numberWord"></div>
-      <div class="objects-container" id="objectsContainer" style="display:none;"></div>
-      <div style="margin-top: 15px; color: rgba(255,255,255,0.8); font-size: 0.9em; text-align: center;">
-        💡 Tip: Press number keys 1-9, 0 for 10, R for random, Space to speak
+      <div class="part-name" id="partName"></div>
+      <div class="part-display-container" id="partDisplayContainer" style="display:none;">
+        <img class="part-image" id="partImage" src="" alt="">
+        <div class="part-sound" id="partSound"></div>
+        <div class="part-info" id="partInfo"></div>
       </div>
     </div>
   </div>
   
   <script>
-    // Particle Background System
+    // Phase 5: Particle Background System
     (function() {
       const canvas = document.getElementById('particleCanvas');
       const ctx = canvas.getContext('2d');
@@ -617,7 +642,7 @@
       if (window.innerWidth > 768) { init(); animate(); }
     })();
 
-    // Ripple Effect Function
+    // Phase 5: Ripple Effect Function
     function createRipple(e) {
       const button = e.currentTarget;
       const rect = button.getBoundingClientRect();
@@ -636,33 +661,125 @@
       setTimeout(() => ripple.remove(), 600);
     }
 
-    // Data
-    const numbers = {
-      1: 'One',
-      2: 'Two',
-      3: 'Three',
-      4: 'Four',
-      5: 'Five',
-      6: 'Six',
-      7: 'Seven',
-      8: 'Eight',
-      9: 'Nine',
-      10: 'Ten'
+    const bodyParts = {
+      'Head': {
+        img: 'https://api.iconify.design/noto/brain.svg?width=96&height=96',
+        sound: '🧠 Think think!',
+        info: 'Your head holds your amazing brain that helps you think!'
+      },
+      'Eyes': {
+        img: 'https://api.iconify.design/noto/eyes.svg?width=96&height=96',
+        sound: '👀 Blink blink!',
+        info: 'Your eyes help you see all the beautiful colors in the world!'
+      },
+      'Ears': {
+        img: 'https://api.iconify.design/noto/ear.svg?width=96&height=96',
+        sound: '👂 Listen!',
+        info: 'Your ears help you hear music, birds singing, and people talking!'
+      },
+      'Nose': {
+        img: 'https://api.iconify.design/noto/nose.svg?width=96&height=96',
+        sound: '👃 Sniff sniff!',
+        info: 'Your nose helps you smell yummy food and beautiful flowers!'
+      },
+      'Mouth': {
+        img: 'https://api.iconify.design/noto/mouth.svg?width=96&height=96',
+        sound: '👄 Nom nom!',
+        info: 'Your mouth helps you eat, talk, sing, and smile!'
+      },
+      'Teeth': {
+        img: 'https://api.iconify.design/noto/tooth.svg?width=96&height=96',
+        sound: '🦷 Chomp chomp!',
+        info: 'Your teeth help you chew food — brush them every day!'
+      },
+      'Tongue': {
+        img: 'https://api.iconify.design/noto/tongue.svg?width=96&height=96',
+        sound: '👅 Taste taste!',
+        info: 'Your tongue helps you taste sweet, sour, salty, and bitter things!'
+      },
+      'Hair': {
+        img: 'https://api.iconify.design/noto/person-blond-hair.svg?width=96&height=96',
+        sound: '💇 Swish swish!',
+        info: 'Hair grows on top of your head and keeps it warm!'
+      },
+      'Hand': {
+        img: 'https://api.iconify.design/noto/raised-hand.svg?width=96&height=96',
+        sound: '🖐️ Wave wave!',
+        info: 'Your hands help you hold things, wave hello, and draw pictures!'
+      },
+      'Fingers': {
+        img: 'https://api.iconify.design/noto/victory-hand.svg?width=96&height=96',
+        sound: '✌️ Wiggle wiggle!',
+        info: 'You have 10 fingers — 5 on each hand — to grab and point!'
+      },
+      'Arm': {
+        img: 'https://api.iconify.design/noto/flexed-biceps.svg?width=96&height=96',
+        sound: '💪 Flex flex!',
+        info: 'Your arms help you hug, reach high, and carry things!'
+      },
+      'Leg': {
+        img: 'https://api.iconify.design/noto/leg.svg?width=96&height=96',
+        sound: '🦵 Kick kick!',
+        info: 'Your legs help you walk, run, jump, and dance!'
+      },
+      'Knee': {
+        img: 'https://api.iconify.design/noto/mechanical-leg.svg?width=96&height=96',
+        sound: '🦿 Bend bend!',
+        info: 'Your knees help your legs bend so you can sit and jump!'
+      },
+      'Foot': {
+        img: 'https://api.iconify.design/noto/foot.svg?width=96&height=96',
+        sound: '🦶 Stomp stomp!',
+        info: 'Your feet help you stand, walk, run, and kick a ball!'
+      },
+      'Toes': {
+        img: 'https://api.iconify.design/noto/footprints.svg?width=96&height=96',
+        sound: '👣 Tippy toes!',
+        info: 'You have 10 toes — they help you balance when you walk!'
+      },
+      'Tummy': {
+        img: 'https://api.iconify.design/noto/baby.svg?width=96&height=96',
+        sound: '🤰 Rumble rumble!',
+        info: 'Your tummy digests all the yummy food you eat!'
+      },
+      'Heart': {
+        img: 'https://api.iconify.design/noto/anatomical-heart.svg?width=96&height=96',
+        sound: '❤️ Thump thump!',
+        info: 'Your heart pumps blood all around your body — it never stops!'
+      },
+      'Lungs': {
+        img: 'https://api.iconify.design/noto/lungs.svg?width=96&height=96',
+        sound: '🫁 Breathe in, breathe out!',
+        info: 'Your lungs help you breathe — take a deep breath and feel them expand!'
+      },
+      'Bones': {
+        img: 'https://api.iconify.design/noto/bone.svg?width=96&height=96',
+        sound: '🦴 Strong strong!',
+        info: 'You have 206 bones inside your body that hold you up!'
+      },
+      'Shoulder': {
+        img: 'https://api.iconify.design/noto/person-shrugging.svg?width=96&height=96',
+        sound: '🤷 Shrug shrug!',
+        info: 'Your shoulders help you lift your arms up high!'
+      }
     };
     
     // State management
-    let currentNumber = null;
-    let learnedNumbers = new Set(JSON.parse(localStorage.getItem('numbers_learned') || '[]'));
+    let currentPart = '';
+    let learnedParts = new Set(JSON.parse(localStorage.getItem('bodyparts_learned') || '[]'));
+    const partNames = Object.keys(bodyParts);
     
     // DOM elements
-    const numbersGrid = document.getElementById('numbersGrid');
-    const numberWord = document.getElementById('numberWord');
-    const largeNumber = document.getElementById('largeNumber');
-    const objectsContainer = document.getElementById('objectsContainer');
-    const progressCounter = document.getElementById('progressCounter');
+    const partsGrid = document.getElementById('partsGrid');
+    const partName = document.getElementById('partName');
+    const partImage = document.getElementById('partImage');
+    const partDisplayContainer = document.getElementById('partDisplayContainer');
+    const partSound = document.getElementById('partSound');
+    const partInfo = document.getElementById('partInfo');
     const randomBtn = document.getElementById('randomBtn');
     const speakBtn = document.getElementById('speakBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const progressCounter = document.getElementById('progressCounter');
     const statsBtn = document.getElementById('statsBtn');
     const statsModal = document.getElementById('statsModal');
     const closeStats = document.getElementById('closeStats');
@@ -679,220 +796,212 @@
       }
     }
     
-    // Display number function
-    function displayNumber(num) {
-      currentNumber = num;
-      const numValue = parseInt(num);
+    // Display body part
+    function displayPart(part) {
+      currentPart = part;
+      const partData = bodyParts[part];
       
-      // Display large number
-      largeNumber.textContent = num;
-      largeNumber.style.display = 'block';
-      largeNumber.style.animation = 'none';
-      largeNumber.offsetHeight;
-      largeNumber.style.animation = 'pulse 1.5s ease-in-out infinite alternate';
+      partName.textContent = part;
+      partName.style.animation = 'none';
+      partName.offsetHeight;
+      partName.style.animation = 'bounce 0.6s ease-in-out';
       
-      // Display number word
-      numberWord.textContent = numbers[num];
-      numberWord.style.animation = 'none';
-      numberWord.offsetHeight;
-      numberWord.style.animation = 'bounce 0.6s ease-in-out';
+      // Show display container
+      partDisplayContainer.style.display = 'flex';
       
-      // Clear previous objects
-      objectsContainer.innerHTML = '';
-      objectsContainer.style.display = 'flex';
+      partImage.src = partData.img;
+      partImage.alt = part;
+      partImage.style.animation = 'none';
+      partImage.offsetHeight;
+      partImage.style.animation = 'fadeInScale 0.8s ease-out';
       
-      // Create counting objects
-      for (let i = 0; i < numValue; i++) {
-        setTimeout(() => {
-          const obj = document.createElement('div');
-          obj.className = 'count-object';
-          obj.style.animationDelay = `${i * 0.1}s`;
-          
-          obj.onclick = () => {
-            obj.style.transform = 'scale(1.5) rotate(360deg)';
-            setTimeout(() => {
-              obj.style.transform = 'scale(1) rotate(0deg)';
-            }, 300);
-          };
-          
-          objectsContainer.appendChild(obj);
-        }, i * 150);
-      }
+      partImage.onerror = () => {
+        partImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="48">🦴</text></svg>';
+      };
       
-      // Animate container
-      objectsContainer.style.animation = 'none';
-      objectsContainer.offsetHeight;
-      objectsContainer.style.animation = 'fadeInScale 0.8s ease-out';
+      partSound.textContent = partData.sound;
+      partSound.style.animation = 'none';
+      partSound.offsetHeight;
+      partSound.style.animation = 'pulse 2s ease-in-out infinite';
+      
+      partInfo.textContent = partData.info;
+      partInfo.style.animation = 'none';
+      partInfo.offsetHeight;
+      partInfo.style.animation = 'fadeIn 1s ease-out';
       
       // Mark as learned
-      learnedNumbers.add(num.toString());
-      localStorage.setItem('numbers_learned', JSON.stringify([...learnedNumbers]));
-      updateProgress();
+      if (!learnedParts.has(part)) {
+        learnedParts.add(part);
+        localStorage.setItem('bodyparts_learned', JSON.stringify([...learnedParts]));
+        updateProgress();
+        
+        // Check achievements
+        checkAchievements();
+      }
       
-      // Update button styles
-      document.querySelectorAll('.number-btn').forEach(btn => {
-        if (btn.textContent === num.toString()) {
-          btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
+      // Update button styling
+      document.querySelectorAll('.bodypart-btn').forEach(btn => {
+        if (btn.textContent === part) {
+          btn.style.backgroundColor = '#ff6b9d';
+          btn.style.color = 'white';
         }
       });
       
-      // Auto-speak
-      speak(`${num}, ${numbers[num]}`);
-    }
-    
-    // Update progress
-    function updateProgress() {
-      progressCounter.textContent = `${learnedNumbers.size} / 10`;
-    }
-    
-    // Random number
-    function showRandom() {
-      const nums = Object.keys(numbers);
-      const randomNum = nums[Math.floor(Math.random() * nums.length)];
-      displayNumber(randomNum);
-    }
-    
-    // Reset
-    function reset() {
-      largeNumber.style.display = 'none';
-      numberWord.textContent = '';
-      objectsContainer.style.display = 'none';
-      objectsContainer.innerHTML = '';
-      currentNumber = null;
+      // Enable speak button
+      speakBtn.disabled = false;
       
-      // Clear learned numbers
-      learnedNumbers.clear();
-      localStorage.removeItem('numbers_learned');
+      // Add click interaction to image
+      partImage.onclick = () => {
+        partImage.style.transform = 'scale(1.3) rotate(360deg)';
+        partSound.style.transform = 'scale(1.5)';
+        partSound.style.color = '#ff6b9d';
+        setTimeout(() => {
+          partImage.style.transform = 'scale(1) rotate(0deg)';
+          partSound.style.transform = 'scale(1)';
+          partSound.style.color = '#fff';
+        }, 600);
+        speak(part + '. ' + partData.sound);
+      };
+      
+      speak(part + '. ' + partData.sound);
+    }
+    
+    // Update progress counter
+    function updateProgress() {
+      progressCounter.textContent = `${learnedParts.size} / 20 learned`;
+    }
+    
+    // Show random body part
+    function showRandom() {
+      const randomPart = partNames[Math.floor(Math.random() * partNames.length)];
+      displayPart(randomPart);
+    }
+    
+    // Reset progress
+    function reset() {
+      learnedParts.clear();
+      localStorage.removeItem('bodyparts_learned');
+      currentPart = '';
+      partName.textContent = 'Click a body part to learn!';
+      partDisplayContainer.style.display = 'none';
+      speakBtn.disabled = true;
       
       // Reset achievements
       Object.keys(achievements).forEach(key => {
         achievements[key].unlocked = false;
       });
-      localStorage.removeItem('numbers_achievements');
+      localStorage.removeItem('bodyparts_achievements');
       
       // Reset statistics
       stats = {totalQuizzes: 0, totalCorrect: 0, totalQuestions: 0, highScore: 0};
-      localStorage.removeItem('numbers_stats');
-      
-      // Reset all button styles
-      document.querySelectorAll('.number-btn').forEach(btn => {
-        btn.style.background = 'linear-gradient(145deg, #ffffff, #f0f0f0)';
-      });
+      localStorage.removeItem('bodyparts_stats');
       
       updateProgress();
+      
+      // Reset all button colors
+      document.querySelectorAll('.bodypart-btn').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+      });
       
       // Show confirmation
       speak('Progress reset complete');
     }
     
-    // Create number buttons
-    Object.keys(numbers).forEach(num => {
+    partNames.forEach(part => {
       const btn = document.createElement('button');
-      btn.className = 'number-btn';
-      btn.textContent = num;
-      btn.setAttribute('aria-label', `Number ${num}`);
-      btn.setAttribute('tabindex', '0');
+      btn.className = 'bodypart-btn';
+      btn.textContent = part;
+      btn.setAttribute('aria-label', `Learn about ${part}`);
+      btn.tabIndex = 0;
       
-      // Check if already learned
-      if (learnedNumbers.has(num.toString())) {
-        btn.style.background = 'linear-gradient(145deg, #c8e6c9, #a5d6a7)';
+      if (learnedParts.has(part)) {
+        btn.style.backgroundColor = '#ff6b9d';
+        btn.style.color = 'white';
       }
       
       btn.onclick = (e) => {
-        // 3D Flip Animation
         btn.classList.add('flipping');
         setTimeout(() => btn.classList.remove('flipping'), 600);
-        
-        // Ripple Effect
         createRipple(e);
-        
-        // Original functionality
-        displayNumber(num);
+        displayPart(part);
       };
       
-      btn.onkeydown = (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          displayNumber(num);
-        }
-      };
-      
-      numbersGrid.appendChild(btn);
+      partsGrid.appendChild(btn);
     });
     
-    // Button events
-    randomBtn.onclick = showRandom;
+    // Control button event listeners
+    randomBtn.onclick = () => { playSound('click'); showRandom(); };
     speakBtn.onclick = () => {
-      if (currentNumber) {
+      if (currentPart) {
         playSound('click');
-        speak(`${currentNumber}, ${numbers[currentNumber]}`);
+        const partData = bodyParts[currentPart];
+        speak(currentPart + '. ' + partData.sound);
       }
     };
     resetBtn.onclick = () => { playSound('click'); reset(); };
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      const nums = Object.keys(numbers);
-      
-      if (e.key === 'r' || e.key === 'R') {
+      // R key for random
+      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
         showRandom();
-      } else if (e.key === ' ' && currentNumber) {
+      }
+      
+      // Space key to speak current part
+      if (e.key === ' ' && currentPart && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
-        speak(`${currentNumber}, ${numbers[currentNumber]}`);
-      } else if (e.key === 'Escape') {
+        const partData = bodyParts[currentPart];
+        speak(currentPart + '. ' + partData.sound);
+      }
+      
+      // Escape key to reset
+      if (e.key === 'Escape') {
         e.preventDefault();
         reset();
-      } else if (e.key === 'ArrowRight' && currentNumber) {
-        e.preventDefault();
-        const currentIndex = nums.indexOf(currentNumber.toString());
-        const nextIndex = (currentIndex + 1) % nums.length;
-        displayNumber(nums[nextIndex]);
-      } else if (e.key === 'ArrowLeft' && currentNumber) {
-        e.preventDefault();
-        const currentIndex = nums.indexOf(currentNumber.toString());
-        const prevIndex = (currentIndex - 1 + nums.length) % nums.length;
-        displayNumber(nums[prevIndex]);
-      } else if (e.key >= '1' && e.key <= '9') {
-        e.preventDefault();
-        displayNumber(e.key);
-      } else if (e.key === '0') {
-        e.preventDefault();
-        displayNumber('10');
       }
-    });
-    
-    randomBtn.onclick = () => { playSound('click'); showRandom(); };
-    
-    // Button hover effects
-    [randomBtn, speakBtn, resetBtn, statsBtn].forEach(btn => {
-      btn.onmouseenter = () => {
-        btn.style.transform = 'translateY(-3px)';
-        btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-      };
-      btn.onmouseleave = () => {
-        btn.style.transform = 'translateY(0)';
-        btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-      };
+      
+      // Arrow keys to navigate
+      if (currentPart && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault();
+        const currentIndex = partNames.indexOf(currentPart);
+        let nextIndex;
+        
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % partNames.length;
+        } else {
+          nextIndex = (currentIndex - 1 + partNames.length) % partNames.length;
+        }
+        
+        displayPart(partNames[nextIndex]);
+      }
+      
+      // Type name to jump to it
+      if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+        const typedLetter = e.key.toUpperCase();
+        const matchingPart = partNames.find(p => p.startsWith(typedLetter));
+        if (matchingPart) {
+          displayPart(matchingPart);
+        }
+      }
     });
     
     // Quiz Mode Implementation
     const quizBtn = document.getElementById('quizBtn');
     const quizModal = document.getElementById('quizModal');
     const closeQuiz = document.getElementById('closeQuiz');
-    const quizObjects = document.getElementById('quizObjects');
+    const quizPartImage = document.getElementById('quizPartImage');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
     const quizScore = document.getElementById('quizScore');
     const nextQuizBtn = document.getElementById('nextQuizBtn');
     
-    const objectEmojis = ['🍎', '⚽', '🌟', '🎈', '🍕', '🎁', '🍭', '🌺', '🦋', '🎨'];
-    
     let quizState = {
       currentQuestion: 0,
       correctAnswers: 0,
       totalQuestions: 10,
-      currentCorrectNumber: 0,
+      currentCorrectPart: '',
       answered: false
     };
     
@@ -901,7 +1010,7 @@
         currentQuestion: 0,
         correctAnswers: 0,
         totalQuestions: 10,
-        currentCorrectNumber: 0,
+        currentCorrectPart: '',
         answered: false
       };
       quizModal.style.display = 'flex';
@@ -919,28 +1028,20 @@
       quizFeedback.textContent = '';
       nextQuizBtn.style.display = 'none';
       
-      // Pick random number (1-10)
-      const correctNumber = Math.floor(Math.random() * 10) + 1;
-      quizState.currentCorrectNumber = correctNumber;
+      // Pick random part
+      const correctPart = partNames[Math.floor(Math.random() * partNames.length)];
+      quizState.currentCorrectPart = correctPart;
       
-      // Show objects
-      quizObjects.innerHTML = '';
-      const emoji = objectEmojis[Math.floor(Math.random() * objectEmojis.length)];
-      
-      for (let i = 0; i < correctNumber; i++) {
-        const obj = document.createElement('div');
-        obj.style.cssText = 'font-size: 2.5em; animation: fadeIn 0.3s ease-in-out;';
-        obj.style.animationDelay = `${i * 0.05}s`;
-        obj.textContent = emoji;
-        quizObjects.appendChild(obj);
-      }
+      // Show part image
+      quizPartImage.src = bodyParts[correctPart].img;
+      quizPartImage.alt = correctPart;
       
       // Generate 4 options (1 correct + 3 wrong)
-      const options = [correctNumber];
+      const options = [correctPart];
       while (options.length < 4) {
-        const randomNum = Math.floor(Math.random() * 10) + 1;
-        if (!options.includes(randomNum)) {
-          options.push(randomNum);
+        const randomPart = partNames[Math.floor(Math.random() * partNames.length)];
+        if (!options.includes(randomPart)) {
+          options.push(randomPart);
         }
       }
       
@@ -949,12 +1050,12 @@
       
       // Create option buttons
       quizOptions.innerHTML = '';
-      options.forEach(num => {
+      options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.textContent = num;
-        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #56ab2f; border-radius: 15px; font-size: 2em; font-weight: bold; padding: 20px; cursor: pointer; transition: all 0.3s; color: #56ab2f;';
+        btn.textContent = opt;
+        btn.style.cssText = 'background: linear-gradient(145deg, #ffffff, #f0f0f0); border: 3px solid #ff6b9d; border-radius: 15px; font-size: 1.3em; font-weight: bold; padding: 15px; cursor: pointer; transition: all 0.3s; color: #c44569;';
         
-        btn.onclick = () => checkAnswer(num, btn);
+        btn.onclick = () => checkAnswer(opt, btn);
         
         btn.onmouseenter = () => {
           if (!quizState.answered) {
@@ -975,21 +1076,21 @@
       updateQuizScore();
     }
     
-    function checkAnswer(selectedNumber, btn) {
+    function checkAnswer(selectedPart, btn) {
       if (quizState.answered) return;
       
       quizState.answered = true;
-      const correct = selectedNumber === quizState.currentCorrectNumber;
+      const correct = selectedPart === quizState.currentCorrectPart;
       
       if (correct) {
         quizState.correctAnswers++;
         btn.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
         btn.style.color = 'white';
         btn.style.borderColor = '#2e7d32';
-        quizFeedback.innerHTML = `✅ Correct! ${selectedNumber} ${numbers[selectedNumber]}`;
+        quizFeedback.innerHTML = `✅ Correct! It's a ${selectedPart}`;
         quizFeedback.style.color = '#4caf50';
         playSound('correct');
-        speak(`Correct! ${selectedNumber} ${numbers[selectedNumber]}`);
+        speak(`Correct! It's a ${selectedPart}. ${bodyParts[selectedPart].sound}`);
       } else {
         btn.style.background = 'linear-gradient(145deg, #f44336, #c62828)';
         btn.style.color = 'white';
@@ -999,16 +1100,16 @@
         // Highlight correct answer
         const buttons = quizOptions.querySelectorAll('button');
         buttons.forEach(b => {
-          if (parseInt(b.textContent) === quizState.currentCorrectNumber) {
+          if (b.textContent === quizState.currentCorrectPart) {
             b.style.background = 'linear-gradient(145deg, #4caf50, #2e7d32)';
             b.style.color = 'white';
             b.style.borderColor = '#2e7d32';
           }
         });
         
-        quizFeedback.innerHTML = `❌ Wrong! Correct answer: ${quizState.currentCorrectNumber} ${numbers[quizState.currentCorrectNumber]}`;
+        quizFeedback.innerHTML = `❌ Wrong! It's a ${quizState.currentCorrectPart}`;
         quizFeedback.style.color = '#f44336';
-        speak(`Wrong! It's ${quizState.currentCorrectNumber} ${numbers[quizState.currentCorrectNumber]}`);
+        speak(`Wrong! It's a ${quizState.currentCorrectPart}. ${bodyParts[quizState.currentCorrectPart].sound}`);
       }
       
       updateQuizScore();
@@ -1016,7 +1117,7 @@
       // Show next button after delay
       setTimeout(() => {
         nextQuizBtn.style.display = 'block';
-      }, 1000);
+      }, 1500);
     }
     
     function updateQuizScore() {
@@ -1029,18 +1130,18 @@
       let emoji = '';
       
       if (percentage === 100) {
-        message = 'Perfect! You\'re a counting champion! 🌟';
+        message = 'Perfect! You know all the body parts! 🌟';
         emoji = '🏆';
         createConfetti();
       } else if (percentage >= 80) {
-        message = 'Excellent counting! Keep it up! 👏';
+        message = 'Excellent! You\'re a body parts expert! 👏';
         emoji = '⭐';
         createConfetti();
       } else if (percentage >= 60) {
-        message = 'Good job! Practice more to improve! 💪';
+        message = 'Good job! Keep learning about body parts! 💪';
         emoji = '👍';
       } else {
-        message = 'Keep practicing! You\'ll get better! 📚';
+        message = 'Keep practicing! You\'ll learn them all! 📚';
         emoji = '💡';
       }
       
@@ -1054,13 +1155,13 @@
           <button onclick="location.reload()" style="background: linear-gradient(145deg, #4caf50, #2e7d32); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             🔄 Try Again
           </button>
-          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #56ab2f, #a8e6cf); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
+          <button onclick="document.getElementById('quizModal').style.display='none'" style="background: linear-gradient(145deg, #ff6b9d, #c44569); border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.2em; font-weight: bold; color: white; cursor: pointer; margin: 10px;">
             ✓ Done
           </button>
         </div>
       `;
       quizFeedback.textContent = '';
-      quizObjects.innerHTML = '';
+      quizPartImage.style.display = 'none';
       nextQuizBtn.style.display = 'none';
       
       speak(`Quiz complete! You scored ${quizState.correctAnswers} out of ${quizState.totalQuestions}. ${message}`);
@@ -1098,49 +1199,48 @@
     const soundToggle = document.getElementById('soundToggle');
     const autoSpeakToggle = document.getElementById('autoSpeakToggle');
     const fontSizeBtns = document.querySelectorAll('.fontSizeBtn');
-    
+
     const settings = {
       darkMode: localStorage.getItem('darkMode') === 'true',
       soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
       autoSpeak: localStorage.getItem('autoSpeak') === 'true',
       fontSize: localStorage.getItem('fontSize') || 'medium'
     };
-    
+
     if (settings.darkMode) {
       document.body.classList.add('dark-mode');
       darkModeToggle.checked = true;
     }
     soundToggle.checked = settings.soundEnabled;
     autoSpeakToggle.checked = settings.autoSpeak;
-    document.body.className = document.body.className.replace(/font-\w+/g, '') + ' font-' + settings.fontSize;
-    
+    document.body.className += ' font-' + settings.fontSize;
+
     fontSizeBtns.forEach(btn => {
       if (btn.dataset.size === settings.fontSize) {
         btn.style.background = 'white';
-        btn.style.color = '#56ab2f';
         btn.style.fontWeight = 'bold';
       }
     });
-    
+
     settingsBtn.onclick = () => settingsModal.style.display = 'flex';
     closeSettings.onclick = () => settingsModal.style.display = 'none';
     settingsModal.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
-    
+
     darkModeToggle.onchange = () => {
       document.body.classList.toggle('dark-mode', darkModeToggle.checked);
       localStorage.setItem('darkMode', darkModeToggle.checked);
     };
-    
+
     soundToggle.onchange = () => {
       settings.soundEnabled = soundToggle.checked;
       localStorage.setItem('soundEnabled', soundToggle.checked);
     };
-    
+
     autoSpeakToggle.onchange = () => {
       settings.autoSpeak = autoSpeakToggle.checked;
       localStorage.setItem('autoSpeak', autoSpeakToggle.checked);
     };
-    
+
     fontSizeBtns.forEach(btn => {
       btn.onclick = () => {
         const size = btn.dataset.size;
@@ -1149,12 +1249,11 @@
         localStorage.setItem('fontSize', size);
         fontSizeBtns.forEach(b => {
           b.style.background = b === btn ? 'white' : 'rgba(255,255,255,0.2)';
-          b.style.color = b === btn ? '#56ab2f' : 'white';
           b.style.fontWeight = b === btn ? 'bold' : 'normal';
         });
       };
     });
-    
+
     settingsBtn.onmouseenter = () => {
       settingsBtn.style.transform = 'translateY(-3px)';
       settingsBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.5)';
@@ -1164,7 +1263,8 @@
       settingsBtn.style.boxShadow = '0 4px 15px rgba(156, 39, 176, 0.4)';
     };
     
-    // Enhanced Confetti Animation (Phase 5)
+    // Confetti animation
+    // Phase 5: Enhanced Confetti Animation
     function createConfetti() {
       const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4', '#32cd32', '#ff1493', '#00bfff', '#ffd700'];
       const shapes = ['circle', 'square', 'triangle'];
@@ -1220,7 +1320,7 @@
     // Sound Effects
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
-      const settings = JSON.parse(localStorage.getItem('numbers_settings') || '{"soundEnabled": true}');
+      const settings = JSON.parse(localStorage.getItem('bodyparts_settings') || '{"soundEnabled": true}');
       if (!settings.soundEnabled) return;
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -1250,25 +1350,25 @@
     // Stats Modal
     // Achievement System - Define early
     const achievements = {
-      first_count: { name: '🎯 First Number', desc: 'Learn your first number', unlocked: false },
-      half_way: { name: '⭐ Half Way', desc: 'Learn 5 numbers', unlocked: false },
-      all_learned: { name: '🏆 Counting Master', desc: 'Learn all 10 numbers', unlocked: false },
+      first_part: { name: '🎯 First Part', desc: 'Learn your first body part', unlocked: false },
+      halfway: { name: '⭐ Halfway', desc: 'Learn 10 body parts', unlocked: false },
+      all_learned: { name: '🏆 Body Expert', desc: 'Learn all 20 body parts', unlocked: false },
       perfect_quiz: { name: '💯 Perfect Score', desc: 'Get 100% in a quiz', unlocked: false },
       quiz_master: { name: '🎓 Quiz Master', desc: 'Complete 10 quizzes', unlocked: false }
     };
-    const savedAchievements = JSON.parse(localStorage.getItem('numbers_achievements') || '{}');
+    const savedAchievements = JSON.parse(localStorage.getItem('bodyparts_achievements') || '{}');
     Object.keys(savedAchievements).forEach(key => { if (achievements[key]) achievements[key].unlocked = savedAchievements[key]; });
-    let stats = JSON.parse(localStorage.getItem('numbers_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+    let stats = JSON.parse(localStorage.getItem('bodyparts_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
     
     function checkAchievements() {
       let newUnlock = false;
-      if (!achievements.first_count.unlocked && learnedNumbers.size >= 1) { achievements.first_count.unlocked = true; showAchievement(achievements.first_count); newUnlock = true; }
-      if (!achievements.half_way.unlocked && learnedNumbers.size >= 5) { achievements.half_way.unlocked = true; showAchievement(achievements.half_way); newUnlock = true; }
-      if (!achievements.all_learned.unlocked && learnedNumbers.size >= 10) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
+      if (!achievements.first_part.unlocked && learnedParts.size >= 1) { achievements.first_part.unlocked = true; showAchievement(achievements.first_part); newUnlock = true; }
+      if (!achievements.halfway.unlocked && learnedParts.size >= 10) { achievements.halfway.unlocked = true; showAchievement(achievements.halfway); newUnlock = true; }
+      if (!achievements.all_learned.unlocked && learnedParts.size >= 20) { achievements.all_learned.unlocked = true; showAchievement(achievements.all_learned); newUnlock = true; }
       if (newUnlock) saveAchievements();
     }
-    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('numbers_achievements', JSON.stringify(toSave)); }
-    function saveStats() { localStorage.setItem('numbers_stats', JSON.stringify(stats)); }
+    function saveAchievements() { const toSave = {}; Object.keys(achievements).forEach(key => { toSave[key] = achievements[key].unlocked; }); localStorage.setItem('bodyparts_achievements', JSON.stringify(toSave)); }
+    function saveStats() { localStorage.setItem('bodyparts_stats', JSON.stringify(stats)); }
     function showAchievement(achievement) {
       const badge = document.createElement('div');
       badge.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 20px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10001; animation: slideIn 0.5s ease-out; font-weight: bold; border: 3px solid #ff8800;';
@@ -1282,14 +1382,14 @@
     // Stats Modal (statsBtn, statsModal, closeStats declared at top)
     if (statsBtn && statsModal && closeStats) {
       function showStats() {
-        const currentStats = JSON.parse(localStorage.getItem('numbers_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
-        const savedAchievements = JSON.parse(localStorage.getItem('numbers_achievements') || '{}');
+        const currentStats = JSON.parse(localStorage.getItem('bodyparts_stats') || '{"totalQuizzes": 0, "totalCorrect": 0, "totalQuestions": 0, "highScore": 0}');
+        const savedAchievements = JSON.parse(localStorage.getItem('bodyparts_achievements') || '{}');
         
         // Update achievements with saved state
         Object.keys(savedAchievements).forEach(key => {
           if (achievements[key]) achievements[key].unlocked = savedAchievements[key];
         });
-        
+      
         const accuracy = currentStats.totalQuestions > 0 ? ((currentStats.totalCorrect / currentStats.totalQuestions) * 100).toFixed(1) : 0;
         
         document.getElementById('statsContent').innerHTML = `
@@ -1308,35 +1408,35 @@
             </div>
             <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
               <div style="font-size: 24px; margin-bottom: 5px;">🏆 ${currentStats.highScore}%</div>
-              <div style="opacity: 0.9;">High Score</div>
-            </div>
+            <div style="opacity: 0.9;">High Score</div>
           </div>
+        </div>
+      `;
+      
+      const achievementsList = document.getElementById('achievementsList');
+      achievementsList.innerHTML = '';
+      Object.entries(achievements).forEach(([key, achievement]) => {
+        const badgeDiv = document.createElement('div');
+        badgeDiv.style.cssText = `
+          background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
+          padding: 20px;
+          border-radius: 15px;
+          text-align: center;
+          opacity: ${achievement.unlocked ? '1' : '0.5'};
+          transition: transform 0.3s;
+          ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
         `;
-        
-        const achievementsList = document.getElementById('achievementsList');
-        achievementsList.innerHTML = '';
-        Object.entries(achievements).forEach(([key, achievement]) => {
-          const badgeDiv = document.createElement('div');
-          badgeDiv.style.cssText = `
-            background: ${achievement.unlocked ? 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)' : 'rgba(255,255,255,0.1)'};
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            opacity: ${achievement.unlocked ? '1' : '0.5'};
-            transition: transform 0.3s;
-            ${achievement.unlocked ? 'animation: pulse-glow 2s ease-in-out infinite;' : ''}
-          `;
-          badgeDiv.innerHTML = `
-            <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
-            <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
-              ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
-            </div>
-            <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
-            ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
-          `;
-          achievementsList.appendChild(badgeDiv);
-        });
-        
+        badgeDiv.innerHTML = `
+          <div style="font-size: 48px; margin-bottom: 10px;">${achievement.name.split(' ')[0]}</div>
+          <div style="font-weight: bold; font-size: 16px; color: ${achievement.unlocked ? '#000' : '#fff'}; margin-bottom: 5px;">
+            ${achievement.name.substring(achievement.name.indexOf(' ') + 1)}
+          </div>
+          <div style="font-size: 14px; color: ${achievement.unlocked ? '#333' : '#ccc'};">${achievement.desc}</div>
+          ${achievement.unlocked ? '<div style="margin-top: 10px; color: #000; font-weight: bold;">✓ UNLOCKED</div>' : '<div style="margin-top: 10px; color: #999;">🔒 Locked</div>'}
+        `;
+        achievementsList.appendChild(badgeDiv);
+      });
+      
         statsModal.style.display = 'flex';
         if (typeof playSound === 'function') playSound('click');
       }
@@ -1365,8 +1465,6 @@
       };
     }
     
-    const originalDisplayNumber = displayNumber;
-    displayNumber = function(num) { originalDisplayNumber(num); checkAchievements(); };
     const originalShowQuizResults = showQuizResults;
     showQuizResults = function() {
       stats.totalQuizzes++; stats.totalCorrect += quizState.correctAnswers; stats.totalQuestions += quizState.totalQuestions;
@@ -1377,7 +1475,7 @@
       saveStats(); originalShowQuizResults();
     };
     
-    // Initialize
+    // Initialize progress counter
     updateProgress();
     checkAchievements();
   </script>
