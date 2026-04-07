@@ -143,7 +143,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 
 | ID | Finding | Severity | Status |
 |---|---|---|---|
-| C1 | PWA icons missing | Critical | ✅ Created icon-192.svg + icon-512.svg |
+| C1 | PWA icons missing | Critical | ✅ Created assets/icon-192.svg + assets/icon-512.svg |
 | C2 | Quiz crash if <4 cards | Critical | ✅ Bounded wrongs loop |
 | H1 | No Escape key / click-outside for modals | High | ✅ Added to 4 card-machine games |
 | H2 | Auto-speak fires on page load | High | ✅ _pageReady guard |

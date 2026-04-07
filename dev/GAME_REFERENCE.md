@@ -44,7 +44,7 @@ When adding a new game, pick a **unique gradient** not already used above.
 3. [ ] Set `GAME_KEY` (used for `localStorage`) — must be unique, e.g. `solar_system`.
 4. [ ] Add a nav link inside the `.navigation` bar of the new file **and** in every existing game file.
 5. [ ] Add an `<a>` card to `index.html` `.games-grid` (§7).
-6. [ ] Update `service-worker.js` — add the new HTML file to the `CACHE_ASSETS` array.
+6. [ ] Update `service-worker.js` — add the new HTML file to the `urlsToCache` array.
 7. [ ] Update `manifest.json` `shortcuts` array if desired.
 
 ---
@@ -802,7 +802,7 @@ Also update the animation-delay counter:
 
 ## 8. service-worker.js — Add to Cache
 
-Open `service-worker.js` and add the new file to the `CACHE_ASSETS` (or equivalent) array:
+Open `service-worker.js` and add the new file to the `urlsToCache` array:
 
 ```js
 'games/TOPIC-game.html',

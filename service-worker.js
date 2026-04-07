@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kids-learning-games-v14';
+const CACHE_NAME = 'kids-learning-games-v15';
 const urlsToCache = [
   './',
   'index.html',
@@ -18,8 +18,8 @@ const urlsToCache = [
   'games/common-cards.css',
   'games/common-cards.js',
   'manifest.json',
-  'icon-192.svg',
-  'icon-512.svg'
+  'assets/icon-192.svg',
+  'assets/icon-512.svg'
 ];
 
 // Install event - cache files

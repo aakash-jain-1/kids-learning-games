@@ -49,9 +49,10 @@ A Progressive Web App featuring 12 educational games for children — Alphabets,
 ├── manifest.json           # PWA manifest
 ├── service-worker.js       # Offline caching (auto-updates on version bump)
 ├── offline.html            # Offline fallback page
-├── icon-192.svg            # PWA icon (192x192)
-├── icon-512.svg            # PWA icon (512x512)
 ├── README.md
+├── assets/
+│   ├── icon-192.svg        # PWA icon (192x192)
+│   └── icon-512.svg        # PWA icon (512x512)
 ├── games/
 │   ├── alphabet-game.html
 │   ├── numbers-game.html
@@ -69,7 +70,6 @@ A Progressive Web App featuring 12 educational games for children — Alphabets,
 │   └── common-cards.js     # Shared JS utilities for card-machine games
 └── dev/
     ├── SETUP.html              # Dev/setup utilities
-    ├── generate-icons.html     # PWA icon generator
     ├── _gen_flashcards.py      # Flashcard data generation script
     ├── ACTION_ITEMS.md         # Known issues & fix tracker
     └── GAME_REFERENCE.md       # Template & conventions for adding games
@@ -116,7 +116,7 @@ All layout sizing uses fluid CSS values instead of device-specific `@media (max-
 
 ## 🖼️ App Icons
 
-PWA icons (`icon-192.svg` and `icon-512.svg`) are included in the repository. No generation step is needed.
+PWA icons (`assets/icon-192.svg` and `assets/icon-512.svg`) are included in the repository. No generation step is needed.
 
 ## 🧪 Browser Compatibility
 
