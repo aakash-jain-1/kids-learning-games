@@ -93,36 +93,30 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 
 ---
 
-## 7. Dev docs — `GAME_REFERENCE.md` inventory table outdated
+## 7. ~~Dev docs — `GAME_REFERENCE.md` inventory table outdated~~ ✅
 
-**Severity:** Low | **Effort:** Tiny
+**Severity:** Low | **Effort:** Tiny | **Status:** Done
 
-The "Existing Games Inventory" table in `dev/GAME_REFERENCE.md` only lists 8 games. Missing: `solar-system-game.html`, `dinosaurs-game.html`, `weather-game.html`, `woodcutter-story.html`.
-
-- [ ] Update inventory table with all 12 games
+- [x] Update inventory table with all 12 games
 
 ---
 
-## 8. Build info footer missing from newer games
+## 8. ~~Build info footer missing from newer games~~ ✅
 
-**Severity:** Low | **Effort:** Tiny
+**Severity:** Low | **Effort:** Tiny | **Status:** Done
 
-The classic games + flashcards show a build info footer (commit SHA + date from GitHub API). The following files are missing it:
-
-- [ ] `solar-system-game.html`
-- [ ] `dinosaurs-game.html`
-- [ ] `weather-game.html`
-- [ ] `woodcutter-story.html`
+- [x] `solar-system-game.html`
+- [x] `dinosaurs-game.html`
+- [x] `weather-game.html`
+- [x] `woodcutter-story.html`
 
 ---
 
-## 9. No `<meta name="description">` on game pages
+## 9. ~~No `<meta name="description">` on game pages~~ ✅
 
-**Severity:** Low | **Effort:** Small
+**Severity:** Low | **Effort:** Small | **Status:** Done
 
-Only `index.html` has a `<meta name="description">` tag. None of the 12 game files have one. This affects SEO and social sharing previews.
-
-- [ ] Add `<meta name="description">` to all 12 game files
+- [x] Add `<meta name="description">` to all 12 game files
 
 ---
 
@@ -136,9 +130,9 @@ Only `index.html` has a `<meta name="description">` tag. None of the 12 game fil
 | 4 | ~~Woodcutter not in SW cache + no SW reg~~ | ~~Medium~~ | ~~Tiny~~ | ✅ Done |
 | 5 | Card games missing quiz/achievements/stats | Medium | Large | Open |
 | 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
-| 7 | GAME_REFERENCE.md outdated | Low | Tiny | Open |
-| 8 | Build info footer missing from 4 games | Low | Tiny | Open |
-| 9 | No meta description on game pages | Low | Small | Open |
+| 7 | ~~GAME_REFERENCE.md outdated~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
+| 8 | ~~Build info footer missing~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
+| 9 | ~~Meta descriptions missing~~ | ~~Low~~ | ~~Small~~ | ✅ Done |
 
 ---
 
