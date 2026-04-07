@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kids-learning-games-v18';
+const CACHE_NAME = 'kids-learning-games-v19';
 const urlsToCache = [
   './',
   'index.html',
@@ -22,63 +22,56 @@ const urlsToCache = [
   'assets/icon-512.svg'
 ];
 
-// Install event - cache files
+// Install — pre-cache shell assets, skip waiting to activate immediately
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
   );
   self.skipWaiting();
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then((response) => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          return response;
-        }).catch(() => {
-          if (event.request.mode === 'navigate') {
-            return caches.match('offline.html');
-          }
-        });
-      })
-  );
-});
-
-// Activate event - clean up old caches
+// Activate — purge old caches and take control of all clients
 self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches.keys().then((names) =>
+      Promise.all(names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n)))
+    )
   );
   self.clients.claim();
+});
+
+// Fetch — network-first for navigations, stale-while-revalidate for assets
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+
+  if (request.method !== 'GET') return;
+
+  if (request.mode === 'navigate') {
+    // HTML pages: try network first, fall back to cache, then offline page
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request).then((r) => r || caches.match('offline.html')))
+    );
+    return;
+  }
+
+  // Sub-resources (CSS, JS, images, SVG): serve cache, revalidate in background
+  event.respondWith(
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.match(request).then((cached) => {
+        const networkFetch = fetch(request).then((response) => {
+          if (response && response.status === 200) {
+            cache.put(request, response.clone());
+          }
+          return response;
+        });
+        return cached || networkFetch;
+      })
+    )
+  );
 });
