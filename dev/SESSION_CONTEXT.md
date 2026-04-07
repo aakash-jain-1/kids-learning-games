@@ -13,7 +13,7 @@
 **Live URL:** https://aakash-jain-1.github.io/kids-learning-games/
 **Stack:** HTML5 + CSS3 + Vanilla JS — zero frameworks, zero build tools
 **Total commits:** 28 (as of 2026-04-07)
-**Service Worker cache version:** v15
+**Service Worker cache version:** v16
 
 A Progressive Web App with **12 educational games** for children, organised into three architectures:
 
@@ -122,6 +122,24 @@ After Phase 3, a second pass found and fixed:
 - Removed stale `generate-icons.html` reference from `.gitignore`
 - Updated `GAME_REFERENCE.md` CSS classes and `urlsToCache` reference
 - Moved icons from root to `assets/` directory; updated all references
+
+### Phase 5 — Polish Audit (Issue 11 — 15 findings)
+A third pass focused on consistency, accessibility, SEO completeness, and UX polish:
+
+- **H1**: Unified navbar labels — removed emojis from classic game nav links to match card-machine plain text style
+- **H2**: Added `<meta name="theme-color">` to all 12 game pages (per-game colors)
+- **H3**: Added OS-level dark mode to `index.html` via `@media(prefers-color-scheme:dark)`
+- **H4**: Completed Twitter Card tags (`twitter:description`, `twitter:image`) and added `og:url` to all 13 pages
+- **M1**: Added 4 PWA shortcuts to `manifest.json` (Alphabets, Numbers, Animals, Flash Cards)
+- **M2**: Created `404.html` for GitHub Pages with matching app style
+- **M3**: Added `:focus-visible` styles (gold outline) to all pages + `common-cards.css`
+- **M4**: Added `role="dialog"` and `aria-modal="true"` to all 12 modal overlays (4 games × 3 modals)
+- **M6**: Removed redundant `.back-link` Home button from 4 card-machine games (navbar already has Home)
+- **L1**: Removed 4 `console.log` calls from `index.html`
+- **L3**: Moved `#build-info` div inside `.container` on `index.html`
+- **L4**: Simplified manifest icons to 2 entries with `sizes="any"` (SVG is scalable)
+- **L5**: Added `localStorage` persistence for woodcutter story quiz (attempts, best score, last played)
+- Bumped service worker cache to v16
 
 ---
 

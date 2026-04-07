@@ -134,6 +134,7 @@ The 7 classic games all have: quiz mode, achievements (5 badges), stats dashboar
 | 8 | ~~Build info footer missing~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 9 | ~~Meta descriptions missing~~ | ~~Low~~ | ~~Small~~ | ✅ Done |
 | 10 | ~~Enhancement Audit (22 findings)~~ | ~~Mixed~~ | ~~Large~~ | ✅ Done (21/22, M1 deferred) |
+| 11 | ~~Polish Audit (15 findings)~~ | ~~Mixed~~ | ~~Medium~~ | ✅ Done (13/15, M5 N/A, L2 already done) |
 
 ---
 
@@ -180,3 +181,27 @@ The following mobile rendering issues were identified earlier and have been **fi
 - [x] `shapes-game.html` — Nav overflow + padding fixed
 - [x] `birds.html` — Already had the fix (reference implementation)
 - [x] All classic games — Navbar compact on small screens
+
+---
+
+## 11. Polish Audit — 15 findings across consistency, accessibility, UX, SEO
+
+**Severity:** Mixed (4 High, 6 Medium, 5 Low) | **Status:** Done
+
+| ID | Finding | Severity | Status |
+|---|---|---|---|
+| H1 | Navbar labels inconsistent (emojis in classic, plain in card-machine) | High | ✅ Removed emojis from 7 classic game navbars |
+| H2 | No theme-color meta on any game page | High | ✅ Added to all 12 games |
+| H3 | Home page has no dark mode | High | ✅ Added prefers-color-scheme:dark styles |
+| H4 | Incomplete Twitter Card tags (no description/image on games) | High | ✅ Added twitter:description, twitter:image, og:url to all 13 pages |
+| M1 | No manifest.json shortcuts for quick game access | Medium | ✅ Added 4 shortcuts |
+| M2 | No 404.html for GitHub Pages | Medium | ✅ Created 404.html |
+| M3 | No :focus-visible styles (keyboard accessibility) | Medium | ✅ Added to all pages + common-cards.css |
+| M4 | No ARIA roles on modals (role="dialog", aria-modal) | Medium | ✅ Added to all 12 modal overlays |
+| M5 | Event listeners on modals not cleaned up on close | Medium | N/A — global listener checks visibility, doesn't stack |
+| M6 | Redundant Home back-link in card-machine games (navbar already has Home) | Medium | ✅ Removed back-link + dead CSS from 4 games |
+| L1 | console.log left in index.html | Low | ✅ Removed 4 console.log calls |
+| L2 | Home page animation delays only cover 8 of 12 cards | Low | N/A — already had all 12 |
+| L3 | Build-info div outside .container on index.html | Low | ✅ Moved inside .container |
+| L4 | SVG icons use fixed sizes in manifest (should be "any" for SVG) | Low | ✅ Simplified to 2 entries with sizes="any" |
+| L5 | Woodcutter story has no progress persistence | Low | ✅ Added localStorage for quiz attempts, best score, last played |

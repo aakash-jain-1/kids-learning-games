@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3c72">
   <meta name="description" content="Read the tale of the Honest Woodcutter — an interactive story with animations for kids.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
   <title>The Honest Woodcutter Story</title>
@@ -11,6 +12,9 @@
   <meta property="og:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="The Honest Woodcutter Story — Kids Learning Games">
+  <meta name="twitter:description" content="An interactive animated story about honesty with beautiful scenes!">
+  <meta name="twitter:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
+  <meta property="og:url" content="https://aakash-jain-1.github.io/kids-learning-games/games/woodcutter-story.html">
   <style>
     * {
       margin: 0;
@@ -569,6 +573,7 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(100px); }
     }
+  :focus-visible{outline:3px solid #ffd740;outline-offset:2px;border-radius:4px;}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
   </style>
 </head>
@@ -782,6 +787,13 @@
       document.getElementById("quizResEmoji").textContent=pct===100?"🌟":pct>=67?"👏":"📚";
       document.getElementById("quizResText").textContent=sqCorrect+'/'+storyQuizData.length+' correct ('+pct+'%) — '+(pct===100?"Perfect! You understood the story!":pct>=67?"Great job!":"Read the story again and try once more!");
       document.getElementById("quizResultBox").style.display="block";
+      try{
+        var prev=JSON.parse(localStorage.getItem('woodcutter_progress')||'{}');
+        prev.quizAttempts=(prev.quizAttempts||0)+1;
+        prev.bestScore=Math.max(prev.bestScore||0,pct);
+        prev.lastPlayed=new Date().toISOString().slice(0,10);
+        localStorage.setItem('woodcutter_progress',JSON.stringify(prev));
+      }catch(e){}
     }
     startStoryQuiz();
   </script>

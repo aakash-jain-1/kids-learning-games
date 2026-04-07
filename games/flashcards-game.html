@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2027">
   <meta name="description" content="Flip cards to learn animals, food, shapes, colors and more! Interactive flashcard game for kids.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
   <title>Flash Cards</title>
@@ -11,6 +12,9 @@
   <meta property="og:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Flash Cards — Kids Learning Games">
+  <meta name="twitter:description" content="Learn numbers, colors, shapes, fruits and animals with interactive flashcards!">
+  <meta name="twitter:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
+  <meta property="og:url" content="https://aakash-jain-1.github.io/kids-learning-games/games/flashcards-game.html">
   <link rel="stylesheet" href="common-cards.css">
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -33,12 +37,6 @@
       padding:20px 16px 22px;gap:14px;overflow:hidden;position:relative;
     }
     .left-top{width:100%;display:flex;align-items:center;justify-content:space-between;}
-    .back-link{
-      color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85em;
-      background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
-      padding:6px 14px;border-radius:50px;transition:0.25s;
-    }
-    .back-link:hover{background:rgba(255,255,255,0.22);color:#fff;}
     .left-heading{color:rgba(255,255,255,0.45);font-size:0.78em;letter-spacing:3px;text-transform:uppercase;}
 
     /* category pills */
@@ -412,7 +410,6 @@
   <!-- ════ LEFT: CARD DECK ════ -->
   <div class="left-pane">
     <div class="left-top">
-      <a href="../index.html" class="back-link">&#x1F3E0; Home</a>
       <div style="display:flex;gap:6px;">
         <button class="ctrl-pill" onclick="openQuiz()">&#x1F9E0; Quiz</button>
         <button class="ctrl-pill" onclick="openStats()">&#x1F4CA; Stats</button>
@@ -1047,7 +1044,7 @@ document.querySelectorAll(".modal-overlay").forEach(function(ov){ov.addEventList
 </script>
 
 <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
-<div class="modal-overlay" id="quizOverlay">
+<div class="modal-overlay" id="quizOverlay" role="dialog" aria-modal="true" aria-label="Quiz">
   <div class="modal-box">
     <button class="modal-close" onclick="closeQuiz()">&times;</button>
     <h2>&#x1F9E0; Flashcard Quiz</h2>
@@ -1068,7 +1065,7 @@ document.querySelectorAll(".modal-overlay").forEach(function(ov){ov.addEventList
     </div>
   </div>
 </div>
-<div class="modal-overlay" id="statsOverlay">
+<div class="modal-overlay" id="statsOverlay" role="dialog" aria-modal="true" aria-label="Statistics">
   <div class="modal-box">
     <button class="modal-close" onclick="closeStats()">&times;</button>
     <h2>&#x1F4CA; Stats & Achievements</h2>
@@ -1077,7 +1074,7 @@ document.querySelectorAll(".modal-overlay").forEach(function(ov){ov.addEventList
     <div class="ach-grid" id="achGrid"></div>
   </div>
 </div>
-<div class="modal-overlay" id="settingsOverlay">
+<div class="modal-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Settings">
   <div class="modal-box">
     <button class="modal-close" onclick="closeSettings()">&times;</button>
     <h2>&#x2699;&#xFE0F; Settings</h2>
