@@ -477,12 +477,12 @@ function closeStats(){document.getElementById("statsOverlay").classList.remove("
 /* Settings */
 function applySettings(){
   document.body.classList.toggle("dark-mode",settings.dark);
-  document.getElementById("togDark").checked=settings.dark;
+  var td=document.getElementById("togDark");if(td)td.checked=settings.dark;
   document.body.classList.remove("font-small","font-medium","font-large");
   document.body.classList.add("font-"+settings.fontSize);
   document.querySelectorAll(".font-btn").forEach(function(b){b.classList.toggle("active",b.dataset.size===settings.fontSize);});
-  document.getElementById("togSound").checked=settings.sound;
-  document.getElementById("togSpeak").checked=settings.autoSpeak;
+  var ts=document.getElementById("togSound");if(ts)ts.checked=settings.sound;
+  var ta=document.getElementById("togSpeak");if(ta)ta.checked=settings.autoSpeak;
 }
 function openSettings(){applySettings();document.getElementById("settingsOverlay").classList.add("show");}
 function closeSettings(){document.getElementById("settingsOverlay").classList.remove("show");}
