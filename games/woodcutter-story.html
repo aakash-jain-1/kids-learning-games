@@ -725,5 +725,6 @@
       setTimeout(() => playAnimation(), 500);
     });
   </script>
+  <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
 </body>
 </html>

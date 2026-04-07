@@ -53,17 +53,13 @@
 
 ---
 
-## 4. Service Worker — `woodcutter-story.html` not cached + no SW registration
+## 4. ~~Service Worker — `woodcutter-story.html` not cached + no SW registration~~ ✅
 
-**Severity:** Medium | **Effort:** Tiny
+**Severity:** Medium | **Effort:** Tiny | **Status:** Done
 
-`service-worker.js` lists all 11 other game files in `urlsToCache` but is missing `games/woodcutter-story.html`. The story won't work offline.
-
-Additionally, `woodcutter-story.html` is the only game file that does **not** include the service worker registration `<script>` block at the bottom.
-
-- [ ] Add `'games/woodcutter-story.html'` to `urlsToCache` in `service-worker.js`
-- [ ] Bump `CACHE_NAME` version
-- [ ] Add SW registration script to `woodcutter-story.html`
+- [x] Add `'games/woodcutter-story.html'` to `urlsToCache` in `service-worker.js`
+- [x] Bump `CACHE_NAME` version (v11 → v12)
+- [x] Add SW registration script to `woodcutter-story.html`
 
 ---
 
@@ -137,7 +133,7 @@ Only `index.html` has a `<meta name="description">` tag. None of the 12 game fil
 | 1 | ~~Missing home page cards~~ | ~~High~~ | ~~Small~~ | ✅ Done |
 | 2 | ~~Card games missing navbar~~ | ~~High~~ | ~~Medium~~ | ✅ Done |
 | 3 | ~~Flashcards + Story not in any navbar~~ | ~~High~~ | ~~Small~~ | ✅ Done |
-| 4 | Woodcutter not in SW cache + no SW reg | Medium | Tiny | Open |
+| 4 | ~~Woodcutter not in SW cache + no SW reg~~ | ~~Medium~~ | ~~Tiny~~ | ✅ Done |
 | 5 | Card games missing quiz/achievements/stats | Medium | Large | Open |
 | 6 | ~~Duplicate CSS in index.html~~ | ~~Low~~ | ~~Tiny~~ | ✅ Done |
 | 7 | GAME_REFERENCE.md outdated | Low | Tiny | Open |
