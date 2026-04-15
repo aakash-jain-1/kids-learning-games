@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f2027">
-  <meta name="description" content="Flip cards to learn animals, body parts, food, shapes, colors and more! Interactive flashcard game for kids.">
+  <meta name="description" content="Flip cards to learn animals, body parts, emotions, instruments, opposites, rhyming and more! Interactive flashcard game for kids.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
   <title>Flash Cards</title>
   <meta property="og:title" content="Flash Cards — Kids Learning Games">
@@ -735,6 +735,87 @@ var DECKS = {
       {img:'Brain/3D/brain_3d.png',                               code:'1F9E0',e:E(0x1F9E0),n:'Brain',   f:'Your brain helps you think, learn, remember, and dream!'},
       {img:'Anatomical%20Heart/3D/anatomical_heart_3d.png',       code:'1FAC0',e:E(0x1FAC0),n:'Heart',   f:'Your heart pumps blood all around your body \u2014 it never stops!'},
       {img:'Bone/3D/bone_3d.png',                                 code:'1F9B4',e:E(0x1F9B4),n:'Bone',    f:'You have 206 bones inside your body that hold you up!'},
+    ]
+  },
+  emotions:{
+    label: E(0x1F60A)+' Emotions',
+    cards:[
+      {img:'Grinning%20Face/3D/grinning_face_3d.png',                       code:'1F600',e:E(0x1F600),n:'Happy',      f:'You feel happy when you play with your friends and family!'},
+      {img:'Crying%20Face/3D/crying_face_3d.png',                            code:'1F622',e:E(0x1F622),n:'Sad',        f:'It is okay to feel sad sometimes \u2014 a hug always helps!'},
+      {img:'Enraged%20Face/3D/enraged_face_3d.png',                          code:'1F621',e:E(0x1F621),n:'Angry',      f:'When you feel angry, take a deep breath and count to five!'},
+      {img:'Face%20with%20Open%20Mouth/3D/face_with_open_mouth_3d.png',      code:'1F62E',e:E(0x1F62E),n:'Surprised',  f:'You feel surprised when something unexpected happens!'},
+      {img:'Fearful%20Face/3D/fearful_face_3d.png',                          code:'1F628',e:E(0x1F628),n:'Scared',     f:'Everyone feels scared sometimes \u2014 being brave means trying anyway!'},
+      {img:'Smiling%20Face%20with%20Heart-Eyes/3D/smiling_face_with_heart-eyes_3d.png',code:'1F60D',e:E(0x1F60D),n:'Love',f:'You feel love when you care about someone very much!'},
+      {img:'Thinking%20Face/3D/thinking_face_3d.png',                        code:'1F914',e:E(0x1F914),n:'Thinking',   f:'You make a thinking face when you are figuring something out!'},
+      {img:'Sleepy%20Face/3D/sleepy_face_3d.png',                            code:'1F62A',e:E(0x1F62A),n:'Sleepy',     f:'You feel sleepy when your body needs rest \u2014 time for bed!'},
+      {img:'Confused%20Face/3D/confused_face_3d.png',                        code:'1F615',e:E(0x1F615),n:'Confused',   f:'You feel confused when something does not make sense yet!'},
+      {img:'Face%20with%20Tears%20of%20Joy/3D/face_with_tears_of_joy_3d.png',code:'1F602',e:E(0x1F602),n:'Laughing',   f:'You laugh so hard that happy tears come out of your eyes!'},
+      {img:'Worried%20Face/3D/worried_face_3d.png',                          code:'1F61F',e:E(0x1F61F),n:'Worried',    f:'You feel worried when you are not sure what will happen next!'},
+      {img:'Disappointed%20Face/3D/disappointed_face_3d.png',                code:'1F61E',e:E(0x1F61E),n:'Disappointed',f:'You feel disappointed when things do not go the way you hoped.'},
+      {img:'Hugging%20Face/3D/hugging_face_3d.png',                          code:'1F917',e:E(0x1F917),n:'Caring',     f:'A warm hug shows someone you care about them!'},
+      {img:'Star-Struck/3D/star-struck_3d.png',                              code:'1F929',e:E(0x1F929),n:'Excited',    f:'You feel excited when something amazing is about to happen!'},
+      {img:'Yawning%20Face/3D/yawning_face_3d.png',                          code:'1F971',e:E(0x1F971),n:'Bored',      f:'You feel bored when there is nothing fun to do \u2014 try drawing!'},
+    ]
+  },
+  opposites:{
+    label: E(0x1F504)+' Opposites',
+    cards:[
+      {e:E(0x2B06)+E(0xFE0F), n:'Up',     f:'Up means going higher \u2014 like a bird flying into the sky!'},
+      {e:E(0x2B07)+E(0xFE0F), n:'Down',   f:'Down means going lower \u2014 like a ball rolling down a hill!'},
+      {e:E(0x1F506),          n:'Big',     f:'An elephant is big \u2014 it is the largest land animal!'},
+      {e:E(0x1F505),          n:'Small',   f:'An ant is small \u2014 but it can carry 50 times its weight!'},
+      {e:E(0x1F525),          n:'Hot',     f:'The sun is hot \u2014 it warms the whole Earth!'},
+      {e:E(0x2744)+E(0xFE0F), n:'Cold',    f:'Snow is cold \u2014 it turns water into fluffy white flakes!'},
+      {e:E(0x1F31E),          n:'Day',     f:'During the day, the sun shines and everything is bright!'},
+      {e:E(0x1F31A),          n:'Night',   f:'At night, the moon and stars come out in the dark sky!'},
+      {e:E(0x1F3C3),          n:'Fast',    f:'A cheetah is fast \u2014 it can run faster than a car in a city!'},
+      {e:E(0x1F422),          n:'Slow',    f:'A turtle is slow \u2014 but it always reaches where it is going!'},
+      {e:E(0x1F4AA),          n:'Strong',  f:'An elephant is strong \u2014 it can push down a whole tree!'},
+      {e:E(0x1FAB6),          n:'Light',   f:'A feather is light \u2014 it floats gently in the air!'},
+      {e:E(0x1F603),          n:'Happy',   f:'You feel happy when you laugh and play with your friends!'},
+      {e:E(0x1F622),          n:'Sad',     f:'You feel sad when something makes you want to cry!'},
+      {e:E(0x1F4E2),          n:'Loud',    f:'Thunder is loud \u2014 it makes a big booming sound!'},
+      {e:E(0x1F910),          n:'Quiet',   f:'A library is quiet \u2014 everyone whispers softly there!'},
+      {e:E(0x2B50),           n:'New',     f:'A new toy is shiny and has never been played with before!'},
+      {e:E(0x1F9F8),          n:'Old',     f:'An old teddy bear is soft and full of happy memories!'},
+    ]
+  },
+  instruments:{
+    label: E(0x1F3B5)+' Instruments',
+    cards:[
+      {img:'Guitar/3D/guitar_3d.png',                   code:'1F3B8',e:E(0x1F3B8),n:'Guitar',     f:'A guitar has strings that you strum to make music!'},
+      {img:'Drum/3D/drum_3d.png',                        code:'1F941',e:E(0x1F941),n:'Drum',       f:'You hit a drum with sticks to make a loud beat!'},
+      {img:'Trumpet/3D/trumpet_3d.png',                  code:'1F3BA',e:E(0x1F3BA),n:'Trumpet',    f:'A trumpet is a shiny brass horn that plays loud and bright!'},
+      {img:'Violin/3D/violin_3d.png',                    code:'1F3BB',e:E(0x1F3BB),n:'Violin',     f:'A violin sings sweetly when you slide a bow across its strings!'},
+      {img:'Saxophone/3D/saxophone_3d.png',              code:'1F3B7',e:E(0x1F3B7),n:'Saxophone',  f:'A saxophone makes smooth jazzy sounds and is made of brass!'},
+      {img:'Piano%20Keys/3D/piano_keys_3d.png',          code:'1F3B9',e:E(0x1F3B9),n:'Piano',      f:'A piano has black and white keys that play different notes!'},
+      {img:'Banjo/3D/banjo_3d.png',                      code:'1FA95',e:E(0x1FA95),n:'Banjo',      f:'A banjo has a round body and strings that make a twangy sound!'},
+      {img:'Accordion/3D/accordion_3d.png',              code:'1FA97',e:E(0x1FA97),n:'Accordion',  f:'An accordion is squeezed in and out to push air through reeds!'},
+      {img:'Long%20Drum/3D/long_drum_3d.png',            code:'1FA98',e:E(0x1FA98),n:'Bongo',      f:'Bongos are small drums you play with your hands!'},
+      {img:'Maracas/3D/maracas_3d.png',                  code:'1FA87',e:E(0x1FA87),n:'Maracas',    f:'Maracas are shakers filled with tiny beads that rattle!'},
+      {img:'Flute/3D/flute_3d.png',                      code:'1FA88',e:E(0x1FA88),n:'Flute',      f:'A flute is a long thin pipe you blow across to make gentle music!'},
+      {e:E(0x1F514),n:'Bell',       f:'Bells ring with a clear ding-dong sound when you shake them!'},
+      {e:E(0x1F3B6),n:'Xylophone',  f:'A xylophone has colourful bars you hit with mallets to play tunes!'},
+      {e:E(0x1F3BC),n:'Harp',       f:'A harp has many strings you pluck gently to make dreamy music!'},
+    ]
+  },
+  rhyming:{
+    label: E(0x1F4AC)+' Rhyming',
+    cards:[
+      {e:E(0x1F431),n:'Cat \u2013 Hat',     f:'The cat sat on the mat and wore a funny hat!'},
+      {e:E(0x1F415),n:'Dog \u2013 Log',     f:'The dog sat on a log near a pond in the fog!'},
+      {e:E(0x1F41D),n:'Bee \u2013 Tree',    f:'The busy bee flew up to the tall tree!'},
+      {e:E(0x1F42D),n:'Mouse \u2013 House', f:'The little mouse lived in a tiny house!'},
+      {e:E(0x1F438),n:'Frog \u2013 Bog',    f:'The frog jumped into the squishy bog!'},
+      {e:E(0x1F411),n:'Sheep \u2013 Sleep', f:'Count the sheep to help you fall asleep!'},
+      {e:E(0x2B50), n:'Star \u2013 Car',    f:'I saw a star while riding in the car!'},
+      {e:E(0x1F319),n:'Moon \u2013 Spoon',  f:'Hey diddle diddle, the dish ran away with the spoon under the moon!'},
+      {e:E(0x1F382),n:'Cake \u2013 Lake',   f:'Let us eat cake by the beautiful blue lake!'},
+      {e:E(0x1F380),n:'Bow \u2013 Snow',    f:'She tied a big bow and played in the snow!'},
+      {e:E(0x1F451),n:'King \u2013 Ring',   f:'The king wore a golden ring and started to sing!'},
+      {e:E(0x1F4D6),n:'Book \u2013 Cook',   f:'The cook read a book about how to bake!'},
+      {e:E(0x1F3B5),n:'Song \u2013 Long',   f:'We sang a song that was very long!'},
+      {e:E(0x2600)+E(0xFE0F),n:'Sun \u2013 Fun',f:'Playing in the sun is so much fun!'},
     ]
   }
 };
