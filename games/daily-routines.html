@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff9a56">
+  <meta name="description" content="Follow a child's day from sunrise to bedtime! Interactive story game teaching daily routines for kids.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌅</text></svg>">
+  <title>My Daily Routines</title>
+  <meta property="og:title" content="My Daily Routines — Kids Learning Games">
+  <meta property="og:description" content="Learn about daily routines through an interactive day-in-the-life story!">
+  <meta property="og:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="My Daily Routines — Kids Learning Games">
+  <meta name="twitter:description" content="Learn about daily routines through an interactive day-in-the-life story!">
+  <meta name="twitter:image" content="https://aakash-jain-1.github.io/kids-learning-games/assets/icon-512.svg">
+  <meta property="og:url" content="https://aakash-jain-1.github.io/kids-learning-games/games/daily-routines.html">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    *{-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation;}
+    body{
+      font-family:'Comic Sans MS','Chalkboard SE',cursive,Arial,sans-serif;
+      min-height:100vh;overflow-x:hidden;position:relative;
+      padding-top:48px;transition:background 1s ease;
+    }
+    .navigation{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);justify-content:center;}
+    .nav-btn{color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.75em;font-weight:bold;padding:4px 10px;border-radius:50px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);transition:0.2s;white-space:nowrap;}
+    .nav-btn:hover{background:rgba(255,255,255,0.25);color:#fff;}
+    .container{max-width:900px;margin:0 auto;padding:20px;position:relative;z-index:1;}
+    h1{text-align:center;color:#fff;font-size:2.5em;margin:20px 0 10px;text-shadow:2px 2px 8px rgba(0,0,0,0.4);animation:fadeInDown 0.8s ease-out;}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px);}to{opacity:1;transform:translateY(0);}}
+
+    .scene-box{
+      background:rgba(255,255,255,0.95);border-radius:24px;padding:30px;
+      box-shadow:0 15px 50px rgba(0,0,0,0.25);margin-bottom:30px;
+      animation:sceneIn 0.6s ease-out;
+    }
+    @keyframes sceneIn{from{opacity:0;transform:translateY(30px) scale(0.95);}to{opacity:1;transform:none;}}
+
+    .scene-art{
+      position:relative;width:100%;height:340px;border-radius:16px;overflow:hidden;
+      margin-bottom:20px;box-shadow:inset 0 0 40px rgba(0,0,0,0.08);
+    }
+
+    .scene-time{text-align:center;font-size:0.85em;color:#999;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+    .scene-title{text-align:center;font-size:2em;color:#333;margin-bottom:12px;}
+    .scene-text{font-size:1.2em;color:#555;line-height:1.7;text-align:center;max-width:600px;margin:0 auto 20px;}
+    .scene-emoji{text-align:center;font-size:3.5em;margin-bottom:10px;}
+
+    .controls{display:flex;justify-content:center;gap:14px;margin-top:20px;}
+    .btn{
+      padding:14px 36px;border-radius:50px;border:none;font-size:1.1em;font-weight:bold;
+      cursor:pointer;font-family:inherit;transition:all 0.2s;
+      box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    }
+    .btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+    .btn:active{transform:translateY(0);}
+    .btn-prev{background:linear-gradient(145deg,#e0e0e0,#bdbdbd);color:#555;}
+    .btn-next{background:linear-gradient(145deg,#ff9a56,#ff6f20);color:#fff;}
+    .btn-speak{background:linear-gradient(145deg,#66bb6a,#43a047);color:#fff;}
+    .btn-restart{background:linear-gradient(145deg,#42a5f5,#1976d2);color:#fff;}
+
+    .progress-bar{width:100%;height:8px;background:rgba(255,255,255,0.3);border-radius:50px;margin:10px 0 20px;overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#ff9a56,#ffd740);border-radius:50px;transition:width 0.5s ease;}
+    .progress-text{text-align:center;color:rgba(255,255,255,0.6);font-size:0.8em;margin-bottom:6px;}
+
+    /* ── Scene art backgrounds ── */
+    .sky-morning{background:linear-gradient(180deg,#87ceeb 0%,#ffecd2 80%,#fcb69f 100%);}
+    .sky-day{background:linear-gradient(180deg,#56ccf2 0%,#87ceeb 60%,#a8e6cf 100%);}
+    .sky-evening{background:linear-gradient(180deg,#f093fb 0%,#f5576c 40%,#ffecd2 100%);}
+    .sky-night{background:linear-gradient(180deg,#0f0c29 0%,#302b63 50%,#24243e 100%);}
+    .sky-indoor{background:linear-gradient(180deg,#ffecd2 0%,#fcb69f 100%);}
+
+    /* ── CSS art elements ── */
+    .sun{position:absolute;width:80px;height:80px;background:radial-gradient(circle,#ffd740,#ff9800);border-radius:50%;box-shadow:0 0 40px rgba(255,215,0,0.6);}
+    .sun-rise{top:60%;right:15%;animation:sunRise 2s ease-out forwards;}
+    @keyframes sunRise{from{top:80%;opacity:0.3;}to{top:15%;opacity:1;}}
+    .sun-high{top:10%;right:20%;}
+    .sun-set{top:50%;right:10%;background:radial-gradient(circle,#ff6f20,#e65100);box-shadow:0 0 50px rgba(255,111,32,0.5);}
+
+    .moon{position:absolute;top:12%;right:18%;width:60px;height:60px;background:#ffd740;border-radius:50%;box-shadow:0 0 30px rgba(255,215,64,0.4);}
+    .moon::after{content:'';position:absolute;top:-5px;left:12px;width:50px;height:50px;background:#24243e;border-radius:50%;}
+
+    .stars-bg .s{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;animation:twinkle 2s infinite;}
+    @keyframes twinkle{0%,100%{opacity:0.3;}50%{opacity:1;}}
+
+    .ground{position:absolute;bottom:0;left:0;right:0;height:80px;border-radius:0 0 16px 16px;}
+    .grass{background:linear-gradient(180deg,#66bb6a,#388e3c);}
+    .floor{background:linear-gradient(180deg,#d7ccc8,#bcaaa4);}
+    .bed-floor{background:linear-gradient(180deg,#5d4037,#3e2723);}
+
+    /* Child character */
+    .child{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);}
+    .child-head{width:50px;height:50px;background:#fdbcb4;border-radius:50%;position:relative;margin:0 auto;}
+    .child-hair{position:absolute;top:-5px;left:5px;right:5px;height:25px;background:#4a2c2a;border-radius:25px 25px 0 0;}
+    .child-eyes{position:absolute;top:20px;display:flex;gap:14px;left:50%;transform:translateX(-50%);}
+    .child-eye{width:6px;height:6px;background:#333;border-radius:50%;}
+    .child-smile{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:16px;height:8px;border:2px solid #c0392b;border-top:none;border-radius:0 0 16px 16px;}
+    .child-body{width:36px;height:45px;background:#42a5f5;border-radius:10px 10px 0 0;margin:0 auto;position:relative;}
+    .child-legs{display:flex;gap:6px;justify-content:center;}
+    .child-leg{width:12px;height:30px;background:#1565c0;border-radius:0 0 6px 6px;}
+    .child-arms{position:absolute;top:5px;left:-10px;right:-10px;height:8px;display:flex;justify-content:space-between;}
+    .child-arm{width:14px;height:8px;background:#fdbcb4;border-radius:4px;}
+
+    /* Bed */
+    .bed{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);width:200px;}
+    .mattress{width:200px;height:40px;background:linear-gradient(145deg,#e8f5e9,#c8e6c9);border-radius:10px;position:relative;}
+    .pillow{position:absolute;top:-15px;left:10px;width:50px;height:25px;background:#fff;border-radius:12px;border:2px solid #e0e0e0;}
+    .blanket{position:absolute;top:5px;left:20px;right:10px;height:30px;background:linear-gradient(145deg,#ffcc80,#ffb74d);border-radius:8px;}
+    .bed-frame{width:210px;height:15px;background:#5d4037;border-radius:6px;margin-top:-2px;margin-left:-5px;}
+
+    /* Toothbrush */
+    .toothbrush{position:absolute;bottom:150px;right:25%;width:12px;height:80px;background:linear-gradient(180deg,#42a5f5,#1e88e5);border-radius:6px;}
+    .brush-head{position:absolute;top:-10px;left:-2px;width:16px;height:20px;background:#fff;border-radius:4px;}
+    .bubbles .bub{position:absolute;border-radius:50%;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);animation:bubFloat 2s ease-out infinite;}
+    @keyframes bubFloat{from{opacity:1;transform:translateY(0) scale(1);}to{opacity:0;transform:translateY(-40px) scale(0.5);}}
+
+    /* Table & plate */
+    .table{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);width:220px;height:10px;background:#8d6e63;border-radius:4px;}
+    .table-leg{position:absolute;bottom:-40px;width:8px;height:40px;background:#6d4c41;border-radius:2px;}
+    .table-leg.l{left:15px;}.table-leg.r{right:15px;}
+    .plate{position:absolute;top:-25px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:#fff;border-radius:50%;border:2px solid #e0e0e0;}
+    .food-emoji{position:absolute;top:-38px;left:50%;transform:translateX(-50%);font-size:2em;}
+
+    /* School bag */
+    .bag{position:absolute;bottom:100px;right:30%;width:50px;height:60px;background:linear-gradient(145deg,#ef5350,#c62828);border-radius:12px 12px 8px 8px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+    .bag-strap{position:absolute;top:-10px;left:10px;right:10px;height:15px;border:3px solid #b71c1c;border-bottom:none;border-radius:10px 10px 0 0;}
+    .bag-pocket{position:absolute;bottom:8px;left:8px;right:8px;height:20px;background:rgba(0,0,0,0.15);border-radius:4px;}
+
+    /* Book */
+    .book{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);width:80px;height:100px;background:linear-gradient(145deg,#7e57c2,#512da8);border-radius:4px 12px 12px 4px;box-shadow:3px 3px 10px rgba(0,0,0,0.2);}
+    .book-line{position:absolute;left:8px;top:15px;bottom:15px;width:2px;background:rgba(255,255,255,0.3);}
+    .book-title{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:0.6em;font-weight:bold;text-align:center;line-height:1.3;}
+
+    /* Playground */
+    .swing{position:absolute;bottom:80px;left:35%;}
+    .swing-frame{width:4px;height:120px;background:#795548;position:absolute;bottom:0;}
+    .swing-frame.lf{left:0;}.swing-frame.rf{left:80px;}
+    .swing-top{position:absolute;top:0;left:-5px;width:90px;height:4px;background:#795548;}
+    .swing-rope{position:absolute;top:4px;left:35px;width:2px;height:80px;background:#9e9e9e;animation:swingMotion 2s ease-in-out infinite;transform-origin:top;}
+    .swing-seat{position:absolute;bottom:-8px;left:-12px;width:26px;height:6px;background:#5d4037;border-radius:3px;}
+    @keyframes swingMotion{0%,100%{transform:rotate(-15deg);}50%{transform:rotate(15deg);}}
+
+    .slide{position:absolute;bottom:80px;right:25%;width:60px;height:120px;}
+    .slide-body{position:absolute;bottom:0;left:0;width:60px;height:120px;background:linear-gradient(145deg,#fdd835,#f9a825);border-radius:30px 30px 10px 10px;transform:rotate(-15deg);transform-origin:bottom center;}
+
+    /* Bathtub */
+    .tub{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);width:200px;height:70px;background:#e3f2fd;border:4px solid #90caf9;border-radius:0 0 40px 40px;overflow:hidden;}
+    .tub-water{position:absolute;bottom:0;left:0;right:0;height:45px;background:linear-gradient(180deg,rgba(66,165,245,0.4),rgba(25,118,210,0.5));}
+    .tub-bubbles{position:absolute;top:-8px;left:10px;right:10px;display:flex;gap:6px;justify-content:center;}
+    .tub-b{width:20px;height:20px;background:rgba(255,255,255,0.7);border-radius:50%;border:1px solid rgba(200,200,200,0.4);}
+
+    /* Quiz section */
+    .quiz-box{background:rgba(255,255,255,0.95);border-radius:20px;padding:25px;margin-top:20px;color:#333;display:none;}
+    .quiz-opt{display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;border-radius:12px;border:2px solid #ffe0b2;background:#fff8e1;color:#333;font-size:1em;cursor:pointer;font-family:inherit;font-weight:600;transition:0.2s;}
+    .quiz-opt:hover{background:#ffe0b2;}
+
+    @media(max-width:600px){
+      h1{font-size:1.8em!important;}
+      .scene-art{height:240px!important;}
+      .scene-title{font-size:1.5em!important;}
+      .scene-text{font-size:1em!important;}
+      .btn{padding:12px 24px;font-size:0.95em;}
+      .controls{flex-wrap:wrap;}
+    }
+    :focus-visible{outline:3px solid #ffd740;outline-offset:2px;border-radius:4px;}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}}
+  </style>
+</head>
+<body>
+  <div class="navigation">
+    <a href="../index.html" class="nav-btn">Home</a>
+    <a href="alphabet-game.html" class="nav-btn">Alphabets</a>
+    <a href="numbers-game.html" class="nav-btn">Numbers</a>
+    <a href="colors-game.html" class="nav-btn">Colors</a>
+    <a href="shapes-game.html" class="nav-btn">Shapes</a>
+    <a href="animals-game.html" class="nav-btn">Animals</a>
+    <a href="hindi-alphabets.html" class="nav-btn">Hindi</a>
+    <a href="birds.html" class="nav-btn">Birds</a>
+    <a href="flashcards-game.html" class="nav-btn">Flashcards</a>
+    <a href="solar-system-game.html" class="nav-btn">Solar System</a>
+    <a href="dinosaurs-game.html" class="nav-btn">Dinosaurs</a>
+    <a href="weather-game.html" class="nav-btn">Weather</a>
+    <a href="woodcutter-story.html" class="nav-btn">Story</a>
+  </div>
+
+  <div class="container">
+    <h1>🌅 My Daily Routines 🌙</h1>
+    <div class="progress-text" id="progText">Scene 1 of 10</div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+
+    <div class="scene-box" id="sceneBox"></div>
+
+    <div class="controls">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)">&#9664; Back</button>
+      <button class="btn btn-speak" onclick="speakScene()">&#128266; Listen</button>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next &#9654;</button>
+    </div>
+
+    <div class="quiz-box" id="quizBox">
+      <h2 style="color:#e65100;text-align:center;margin-bottom:18px;">📝 Daily Routines Quiz</h2>
+      <div id="quizBody"></div>
+      <div id="quizResult" style="display:none;text-align:center;padding:20px;">
+        <div style="font-size:3em;" id="quizEmoji"></div>
+        <div style="font-size:1.3em;font-weight:bold;margin:10px 0;" id="quizText"></div>
+        <button class="btn btn-restart" onclick="startQuiz()" style="margin:8px;">🔄 Try Again</button>
+        <button class="btn btn-prev" onclick="goToScene(0)" style="margin:8px;">📖 Read Again</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+var scenes = [
+  {
+    time:'6:30 AM — Morning',title:'Wake Up!',emoji:'🌅',
+    text:'The sun peeks through the window. It is time to wake up! You stretch your arms, yawn a big yawn, and hop out of your cosy bed.',
+    bg:'sky-morning',
+    art:function(el){
+      el.innerHTML='<div class="sun sun-rise"></div><div class="ground grass"></div>'
+        +'<div class="bed"><div class="mattress"><div class="pillow"></div><div class="blanket"></div></div><div class="bed-frame"></div></div>';
+    }
+  },
+  {
+    time:'7:00 AM — Bathroom',title:'Brush Your Teeth',emoji:'🪥',
+    text:'Time to brush your teeth! Squeeze some toothpaste on your brush, and scrub scrub scrub — up, down, and all around. Sparkly clean teeth!',
+    bg:'sky-indoor',
+    art:function(el){
+      el.style.background='linear-gradient(180deg,#e3f2fd 0%,#bbdefb 100%)';
+      el.innerHTML='<div class="ground floor"></div>'
+        +'<div class="child" style="bottom:80px;left:35%;transform:none;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div><div class="child-legs"><div class="child-leg"></div><div class="child-leg"></div></div></div>'
+        +'<div class="toothbrush"><div class="brush-head"></div></div>'
+        +'<div class="bubbles"><div class="bub" style="right:23%;bottom:180px;width:10px;height:10px;animation-delay:0s;"></div><div class="bub" style="right:26%;bottom:190px;width:8px;height:8px;animation-delay:0.4s;"></div><div class="bub" style="right:20%;bottom:170px;width:12px;height:12px;animation-delay:0.8s;"></div></div>';
+    }
+  },
+  {
+    time:'7:30 AM — Kitchen',title:'Eat Breakfast',emoji:'🥣',
+    text:'Yummy breakfast time! A bowl of warm cereal, some fresh fruit, and a glass of milk. Eating breakfast gives you energy to play and learn all day!',
+    bg:'sky-indoor',
+    art:function(el){
+      el.style.background='linear-gradient(180deg,#fff8e1 0%,#ffecb3 100%)';
+      el.innerHTML='<div class="ground floor"></div>'
+        +'<div class="child" style="bottom:130px;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div></div>'
+        +'<div class="table"><div class="table-leg l"></div><div class="table-leg r"></div><div class="plate"></div><div class="food-emoji">🥣</div></div>';
+    }
+  },
+  {
+    time:'8:00 AM — Getting Ready',title:'Get Dressed',emoji:'👕',
+    text:'Pick out your favourite clothes! A comfy shirt, trousers, socks, and shoes. Getting dressed all by yourself is a big-kid achievement!',
+    bg:'sky-indoor',
+    art:function(el){
+      el.style.background='linear-gradient(180deg,#fce4ec 0%,#f8bbd0 100%)';
+      el.innerHTML='<div class="ground floor"></div>'
+        +'<div class="child"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body" style="background:#66bb6a;"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div><div class="child-legs"><div class="child-leg" style="background:#2e7d32;"></div><div class="child-leg" style="background:#2e7d32;"></div></div></div>'
+        +'<div class="bag"><div class="bag-strap"></div><div class="bag-pocket"></div></div>';
+    }
+  },
+  {
+    time:'9:00 AM — School',title:'Learn at School',emoji:'📚',
+    text:'At school you learn so many things! ABCs, 123s, colours, shapes, and stories. You also get to draw, sing songs, and make new friends!',
+    bg:'sky-day',
+    art:function(el){
+      el.innerHTML='<div class="sun sun-high"></div><div class="ground grass"></div>'
+        +'<div class="child" style="left:35%;transform:none;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div><div class="child-legs"><div class="child-leg"></div><div class="child-leg"></div></div></div>'
+        +'<div class="book"><div class="book-line"></div><div class="book-title">ABC<br>123</div></div>';
+    }
+  },
+  {
+    time:'12:00 PM — Lunchtime',title:'Eat Lunch',emoji:'🍱',
+    text:'Lunchtime! Open your lunchbox and enjoy a delicious meal. Eating healthy food helps your body grow big and strong!',
+    bg:'sky-day',
+    art:function(el){
+      el.innerHTML='<div class="sun sun-high" style="right:30%;"></div><div class="ground grass"></div>'
+        +'<div class="child" style="bottom:130px;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div></div>'
+        +'<div class="table"><div class="table-leg l"></div><div class="table-leg r"></div><div class="plate"></div><div class="food-emoji">🍱</div></div>';
+    }
+  },
+  {
+    time:'3:00 PM — Playtime',title:'Play Outside',emoji:'🤸',
+    text:'After school it is time to play! Run around, swing on the swings, slide down the slide, and laugh with your friends. Playing makes you happy and healthy!',
+    bg:'sky-day',
+    art:function(el){
+      el.innerHTML='<div class="sun sun-high" style="right:12%;top:8%;"></div><div class="ground grass"></div>'
+        +'<div class="swing"><div class="swing-frame lf"></div><div class="swing-frame rf"></div><div class="swing-top"></div><div class="swing-rope"><div class="swing-seat"></div></div></div>'
+        +'<div class="slide"><div class="slide-body"></div></div>'
+        +'<div class="child" style="left:55%;transform:none;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body" style="background:#ff7043;"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div><div class="child-legs"><div class="child-leg" style="background:#d84315;"></div><div class="child-leg" style="background:#d84315;"></div></div></div>';
+    }
+  },
+  {
+    time:'6:00 PM — Evening',title:'Bath Time',emoji:'🛁',
+    text:'Splash splash! Jump into a warm bubbly bath. Wash your hair, scrub behind your ears, and play with bath toys. Squeaky clean!',
+    bg:'sky-evening',
+    art:function(el){
+      el.innerHTML='<div class="sun sun-set"></div><div class="ground floor" style="background:linear-gradient(180deg,#e8eaf6,#c5cae9);"></div>'
+        +'<div class="tub"><div class="tub-water"></div><div class="tub-bubbles"><div class="tub-b"></div><div class="tub-b" style="width:16px;height:16px;"></div><div class="tub-b"></div><div class="tub-b" style="width:14px;height:14px;"></div><div class="tub-b"></div></div></div>';
+    }
+  },
+  {
+    time:'7:00 PM — Dinner',title:'Eat Dinner',emoji:'🍽️',
+    text:'The whole family sits together for dinner. Yummy rice, vegetables, and something sweet for dessert. Eating together is the best part of the day!',
+    bg:'sky-evening',
+    art:function(el){
+      el.style.background='linear-gradient(180deg,#fff3e0 0%,#ffe0b2 100%)';
+      el.innerHTML='<div class="ground floor"></div>'
+        +'<div class="child" style="bottom:130px;left:40%;transform:none;"><div class="child-head"><div class="child-hair"></div><div class="child-eyes"><div class="child-eye"></div><div class="child-eye"></div></div><div class="child-smile"></div></div><div class="child-body"><div class="child-arms"><div class="child-arm"></div><div class="child-arm"></div></div></div></div>'
+        +'<div class="table" style="left:45%;"><div class="table-leg l"></div><div class="table-leg r"></div><div class="plate"></div><div class="food-emoji">🍽️</div></div>';
+    }
+  },
+  {
+    time:'8:00 PM — Bedtime',title:'Good Night!',emoji:'🌙',
+    text:'The moon is up and the stars are twinkling. Put on your pyjamas, listen to a bedtime story, and snuggle under your warm blanket. Sweet dreams! Tomorrow is a brand new day!',
+    bg:'sky-night',
+    art:function(el){
+      el.innerHTML='<div class="moon"></div><div class="ground bed-floor"></div>'
+        +'<div class="bed"><div class="mattress"><div class="pillow"></div><div class="blanket"></div></div><div class="bed-frame"></div></div>';
+      var s='';for(var i=0;i<25;i++){s+='<div class="s" style="left:'+Math.random()*100+'%;top:'+Math.random()*50+'%;animation-delay:'+Math.random()*3+'s;"></div>';}
+      var sd=document.createElement('div');sd.className='stars-bg';sd.innerHTML=s;el.appendChild(sd);
+    }
+  }
+];
+
+var bgColors=[
+  'linear-gradient(135deg,#ffecd2 0%,#fcb69f 100%)',
+  'linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%)',
+  'linear-gradient(135deg,#fff8e1 0%,#ffecb3 100%)',
+  'linear-gradient(135deg,#fce4ec 0%,#f8bbd0 100%)',
+  'linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 100%)',
+  'linear-gradient(135deg,#e8f5e9 0%,#a5d6a7 100%)',
+  'linear-gradient(135deg,#c8e6c9 0%,#a5d6a7 100%)',
+  'linear-gradient(135deg,#f3e5f5 0%,#ce93d8 100%)',
+  'linear-gradient(135deg,#fff3e0 0%,#ffcc80 100%)',
+  'linear-gradient(135deg,#1a237e 0%,#311b92 50%,#4a148c 100%)'
+];
+
+var idx=0;
+function render(){
+  var s=scenes[idx];
+  document.body.style.background=bgColors[idx];
+  var box=document.getElementById('sceneBox');
+  box.style.animation='none';void box.offsetWidth;box.style.animation='sceneIn 0.6s ease-out';
+
+  var art='<div class="scene-art '+s.bg+'" id="sceneArt"></div>';
+  box.innerHTML=art
+    +'<div class="scene-time">'+s.time+'</div>'
+    +'<div class="scene-emoji">'+s.emoji+'</div>'
+    +'<div class="scene-title">'+s.title+'</div>'
+    +'<div class="scene-text">'+s.text+'</div>';
+
+  s.art(document.getElementById('sceneArt'));
+
+  document.getElementById('progFill').style.width=((idx+1)/scenes.length*100)+'%';
+  document.getElementById('progText').textContent='Scene '+(idx+1)+' of '+scenes.length;
+  document.getElementById('prevBtn').style.visibility=idx===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=idx===scenes.length-1?'Quiz \u2714':'Next \u25B6';
+
+  document.getElementById('quizBox').style.display='none';
+}
+function navigate(dir){
+  var next=idx+dir;
+  if(next<0)return;
+  if(next>=scenes.length){showQuiz();return;}
+  idx=next;render();
+}
+function goToScene(i){idx=i;render();document.getElementById('quizBox').style.display='none';document.querySelector('.controls').style.display='flex';}
+function speakScene(){
+  if(!('speechSynthesis' in window))return;
+  window.speechSynthesis.cancel();
+  var s=scenes[idx];
+  var u=new SpeechSynthesisUtterance(s.title+'. '+s.text);
+  u.rate=0.85;u.pitch=1.15;
+  window.speechSynthesis.speak(u);
+}
+
+var quizData=[
+  {q:'What is the first thing you do when you wake up?',opts:['Eat dinner','Stretch and get out of bed','Go to school','Take a bath'],ans:1},
+  {q:'Why do we brush our teeth every morning?',opts:['To make them sparkly clean','Because teeth are bored','To make them fall out','To paint them'],ans:0},
+  {q:'What does eating breakfast give you?',opts:['Homework','Energy for the day','A stomachache','New shoes'],ans:1},
+  {q:'What do you learn at school?',opts:['Nothing at all','Only how to sleep','ABCs, numbers, colours, and stories','How to fly'],ans:2},
+  {q:'Why is playing outside good for you?',opts:['It makes you tired only','It makes you happy and healthy','It gives you homework','It makes the rain stop'],ans:1},
+  {q:'What do you do at bath time?',opts:['Sleep','Wash and play with bath toys','Eat food','Read a book'],ans:1},
+  {q:'What happens at bedtime?',opts:['You go to school','You eat breakfast','You put on pyjamas and listen to a story','You play outside'],ans:2},
+  {q:'What comes after dinner in the daily routine?',opts:['Lunch','Bedtime','Breakfast','School'],ans:1}
+];
+var qIdx=0,qCorrect=0;
+
+function showQuiz(){
+  document.querySelector('.controls').style.display='none';
+  document.getElementById('quizBox').style.display='block';
+  startQuiz();
+}
+function startQuiz(){
+  qIdx=0;qCorrect=0;
+  document.getElementById('quizResult').style.display='none';
+  document.getElementById('quizBody').style.display='block';
+  renderQ();
+}
+function renderQ(){
+  if(qIdx>=quizData.length){showResult();return;}
+  var q=quizData[qIdx];
+  var h='<div style="font-weight:bold;font-size:1.1em;margin-bottom:12px;">'+(qIdx+1)+'/'+quizData.length+': '+q.q+'</div>';
+  q.opts.forEach(function(o,i){h+='<button class="quiz-opt" onclick="answerQ('+i+')">'+o+'</button>';});
+  document.getElementById('quizBody').innerHTML=h;
+}
+function answerQ(i){if(i===quizData[qIdx].ans)qCorrect++;qIdx++;renderQ();}
+function showResult(){
+  document.getElementById('quizBody').style.display='none';
+  var pct=Math.round(qCorrect/quizData.length*100);
+  document.getElementById('quizEmoji').textContent=pct===100?'🌟':pct>=63?'👏':'📚';
+  document.getElementById('quizText').textContent=qCorrect+'/'+quizData.length+' correct ('+pct+'%) \u2014 '+(pct===100?'Perfect! You know your daily routines!':pct>=63?'Great job!':'Read the story again and try once more!');
+  document.getElementById('quizResult').style.display='block';
+  try{
+    var prev=JSON.parse(localStorage.getItem('routines_progress')||'{}');
+    prev.quizAttempts=(prev.quizAttempts||0)+1;
+    prev.bestScore=Math.max(prev.bestScore||0,pct);
+    prev.lastPlayed=new Date().toISOString().slice(0,10);
+    localStorage.setItem('routines_progress',JSON.stringify(prev));
+  }catch(e){}
+}
+
+render();
+</script>
+<script>if('serviceWorker'in navigator){navigator.serviceWorker.register('../service-worker.js');let r=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!r){r=true;location.reload();}});}</script>
+<div id="build-info" style="text-align:center;padding:10px 10px 20px;font-size:0.7em;color:rgba(255,255,255,0.35);"></div>
+<script>(function(){var el=document.getElementById('build-info');fetch('https://api.github.com/repos/aakash-jain-1/kids-learning-games/commits/main').then(function(r){return r.json();}).then(function(d){el.textContent='Build: '+d.sha.slice(0,7)+' \xB7 '+d.commit.committer.date.slice(0,10);}).catch(function(){});})();</script>
+</body>
+</html>

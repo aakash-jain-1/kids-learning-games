@@ -13,7 +13,7 @@
 **Live URL:** https://aakash-jain-1.github.io/kids-learning-games/
 **Stack:** HTML5 + CSS3 + Vanilla JS — zero frameworks, zero build tools
 **Total commits:** 28 (as of 2026-04-07)
-**Service Worker cache version:** v23
+**Service Worker cache version:** v24
 
 A Progressive Web App with **12 educational games** for children, organised into three architectures:
 
@@ -30,7 +30,7 @@ A Progressive Web App with **12 educational games** for children, organised into
 ```
 ├── index.html              # Home page / game launcher
 ├── manifest.json           # PWA manifest
-├── service-worker.js       # Offline cache + network-first strategy (v23)
+├── service-worker.js       # Offline cache + network-first strategy (v24)
 ├── offline.html            # Offline fallback page
 ├── assets/
 │   ├── icon-192.svg        # PWA icon 192×192
@@ -48,6 +48,7 @@ A Progressive Web App with **12 educational games** for children, organised into
 │   ├── dinosaurs-game.html
 │   ├── weather-game.html
 │   ├── woodcutter-story.html
+│   ├── daily-routines.html   # Story mode — 10-scene daily routine (wake → bedtime)
 │   ├── common-cards.css    # Shared styles for card-machine games
 │   └── common-cards.js     # Shared JS utilities (reference file, not yet linked)
 └── dev/
@@ -235,5 +236,5 @@ cd kids-learning-games && python3 -m http.server 8000
 # Open DevTools → Application → Cache Storage → kids-learning-games-v19
 
 # Bump cache after changes
-# Edit CACHE_NAME in service-worker.js (e.g., v23 → v24)
+# Edit CACHE_NAME in service-worker.js (e.g., v24 → v25)
 ```

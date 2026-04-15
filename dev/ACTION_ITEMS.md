@@ -221,5 +221,5 @@ The following mobile rendering issues were identified earlier and have been **fi
 | 2 | Emotions / Feelings | Flashcard Deck | ✅ Done — 15 cards with Fluent 3D face images |
 | 3 | Opposites | Flashcard Deck | ✅ Done — 18 cards (emoji pairs: up/down, big/small, hot/cold, etc.) |
 | 4 | Musical Instruments | Flashcard Deck | ✅ Done — 14 cards with Fluent 3D instrument images |
-| 5 | Daily Routines | Story Mode (standalone) | Planned — needs sequential narrative flow |
+| 5 | Daily Routines | Story Mode (standalone) | ✅ Done — 10-scene interactive story (wake up → bedtime) with CSS art, speech, quiz |
 | 6 | Rhyming Words | Flashcard Deck | ✅ Done — 14 cards with fun rhyming pairs |
